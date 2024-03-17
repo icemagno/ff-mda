@@ -4,7 +4,7 @@
 <head th:insert="~{head}">
 </head>
 
-<body class="skin-black-light layout-top-nav sidebar-collapse"
+<body class="skin-black-light layout-top-nav"
 	style="height: auto; min-height: 100%;">
 	
 	<div class="wrapper" style="height: auto; min-height: 100%;">
@@ -20,17 +20,19 @@
 				<div class="container-fluid">
 
 					<div class="navbar-header">
-						<img id="logoMd2" src="common/img/logo.png"
-							style="height: 40px; float: left; margin-top: 5px; margin-left: 10px; margin-right: 10px;">
+						<img id="logoMd2" src="common/img/logo.png"	style="height: 40px; float: left; margin-top: 5px; margin-left: 10px; margin-right: 10px;">
 					</div>
-
+					<div th:if="${systemReady}" style="padding-left:10px; padding-top:5px; height: 40px; float:left">
+						<spam style="font-family:Courier New" th:text="${walletAddress}"></spam><br/>
+						<spam style="font-family:Courier New" th:text="${walletBalance}"></spam>
+					</div>
 					<!-- Navbar Right Menu -->
 					<div class="navbar-custom-menu">
 						<ul class="nav navbar-nav">
-							<li><div id="spinDiv" style="padding:15px;" title="Searching..." ><i class="fa fa-refresh fa-spin"></i></div></li>
-							<li><div id="cameraDiv" style="padding:15px;" title="Controle por Gestos Ativo" ><i id="cameraIcon" class="fa fa-video-camera"></i></div></li>
-							<li><a title="Configuration" href="#"
-								data-toggle="control-sidebar"><i class="fa fa-gears"></i></a></li>
+							<li><div th:if="${not systemReady}" style="padding:15px;" title="Searching..." ><i class="fa fa-refresh fa-spin"></i></div></li>
+							<li><div th:if="${systemReady}" style="padding:15px;" title="System Operational" ><i id="readyIcon" class="fa fa-check-square text-green"></i></div></li>
+							<li><div th:if="${not systemReady}" style="padding:15px;" title="System Error" ><i id="readyIcon" class="fa fa-ban text-red"></i></div></li>
+							<li><a title="Configuration" href="#" data-toggle="control-sidebar"><i class="fa fa-gears"></i></a></li>
 						</ul>
 					</div>
 
