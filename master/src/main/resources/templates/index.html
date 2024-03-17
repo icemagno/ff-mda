@@ -6,7 +6,7 @@
 
 <body class="skin-black-light layout-top-nav sidebar-collapse"
 	style="height: auto; min-height: 100%;">
-	
+
 	<div class="wrapper" style="height: auto; min-height: 100%;">
 
 		<header class="main-header">
@@ -20,19 +20,32 @@
 				<div class="container-fluid">
 
 					<div class="navbar-header">
-						<img id="logoMd2" src="common/img/logo.png"	style="height: 40px; float: left; margin-top: 5px; margin-left: 10px; margin-right: 10px;">
+						<img id="logoMd2" src="common/img/logo.png"
+							style="height: 40px; float: left; margin-top: 5px; margin-left: 10px; margin-right: 10px;">
 					</div>
-					<div th:if="${systemReady}" style="padding-left:10px; padding-top:5px; height: 40px; float:left">
-						<spam style="font-family:Courier New" th:text="${walletAddress}"></spam><br/>
+					<div th:if="${systemReady}"
+						style="padding-left: 10px; padding-top: 5px; height: 40px; float: left">
+						<spam style="font-family:Courier New" th:text="${walletAddress}"></spam>
+						<br />
 						<spam style="font-family:Courier New" th:text="${walletBalance}"></spam>
 					</div>
 					<!-- Navbar Right Menu -->
 					<div class="navbar-custom-menu">
 						<ul class="nav navbar-nav">
-							<li><div th:if="${not systemReady}" style="padding:15px;" title="Searching..." ><i class="fa fa-refresh fa-spin"></i></div></li>
-							<li><div th:if="${systemReady}" style="padding:15px;" title="System Operational" ><i id="readyIcon" class="fa fa-check-square text-green"></i></div></li>
-							<li><div th:if="${not systemReady}" style="padding:15px;" title="System Error" ><i id="readyIcon" class="fa fa-ban text-red"></i></div></li>
-							<li><a title="Configuration" href="#" data-toggle="control-sidebar"><i class="fa fa-gears"></i></a></li>
+							<li><div th:if="${not systemReady}" style="padding: 15px;"
+									title="Searching...">
+									<i class="fa fa-refresh fa-spin"></i>
+								</div></li>
+							<li><div th:if="${systemReady}" style="padding: 15px;"
+									title="System Operational">
+									<i id="readyIcon" class="fa fa-check-square text-green"></i>
+								</div></li>
+							<li><div th:if="${not systemReady}" style="padding: 15px;"
+									title="System Error">
+									<i id="readyIcon" class="fa fa-ban text-red"></i>
+								</div></li>
+							<li><a title="Configuration" href="#"
+								data-toggle="control-sidebar"><i class="fa fa-gears"></i></a></li>
 						</ul>
 					</div>
 
@@ -44,21 +57,144 @@
 
 		<aside class="main-sidebar" th:insert="~{sidebar}"></aside>
 
-		<div class="content-wrapper" style="position: relative; min-height: 600px;">
-			<section  class="content container-fluid">
+		<div class="content-wrapper"
+			style="position: relative; min-height: 600px;">
+			
+<section class="content-header">
+      <h1>
+        This Node
+        <small>Version 2.0</small>
+      </h1>
+      <ol class="breadcrumb">
+        <li><a href="#"><i class="fa fa-dashboard"></i> Home</a></li>
+      </ol>
+    </section>			
+			
+			<section class="content container-fluid">
 				<div class="row">
-					<div class="col-md-12">
-						<div class="box">
+					<section class="col-lg-3">
+						<div class="box box-primary">
 							<div class="box-header with-border">
-	              				<h3 class="box-title">This Node</h3>
+								<h3 class="box-title">An Empty Box</h3>
+
+								<div class="box-tools pull-right">
+									&nbsp;
+								</div>
+							</div>
+							<!-- /.box-header -->
+							<div class="box-body">
+							Body
+							</div>
+							<div class="box-footer text-center">
+								Footer
+							</div>							
+						</div>					
+					
+					
+					</section>				
+					<section class="col-lg-6">
+						<div class="box box-primary">
+							<div class="box-header ui-sortable-handle" style="cursor: move;">
+								<i class="fa fa-envelope"></i>
+
+								<h3 class="box-title">Quick Email</h3>
+								<!-- tools box -->
+								<div class="pull-right box-tools">
+									&nbsp;
+								</div>
+								<!-- /. tools -->
 							</div>
 							<div class="box-body">
-								<div class="row" id="thisNode"></div>
+								<form action="#" method="post">
+									<div class="form-group">
+										<input type="email" class="form-control" name="emailto"
+											placeholder="Email to:">
+									</div>
+									<div class="form-group">
+										<input type="text" class="form-control" name="subject"
+											placeholder="Subject">
+									</div>
+
+								</form>
 							</div>
-							<div class="box-footer">
+							<div class="box-footer clearfix">
+								<button type="button" class="pull-right btn btn-default"
+									id="sendEmail">
+									Send <i class="fa fa-arrow-circle-right"></i>
+								</button>
 							</div>
 						</div>
-					</div>
+					</section>
+					<section class="col-lg-3">
+						<div class="box box-primary">
+							<div class="box-header with-border">
+								<h3 class="box-title">Recently Added Products</h3>
+
+								<div class="box-tools pull-right">
+									&nbsp;
+								</div>
+							</div>
+							<!-- /.box-header -->
+							<div class="box-body">
+								<ul class="products-list product-list-in-box">
+									<li class="item">
+										<div class="product-img">
+											<img src="common/img/default-50x50.gif" alt="Product Image">
+										</div>
+										<div class="product-info">
+											<a href="javascript:void(0)" class="product-title">Samsung
+												TV <span class="label label-warning pull-right">$1800</span>
+											</a> <span class="product-description"> Samsung 32" 1080p
+												60Hz LED Smart HDTV. </span>
+										</div>
+									</li>
+									<!-- /.item -->
+									<li class="item">
+										<div class="product-img">
+											<img src="common/img/default-50x50.gif" alt="Product Image">
+										</div>
+										<div class="product-info">
+											<a href="javascript:void(0)" class="product-title">Bicycle
+												<span class="label label-info pull-right">$700</span>
+											</a> <span class="product-description"> 26" Mongoose
+												Dolomite Men's 7-speed, Navy Blue. </span>
+										</div>
+									</li>
+									<!-- /.item -->
+									<li class="item">
+										<div class="product-img">
+											<img src="common/img/default-50x50.gif" alt="Product Image">
+										</div>
+										<div class="product-info">
+											<a href="javascript:void(0)" class="product-title">Xbox
+												One <span class="label label-danger pull-right">$350</span>
+											</a> <span class="product-description"> Xbox One Console
+												Bundle with Halo Master Chief Collection. </span>
+										</div>
+									</li>
+									<!-- /.item -->
+									<li class="item">
+										<div class="product-img">
+											<img src="common/img/default-50x50.gif" alt="Product Image">
+										</div>
+										<div class="product-info">
+											<a href="javascript:void(0)" class="product-title">PlayStation
+												4 <span class="label label-success pull-right">$399</span>
+											</a> <span class="product-description"> PlayStation 4
+												500GB Console (PS4) </span>
+										</div>
+									</li>
+									<!-- /.item -->
+								</ul>
+							</div>
+							<!-- /.box-body -->
+							<div class="box-footer text-center">
+								<a href="javascript:void(0)" class="uppercase">View All
+									Products</a>
+							</div>
+							<!-- /.box-footer -->
+						</div>
+					</section>
 				</div>
 			</section>
 		</div>
@@ -69,27 +205,27 @@
 
 
 		<!-- Main Footer -->
-		
+
 		<footer class="main-footer"
 			style="height: 44px; padding: 0px 10px 0px 10px;">
-			
+
 			<table id="tableFooter" style="width: 100%; cursor: pointer">
 				<tr>
 					<td>by Carlos Magno Abreu</td>
 
-					<td style="width:40px">Foo</td>
-					<td style="width:70px" ></td>
-					<td style="width:70px" ></td>
+					<td style="width: 40px">Foo</td>
+					<td style="width: 70px"></td>
+					<td style="width: 70px"></td>
 				</tr>
 				<tr>
 					<td>magno.mabreu@gmail.com</td>
-					<td style="width:40px">Bar</td>
-					<td style="width:70px" ></td>
-					<td style="width:70px" ></td>
+					<td style="width: 40px">Bar</td>
+					<td style="width: 70px"></td>
+					<td style="width: 70px"></td>
 				</tr>
 			</table>
 		</footer>
-		
+
 
 	</div>
 
@@ -120,7 +256,8 @@
 	<script src="adminlte/plugins/iCheck/icheck.min.js"></script>
 
 	<!-- Select2 -->
-	<script	src="adminlte/bower_components/select2/dist/js/select2.full.min.js"></script>
+	<script
+		src="adminlte/bower_components/select2/dist/js/select2.full.min.js"></script>
 
 	<!-- FLOT CHARTS -->
 	<script src="adminlte/bower_components/Flot/jquery.flot.js"></script>
