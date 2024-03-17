@@ -4,7 +4,7 @@
 <head th:insert="~{head}">
 </head>
 
-<body class="skin-black-light layout-top-nav"
+<body class="skin-black-light layout-top-nav sidebar-collapse"
 	style="height: auto; min-height: 100%;">
 	
 	<div class="wrapper" style="height: auto; min-height: 100%;">
@@ -45,9 +45,20 @@
 		<aside class="main-sidebar" th:insert="~{sidebar}"></aside>
 
 		<div class="content-wrapper" style="position: relative; min-height: 600px;">
-			<section style="padding: 0px;" class="content container-fluid">
+			<section  class="content container-fluid">
 				<div class="row">
-	
+					<div class="col-md-12">
+						<div class="box">
+							<div class="box-header with-border">
+	              				<h3 class="box-title">This Node</h3>
+							</div>
+							<div class="box-body">
+								<div class="row" id="thisNode"></div>
+							</div>
+							<div class="box-footer">
+							</div>
+						</div>
+					</div>
 				</div>
 			</section>
 		</div>
@@ -145,8 +156,6 @@
 
 	<script src="common/websocket/sockjs.min.js"></script>
 	<script src="common/websocket/stomp.min.js"></script>
-	<script src="common/geohash.js"></script>
-
 	<script src="common/script.js"></script>
 
 </body>
