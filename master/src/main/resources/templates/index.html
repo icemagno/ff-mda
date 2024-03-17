@@ -59,60 +59,38 @@
 
 		<div class="content-wrapper"
 			style="position: relative; min-height: 600px;">
-			
-<section class="content-header">
-      <h1>
-        This Node
-        <small>Version 2.0</small>
-      </h1>
-      <ol class="breadcrumb">
-        <li><a href="#"><i class="fa fa-dashboard"></i> Home</a></li>
-      </ol>
-    </section>			
-			
+
+			<section class="content-header">
+				<h1>
+					This Node <small>Version 2.0</small>
+				</h1>
+				<ol class="breadcrumb">
+					<li><a href="#"><i class="fa fa-dashboard"></i> Home</a></li>
+				</ol>
+			</section>
+
 			<section class="content container-fluid">
 				<div class="row">
 					<section class="col-lg-3">
-						<div class="box box-primary">
-							<div class="box-header with-border">
-								<h3 class="box-title">An Empty Box</h3>
 
-								<div class="box-tools pull-right">
-									&nbsp;
-								</div>
-							</div>
-							<!-- /.box-header -->
-							<div class="box-body">
-							Body
-							</div>
-							<div class="box-footer text-center">
-								Footer
-							</div>							
-						</div>					
-					
-					
-					</section>				
-					<section class="col-lg-6">
 						<div class="box box-primary">
 							<div class="box-header ui-sortable-handle">
 								<i class="fa fa-envelope"></i>
 
-								<h3 class="box-title">Quick Email</h3>
+								<h3 class="box-title">Node Configuration</h3>
 								<!-- tools box -->
-								<div class="pull-right box-tools">
-									&nbsp;
-								</div>
+								<div class="pull-right box-tools">&nbsp;</div>
 								<!-- /. tools -->
 							</div>
 							<div class="box-body">
 								<form action="#" method="post">
 									<div class="form-group">
 										<input type="email" class="form-control" name="emailto"
-											placeholder="Email to:">
+											placeholder="Organization Name:">
 									</div>
 									<div class="form-group">
 										<input type="text" class="form-control" name="subject"
-											placeholder="Subject">
+											placeholder="Node Name">
 									</div>
 
 								</form>
@@ -120,19 +98,92 @@
 							<div class="box-footer clearfix">
 								<button type="button" class="pull-right btn btn-default"
 									id="sendEmail">
-									Send <i class="fa fa-arrow-circle-right"></i>
+									Update <i class="fa fa-arrow-circle-right"></i>
 								</button>
 							</div>
 						</div>
+						
+						<div class="box box-primary">
+							<div class="box-header ui-sortable-handle">
+								<i class="fa fa-envelope"></i>
+
+								<h3 class="box-title">Node Information</h3>
+								<!-- tools box -->
+								<div class="pull-right box-tools">&nbsp;</div>
+								<!-- /. tools -->
+							</div>
+							<div class="box-body">
+								<form action="#" method="post">
+									<div class="form-group">
+										<input type="email" class="form-control" name="emailto"
+											placeholder="Wallet Address">
+									</div>
+									<div class="form-group">
+										<input type="text" class="form-control" name="subject"
+											placeholder="IP Address">
+									</div>
+
+								</form>
+							</div>
+							<div class="box-footer clearfix">
+								<button type="button" class="pull-right btn btn-default"
+									id="sendEmail">
+									Refresh <i class="fa fa-arrow-circle-right"></i>
+								</button>
+							</div>
+						</div>						
+
 					</section>
+					<section class="col-lg-6">
+
+
+						<div class="box box-primary">
+							<div class="box-header ui-sortable-handle">
+								<i class="fa fa-envelope"></i>
+
+								<h3 class="box-title">Stack Configuration</h3>
+								<!-- tools box -->
+								<div class="pull-right box-tools">&nbsp;</div>
+								<!-- /. tools -->
+							</div>
+							<div class="box-body">
+								<form action="#" method="post">
+									<div class="form-group">
+										<input type="email" class="form-control" name="emailto"
+											placeholder="Stack Name:">
+									</div>
+								</form>
+							</div>
+							<div class="box-footer clearfix">
+								<button type="button" class="pull-right btn btn-default"
+									id="sendEmail">
+									Update <i class="fa fa-arrow-circle-right"></i>
+								</button>
+							</div>
+						</div>
+
+
+						<div class="box box-primary">
+							<div class="box-header with-border">
+								<i class="fa fa-envelope"></i>
+								<h3 class="box-title">Agent Slaves</h3>
+
+								<div class="box-tools pull-right">&nbsp;</div>
+							</div>
+							<!-- /.box-header -->
+							<div class="box-body">Body</div>
+							<div class="box-footer text-center">Footer</div>
+						</div>
+					</section>
+
+
 					<section class="col-lg-3">
 						<div class="box box-primary">
 							<div class="box-header with-border">
-								<h3 class="box-title">Recently Added Products</h3>
+								<i class="fa fa-envelope"></i>
+								<h3 class="box-title">FireFly Components</h3>
 
-								<div class="box-tools pull-right">
-									&nbsp;
-								</div>
+								<div class="box-tools pull-right">&nbsp;</div>
 							</div>
 							<!-- /.box-header -->
 							<div class="box-body">
@@ -142,8 +193,8 @@
 											<img src="common/img/default-50x50.gif" alt="Product Image">
 										</div>
 										<div class="product-info">
-											<a href="javascript:void(0)" class="product-title">Samsung
-												TV <span class="label label-warning pull-right">$1800</span>
+											<a href="javascript:void(0)" class="product-title">Data
+												Exchange <span class="label label-warning pull-right">$1800</span>
 											</a> <span class="product-description"> Samsung 32" 1080p
 												60Hz LED Smart HDTV. </span>
 										</div>
@@ -154,8 +205,8 @@
 											<img src="common/img/default-50x50.gif" alt="Product Image">
 										</div>
 										<div class="product-info">
-											<a href="javascript:void(0)" class="product-title">Bicycle
-												<span class="label label-info pull-right">$700</span>
+											<a href="javascript:void(0)" class="product-title">IPFS
+												Peer<span class="label label-info pull-right">$700</span>
 											</a> <span class="product-description"> 26" Mongoose
 												Dolomite Men's 7-speed, Navy Blue. </span>
 										</div>
@@ -166,8 +217,8 @@
 											<img src="common/img/default-50x50.gif" alt="Product Image">
 										</div>
 										<div class="product-info">
-											<a href="javascript:void(0)" class="product-title">Xbox
-												One <span class="label label-danger pull-right">$350</span>
+											<a href="javascript:void(0)" class="product-title">Besu
+												Node <span class="label label-danger pull-right">$350</span>
 											</a> <span class="product-description"> Xbox One Console
 												Bundle with Halo Master Chief Collection. </span>
 										</div>
@@ -178,8 +229,8 @@
 											<img src="common/img/default-50x50.gif" alt="Product Image">
 										</div>
 										<div class="product-info">
-											<a href="javascript:void(0)" class="product-title">PlayStation
-												4 <span class="label label-success pull-right">$399</span>
+											<a href="javascript:void(0)" class="product-title">FireFly
+												Core <span class="label label-success pull-right">$399</span>
 											</a> <span class="product-description"> PlayStation 4
 												500GB Console (PS4) </span>
 										</div>
@@ -188,10 +239,7 @@
 								</ul>
 							</div>
 							<!-- /.box-body -->
-							<div class="box-footer text-center">
-								<a href="javascript:void(0)" class="uppercase">View All
-									Products</a>
-							</div>
+							<div class="box-footer text-center">Footer</div>
 							<!-- /.box-footer -->
 						</div>
 					</section>
