@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import br.com.j1scorpii.ffmda.services.LocalService;
 
 @Controller
-public class HomeController {
+public class WEBRouteController {
 
     @Value("${spring.application.name}")
     String appName;
@@ -18,13 +18,28 @@ public class HomeController {
 
     @GetMapping("/")
     public String homePage(Model model) {
+    	this.setGenericModel( model );
+        return "index";
+    }
+    
+    @GetMapping("/local")
+    public String local(Model model) {
+    	this.setGenericModel( model );
+        return "local";
+    }
+
+    @GetMapping("/remote")
+    public String remote(Model model) {
+    	this.setGenericModel( model );
+        return "remote";
+    }
+
+    private void setGenericModel( Model model ) {
         model.addAttribute("appName", appName);
         model.addAttribute("walletAddress", localService.getWallet().getAddress() );
         model.addAttribute("systemReady", localService.amIReady() );
         model.addAttribute("walletBalance", localService.getMyWalletBalance() );
-        return "index";
     }
     
-
     
 }

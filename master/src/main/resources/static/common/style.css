@@ -27,3 +27,12 @@
     padding: 0px 10px;
     margin-left: 50px;
 }
+
+.navbar a:hover {
+	color: #cacaca !important;
+	background: #222d32 !important
+}
+
+.main-footer td {
+	color: white
+}
