@@ -12,10 +12,11 @@
 		<header class="main-header">
 
 			<!-- Header Navbar -->
-			<nav class="navbar navbar-static-top" role="navigation" style="background-color: #222d32; color: white;">
+			<nav class="navbar navbar-static-top" role="navigation"
+				style="background-color: #222d32; color: white;">
 
-				<a href="#" class="sidebar-toggle" data-toggle="push-menu" style="color:white"
-					role="button"></a>
+				<a href="#" class="sidebar-toggle" data-toggle="push-menu"
+					style="color: white" role="button"></a>
 
 				<div class="container-fluid">
 
@@ -34,7 +35,7 @@
 						<ul class="nav navbar-nav">
 							<li><div th:if="${not systemReady}" style="padding: 15px;"
 									title="Searching...">
-									<i class="fa fa-refresh fa-spin text-white" ></i>
+									<i class="fa fa-refresh fa-spin text-white"></i>
 								</div></li>
 							<li><div th:if="${systemReady}" style="padding: 15px;"
 									title="System Ready">
@@ -44,7 +45,8 @@
 									title="System Error">
 									<i id="readyIcon" class="fa fa-ban text-red"></i>
 								</div></li>
-							<li><a title="Configuration" href="#" style="color:white; border-left: 0px;"
+							<li><a title="Configuration" href="#"
+								style="color: white; border-left: 0px;"
 								data-toggle="control-sidebar"><i class="fa fa-gears"></i></a></li>
 						</ul>
 					</div>
@@ -73,9 +75,40 @@
 				<div class="row">
 					<section class="col-lg-3">
 
-						<div class="box box-primary">
+						<div class="callout ">
+							<h4>Configuration</h4>
+							<p>This Agent and Stack configurations.</p>
+						</div>	
+
+
+						<div class="box ">
 							<div class="box-header ui-sortable-handle">
-								<i class="fa fa-envelope"></i>
+								<i class="fa fa-gears"></i>
+
+								<h3 class="box-title">Stack Configuration</h3>
+								<!-- tools box -->
+								<div class="pull-right box-tools">&nbsp;</div>
+								<!-- /. tools -->
+							</div>
+							<div class="box-body">
+								<form action="#" method="post">
+									<div class="form-group">
+										<input type="email" class="form-control" name="emailto"
+											placeholder="Stack Name:">
+									</div>
+								</form>
+							</div>
+							<div class="box-footer clearfix">
+								<button type="button" class="pull-right btn btn-default"
+									id="sendEmail">
+									Update <i class="fa fa-arrow-circle-right"></i>
+								</button>
+							</div>
+						</div>
+
+						<div class="box ">
+							<div class="box-header ui-sortable-handle">
+								<i class="fa fa-gears"></i>
 
 								<h3 class="box-title">Node Configuration</h3>
 								<!-- tools box -->
@@ -103,9 +136,9 @@
 							</div>
 						</div>
 
-						<div class="box box-primary">
+						<div class="box ">
 							<div class="box-header ui-sortable-handle">
-								<i class="fa fa-envelope"></i>
+								<i class="fa fa-info-circle"></i>
 
 								<h3 class="box-title">Node Information</h3>
 								<!-- tools box -->
@@ -135,56 +168,40 @@
 
 					</section>
 					<section class="col-lg-6">
-
-
-						<div class="box box-primary">
-							<div class="box-header ui-sortable-handle">
-								<i class="fa fa-envelope"></i>
-
-								<h3 class="box-title">Stack Configuration</h3>
-								<!-- tools box -->
-								<div class="pull-right box-tools">&nbsp;</div>
-								<!-- /. tools -->
+						<!-- 
+							<div class="box box-solid">
+								<div class="box-body">
+							              <div class="callout ">
+							                <h4 th:text="${walletAddress}"></h4>
+							                <p th:text="${walletAddress}"></p>
+							              </div>
+								</div>
 							</div>
-							<div class="box-body">
-								<form action="#" method="post">
-									<div class="form-group">
-										<input type="email" class="form-control" name="emailto"
-											placeholder="Stack Name:">
-									</div>
-								</form>
-							</div>
-							<div class="box-footer clearfix">
-								<button type="button" class="pull-right btn btn-default"
-									id="sendEmail">
-									Update <i class="fa fa-arrow-circle-right"></i>
-								</button>
-							</div>
+						 -->
+
+						<div th:if="${showMainTip}" class="callout ">
+							<h4 th:text="${mainTip}"></h4>
+							<p th:text="${mainSubTip}"></p>
+						</div>
+
+						<div class="box ">
+							<div class="box-body" th:insert="~{infratabs}"></div>
+							
 						</div>
 
 
-						<div class="box box-primary">
-							<div class="box-header with-border">
-								<i class="fa fa-envelope"></i>
-								<h3 class="box-title">Agent Slaves</h3>
-
-								<div class="box-tools pull-right">&nbsp;</div>
-							</div>
-							<!-- /.box-header -->
-							<div class="box-body">Body</div>
-							<div class="box-footer text-center">Footer</div>
-						</div>
 					</section>
 
 
 					<section class="col-lg-3">
-						<div class="box box-primary">
-							<div class="box-header with-border">
-								<i class="fa fa-envelope"></i>
-								<h3 class="box-title">FireFly Components</h3>
-
-								<div class="box-tools pull-right">&nbsp;</div>
-							</div>
+					
+						<div class="callout ">
+							<h4>FireFly Components</h4>
+							<p>Here you can check all components running.</p>
+						</div>					
+					
+					
+						<div class="box">
 							<div class="box-body">
 								<ul class="products-list product-list-in-box">
 									<li class="item">
@@ -230,9 +247,9 @@
 									</li>
 								</ul>
 							</div>
-							
+
 							<div class="box-footer text-center">Footer</div>
-							
+
 						</div>
 					</section>
 				</div>

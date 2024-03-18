@@ -31,10 +31,11 @@ public class LocalService {
 	private boolean imReady = false;
 	private String myBalance = "0";
 	
+	
 	@PostConstruct
 	private void init() {
 		logger.info("init");
-
+		
 		File f = new File( localWalletFolder );
 		
 		// Just to be sure the folder exists
