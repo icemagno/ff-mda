@@ -9,53 +9,7 @@
 
 	<div class="wrapper" style="height: auto; min-height: 100%;">
 
-		<header class="main-header">
-
-			<!-- Header Navbar -->
-			<nav class="navbar navbar-static-top" role="navigation"
-				style="background-color: #222d32; color: white;">
-
-				<a href="#" class="sidebar-toggle" data-toggle="push-menu"
-					style="color: white" role="button"></a>
-
-				<div class="container-fluid">
-
-					<div class="navbar-header">
-						<img id="logoMd2" src="common/img/logo-yellow.png"
-							style="height: 40px; float: left; margin-top: 5px; margin-left: 10px; margin-right: 10px;">
-					</div>
-					<div th:if="${systemReady}"
-						style="padding-left: 10px; padding-top: 5px; height: 40px; float: left">
-						<spam style="font-family:Courier New" th:text="${walletAddress}"></spam>
-						<br />
-						<spam style="font-family:Courier New" th:text="${walletBalance}"></spam>
-					</div>
-					<!-- Navbar Right Menu -->
-					<div class="navbar-custom-menu">
-						<ul class="nav navbar-nav">
-							<li><div th:if="${not systemReady}" style="padding: 15px;"
-									title="Searching...">
-									<i class="fa fa-refresh fa-spin text-white"></i>
-								</div></li>
-							<li><div th:if="${systemReady}" style="padding: 15px;"
-									title="System Ready">
-									<i id="readyIcon" class="fa fa-check-square text-green"></i>
-								</div></li>
-							<li><div th:if="${not systemReady}" style="padding: 15px;"
-									title="System Error">
-									<i id="readyIcon" class="fa fa-ban text-red"></i>
-								</div></li>
-							<li><a title="Configuration" href="#"
-								style="color: white; border-left: 0px;"
-								data-toggle="control-sidebar"><i class="fa fa-gears"></i></a></li>
-						</ul>
-					</div>
-
-
-				</div>
-			</nav>
-
-		</header>
+		<header class="main-header" th:insert="~{navbar}" ></header>
 
 		<aside class="main-sidebar" th:insert="~{sidebar}"></aside>
 
@@ -64,7 +18,7 @@
 
 			<section class="content-header">
 				<h1>
-					Local Node <small>All components running in this server</small>
+					Local Node | <small>The Local Stack</small>
 				</h1>
 				<ol class="breadcrumb">
 					<li><a href="/"><i class="fa fa-dashboard"></i> Home</a></li>
@@ -75,42 +29,11 @@
 				<div class="row">
 					<section class="col-lg-3">
 
-						<div class="callout ">
-							<h4>Configuration</h4>
-							<p>This Agent and Stack configurations.</p>
-						</div>	
-
-
 						<div class="box ">
 							<div class="box-header ui-sortable-handle">
 								<i class="fa fa-gears"></i>
 
-								<h3 class="box-title">Stack Configuration</h3>
-								<!-- tools box -->
-								<div class="pull-right box-tools">&nbsp;</div>
-								<!-- /. tools -->
-							</div>
-							<div class="box-body">
-								<form action="#" method="post">
-									<div class="form-group">
-										<input type="email" class="form-control" name="emailto"
-											placeholder="Stack Name:">
-									</div>
-								</form>
-							</div>
-							<div class="box-footer clearfix">
-								<button type="button" class="pull-right btn btn-default"
-									id="sendEmail">
-									Update <i class="fa fa-arrow-circle-right"></i>
-								</button>
-							</div>
-						</div>
-
-						<div class="box ">
-							<div class="box-header ui-sortable-handle">
-								<i class="fa fa-gears"></i>
-
-								<h3 class="box-title">Node Configuration</h3>
+								<h3 class="box-title">Supernode Configuration</h3>
 								<!-- tools box -->
 								<div class="pull-right box-tools">&nbsp;</div>
 								<!-- /. tools -->
@@ -140,7 +63,7 @@
 							<div class="box-header ui-sortable-handle">
 								<i class="fa fa-info-circle"></i>
 
-								<h3 class="box-title">Node Information</h3>
+								<h3 class="box-title">Agent Information</h3>
 								<!-- tools box -->
 								<div class="pull-right box-tools">&nbsp;</div>
 								<!-- /. tools -->
@@ -148,21 +71,14 @@
 							<div class="box-body">
 								<form action="#" method="post">
 									<div class="form-group">
-										<input type="email" class="form-control" name="emailto"
-											placeholder="Wallet Address">
+										<p>Server IP Address</p> 
+										<spam style="font-family:Courier New" th:text="${serverIpAddress}"></spam>
 									</div>
 									<div class="form-group">
-										<input type="text" class="form-control" name="subject"
-											placeholder="IP Address">
+										<p>Server Host Name</p> 
+										<spam style="font-family:Courier New" th:text="${serverHostName}"></spam>
 									</div>
-
 								</form>
-							</div>
-							<div class="box-footer clearfix">
-								<button type="button" class="pull-right btn btn-default"
-									id="sendEmail">
-									Refresh <i class="fa fa-arrow-circle-right"></i>
-								</button>
 							</div>
 						</div>
 
@@ -195,18 +111,12 @@
 
 					<section class="col-lg-3">
 					
-						<div class="callout ">
-							<h4>FireFly Components</h4>
-							<p>Here you can check all components running.</p>
-						</div>					
-					
-					
 						<div class="box">
 							<div class="box-body">
 								<ul class="products-list product-list-in-box">
 									<li class="item">
 										<div class="product-img">
-											<img src="common/img/default-50x50.gif" alt="Product Image">
+											<img src="common/img/plugin-logo.jpg" alt="Product Image">
 										</div>
 										<div class="product-info">
 											<a href="javascript:void(0)" class="product-title">Data
@@ -216,7 +126,17 @@
 									</li>
 									<li class="item">
 										<div class="product-img">
-											<img src="common/img/default-50x50.gif" alt="Product Image">
+											<img src="common/img/postgres-logo.jpg" alt="Product Image">
+										</div>
+										<div class="product-info">
+											<a href="javascript:void(0)" class="product-title">PostgreSQL
+											 <span class="label label-success pull-right">RUNNING</span>
+											</a> <span class="product-description"> Open room </span>
+										</div>
+									</li>									
+									<li class="item">
+										<div class="product-img">
+											<img src="common/img/ipfs-logo.jpg" alt="Product Image">
 										</div>
 										<div class="product-info">
 											<a href="javascript:void(0)" class="product-title">IPFS
@@ -226,7 +146,7 @@
 									</li>
 									<li class="item">
 										<div class="product-img">
-											<img src="common/img/default-50x50.gif" alt="Product Image">
+											<img src="common/img/besu-logo.jpg" alt="Product Image">
 										</div>
 										<div class="product-info">
 											<a href="javascript:void(0)" class="product-title">Besu
@@ -237,7 +157,47 @@
 									</li>
 									<li class="item">
 										<div class="product-img">
-											<img src="common/img/default-50x50.gif" alt="Product Image">
+											<img src="common/img/plugin-logo.jpg" alt="Product Image">
+										</div>
+										<div class="product-info">
+											<a href="javascript:void(0)" class="product-title">FireFly Tokens
+											 <span class="label label-success pull-right">RUNNING</span>
+											</a> <span class="product-description"> Open room </span>
+										</div>
+									</li>									
+									<li class="item">
+										<div class="product-img">
+											<img src="common/img/plugin-logo.jpg" alt="Product Image">
+										</div>
+										<div class="product-info">
+											<a href="javascript:void(0)" class="product-title">FireFly Signer
+											 <span class="label label-success pull-right">RUNNING</span>
+											</a> <span class="product-description"> Open room </span>
+										</div>
+									</li>
+									<li class="item">
+										<div class="product-img">
+											<img src="common/img/plugin-logo.jpg" alt="Product Image">
+										</div>
+										<div class="product-info">
+											<a href="javascript:void(0)" class="product-title">FireFly EVM Connector
+											 <span class="label label-success pull-right">RUNNING</span>
+											</a> <span class="product-description"> Open room </span>
+										</div>
+									</li>
+									<li class="item">
+										<div class="product-img">
+											<img src="common/img/plugin-logo.jpg" alt="Product Image">
+										</div>
+										<div class="product-info">
+											<a href="javascript:void(0)" class="product-title">FireFly Sandbox
+											 <span class="label label-success pull-right">RUNNING</span>
+											</a> <span class="product-description"> Open room </span>
+										</div>
+									</li>
+									<li class="item">
+										<div class="product-img">
+											<img src="common/img/firefly-logo.jpg" alt="Product Image">
 										</div>
 										<div class="product-info">
 											<a href="javascript:void(0)" class="product-title">FireFly

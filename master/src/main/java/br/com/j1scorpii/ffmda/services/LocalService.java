@@ -5,8 +5,14 @@ import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileReader;
 import java.io.FileWriter;
+import java.io.IOException;
+import java.nio.charset.Charset;
+import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.util.UUID;
 
+import org.json.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
@@ -25,12 +31,13 @@ public class LocalService {
 	private String localDataFolder 		= "/ffmda";
 	private String localWalletFolder 	= localDataFolder + "/wallets";
 	private String myPasswordFile 		= localDataFolder + "/password.txt";
+	private String myConfigFile			= localDataFolder + "/agent-config.json";
 
 	private Wallet myWallet;
 	private String myPassword;
 	private boolean imReady = false;
 	private String myBalance = "0";
-	
+	private JSONObject agentConfig;
 	
 	@PostConstruct
 	private void init() {
@@ -67,12 +74,50 @@ public class LocalService {
 			e.printStackTrace();
 		}
 		
-		// If we have a wallet then we are ready to go ahead.
-		this.imReady = ( this.myWallet != null );
+		// Load this local agent configuration
+		try {
+			if( new File( myConfigFile ).exists() ) {
+				String content = readFile( myConfigFile , StandardCharsets.UTF_8);
+				this.agentConfig = new JSONObject(content);
+			} else {
+				this.agentConfig = new JSONObject();
+				JSONObject stackStatus = new JSONObject();
+				
+				stackStatus
+				.put("dataExchangeOk", false)
+				.put("postgresOk", false)
+				.put("ipfsOk", false)
+				.put("besuOk", false)
+				.put("tokensOk", false)
+				.put("signerOk", false)
+				.put("evmConnOk", false)
+				.put("sandboxOk", false)
+				.put("coreOk", false);
+				
+				this.agentConfig.put("orgName", "");
+				this.agentConfig.put("nodeName", "");
+				this.agentConfig.put("stackStatus", stackStatus);
+				
+				BufferedWriter writer = new BufferedWriter( new FileWriter( myConfigFile , true) );
+				writer.write( this.agentConfig.toString() );
+				writer.close();					
+				
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		
+		
+		// If we have a wallet and a valid config data then we are ready to go ahead.
+		this.imReady = ( this.myWallet != null && this.agentConfig != null && this.agentConfig.has("orgName") );
 	}
 	
 	public String getMyWalletBalance() {
 		return this.myBalance + " ETH";
+	}
+	
+	public JSONObject getAgentConfig() {
+		return this.agentConfig;
 	}
 	
 	public boolean amIReady() {
@@ -117,7 +162,15 @@ public class LocalService {
 		Credentials credentials = WalletUtils.loadBip39Credentials( this.myPassword, wallet.getMnemonic() );	
 		ECKeyPair privateKey = credentials.getEcKeyPair();
 		this.myWallet = new Wallet(credentials.getAddress(), wallet.getMnemonic(), privateKey.getPublicKey().toString(16), privateKey.getPrivateKey().toString(16) );
-	}	
+	}
+	
+	
+	private String readFile(String path, Charset encoding)  throws IOException {
+		byte[] encoded = Files.readAllBytes(Paths.get(path));
+		return new String(encoded, encoding);
+	}		
+	
+	
 	
 	
 }

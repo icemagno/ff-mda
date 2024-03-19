@@ -44,6 +44,8 @@ public class WEBRouteController {
     	model.addAttribute("showMainTip", mainTips.getBoolean("show") );
     	
         model.addAttribute("appName", appName);
+        model.addAttribute("serverIpAddress", "192.168.1.202");
+        model.addAttribute("serverHostName", "firefly.s1");
         model.addAttribute("walletAddress", localService.getWallet().getAddress() );
         model.addAttribute("systemReady", localService.amIReady() );
         model.addAttribute("walletBalance", localService.getMyWalletBalance() );
