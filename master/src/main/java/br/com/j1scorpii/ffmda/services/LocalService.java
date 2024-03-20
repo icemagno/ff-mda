@@ -12,6 +12,7 @@ import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.UUID;
 
+import org.apache.commons.io.FileUtils;
 import org.json.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -22,6 +23,7 @@ import org.web3j.crypto.ECKeyPair;
 import org.web3j.crypto.WalletUtils;
 
 import br.com.j1scorpii.ffmda.model.Wallet;
+import br.com.j1scorpii.ffmda.util.PKIManager;
 import jakarta.annotation.PostConstruct;
 
 @Service
@@ -31,13 +33,14 @@ public class LocalService {
 	private String localDataFolder 		= "/ffmda";
 	private String localWalletFolder 	= localDataFolder + "/wallets";
 	private String myPasswordFile 		= localDataFolder + "/.password.txt";
-	private String myConfigFile		= localDataFolder + "/agent-config.json";
+	private String myConfigFile			= localDataFolder + "/agent-config.json";
 
 	private Wallet myWallet;
 	private String myPassword;
 	private boolean imReady = false;
 	private String myBalance = "0";
 	private JSONObject agentConfig;
+	private PKIManager pkiManager;
 	
 	@PostConstruct
 	private void init() {
@@ -49,7 +52,15 @@ public class LocalService {
 		f.mkdirs();
 		
 		// We need a password to manage the wallet
-		this.readPassword();
+		boolean isNew = this.readPassword();
+		
+		// If a new password was generated then we need to recriate the wallet too.
+		// Delete any file in wallet folder.
+		// NOTE: This is very dangerous since we may lost funds or access to contracts.
+		if ( isNew ) {
+			try { FileUtils.cleanDirectory(f); } catch (Exception e) { e.printStackTrace();	}
+		}
+		
 		
 		// If we don't have any password at this point then everything was broken
 		if( this.myPassword == null ) {
@@ -110,6 +121,13 @@ public class LocalService {
 		
 		// If we have a wallet and a valid config data then we are ready to go ahead.
 		this.imReady = ( this.myWallet != null && this.agentConfig != null && this.agentConfig.has("orgName") );
+		
+		// Start the PKI Manager
+		if( this.imReady ) {
+			String pkiACAlias = "MDA.FireFly";
+			pkiManager = new PKIManager( localDataFolder, this.myPassword, pkiACAlias );
+			pkiManager.genAc();
+		}
 	}
 	
 	private void saveConfig() throws Exception {
@@ -134,22 +152,25 @@ public class LocalService {
 		return myWallet;
 	}
 	
-	private void readPassword() {
+	private boolean readPassword() {
 		try {
 			File pFile = new File( myPasswordFile );
 			if( pFile.exists() ) {
 				BufferedReader reader = new BufferedReader( new FileReader( myPasswordFile ) );
 				this.myPassword = reader.readLine();
 				reader.close();
+				
 			} else {
 				this.myPassword = UUID.randomUUID().toString();				
 				BufferedWriter writer = new BufferedWriter( new FileWriter( myPasswordFile , true) );
 				writer.write( this.myPassword );
-				writer.close();			
+				writer.close();
+				return true;
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
+		return false;
 	}
 	
 	
