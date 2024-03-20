@@ -8,7 +8,6 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 
 import br.com.j1scorpii.ffmda.services.LocalService;
-import br.com.j1scorpii.ffmda.services.TipService;
 
 @Controller
 public class WEBRouteController {
@@ -17,7 +16,6 @@ public class WEBRouteController {
     String appName;
     
     @Autowired private LocalService localService;
-    @Autowired private TipService tipService;
 
     @GetMapping("/")
     public String homePage(Model model) {
@@ -37,18 +35,20 @@ public class WEBRouteController {
         return "remote";
     }
 
-    private void setGenericModel( Model model ) {  	
-    	JSONObject mainTips = tipService.getCurrentMainTip();
-    	model.addAttribute("mainTip", mainTips.getString("mainTip") );
-    	model.addAttribute("mainSubTip", mainTips.getString("mainSubTip") );
-    	model.addAttribute("showMainTip", mainTips.getBoolean("show") );
-    	
+    private void setGenericModel( Model model ) {
+   	
         model.addAttribute("appName", appName);
         model.addAttribute("serverIpAddress", "192.168.1.202");
         model.addAttribute("serverHostName", "firefly.s1");
         model.addAttribute("walletAddress", localService.getWallet().getAddress() );
         model.addAttribute("systemReady", localService.amIReady() );
         model.addAttribute("walletBalance", localService.getMyWalletBalance() );
+        
+        // Inform to front if the stack is locked to edit
+        JSONObject config = localService.getAgentConfig();
+        model.addAttribute("stackIsLocked", config.getJSONObject("stackStatus").getBoolean("locked") );
+        model.addAttribute("orgName", config.getString("orgName") );
+        model.addAttribute("nodeName", config.getString("nodeName") );
     }
     
     

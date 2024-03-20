@@ -77,13 +77,15 @@ public class LocalService {
 		// Load this local agent configuration
 		try {
 			if( new File( myConfigFile ).exists() ) {
-				String content = readFile( myConfigFile , StandardCharsets.UTF_8);
-				this.agentConfig = new JSONObject(content);
+				logger.info("Configuration file found.");
+				this.loadConfig();
 			} else {
+				logger.info("Configuration file not found. Will create one.");
 				this.agentConfig = new JSONObject();
 				JSONObject stackStatus = new JSONObject();
 				
 				stackStatus
+				.put("locked", false)
 				.put("dataExchangeOk", false)
 				.put("postgresOk", false)
 				.put("ipfsOk", false)
@@ -98,9 +100,7 @@ public class LocalService {
 				this.agentConfig.put("nodeName", "");
 				this.agentConfig.put("stackStatus", stackStatus);
 				
-				BufferedWriter writer = new BufferedWriter( new FileWriter( myConfigFile , true) );
-				writer.write( this.agentConfig.toString() );
-				writer.close();					
+				saveConfig();
 				
 			}
 		} catch (Exception e) {
@@ -110,6 +110,12 @@ public class LocalService {
 		
 		// If we have a wallet and a valid config data then we are ready to go ahead.
 		this.imReady = ( this.myWallet != null && this.agentConfig != null && this.agentConfig.has("orgName") );
+	}
+	
+	private void saveConfig() throws Exception {
+		BufferedWriter writer = new BufferedWriter( new FileWriter( myConfigFile) );
+		writer.write( this.agentConfig.toString() );
+		writer.close();			
 	}
 	
 	public String getMyWalletBalance() {
@@ -168,6 +174,32 @@ public class LocalService {
 	private String readFile(String path, Charset encoding)  throws IOException {
 		byte[] encoded = Files.readAllBytes(Paths.get(path));
 		return new String(encoded, encoding);
+	}
+	
+	private void loadConfig() throws Exception {
+		String content = readFile( myConfigFile , StandardCharsets.UTF_8);
+		this.agentConfig = new JSONObject(content);		
+	}
+
+	// Save Organization name and NOde name to configuration
+	public JSONObject saveOrgAndNodeNames(String data) throws Exception {
+		JSONObject obj = new JSONObject( data );
+		if( obj.has("data") ) {
+			obj = obj.getJSONObject("data");
+			if( obj.has("orgName") ) this.agentConfig.put("orgName", obj.getString("orgName") );
+			if( obj.has("nodeName") ) this.agentConfig.put("nodeName", obj.getString("nodeName") );
+			this.saveConfig();
+		}
+		return this.agentConfig;
+	}
+
+	// Reload configuration from disk. Useful when someone edits the JSON file directly
+	public void reloadConfig() {
+		try {
+			loadConfig();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 	}		
 	
 	
