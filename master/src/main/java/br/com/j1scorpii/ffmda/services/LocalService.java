@@ -30,8 +30,8 @@ public class LocalService {
 	
 	private String localDataFolder 		= "/ffmda";
 	private String localWalletFolder 	= localDataFolder + "/wallets";
-	private String myPasswordFile 		= localDataFolder + "/password.txt";
-	private String myConfigFile			= localDataFolder + "/agent-config.json";
+	private String myPasswordFile 		= localDataFolder + "/.password.txt";
+	private String myConfigFile		= localDataFolder + "/agent-config.json";
 
 	private Wallet myWallet;
 	private String myPassword;
