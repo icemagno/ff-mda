@@ -23,6 +23,7 @@
 		<maven.test.skip>true</maven.test.skip>
 		<webj3.version>5.0.0</webj3.version>
 		<bc.version>1.70</bc.version>
+		<bc-old.version>1.54</bc-old.version>
 	</properties>
 
 	<dependencies>
