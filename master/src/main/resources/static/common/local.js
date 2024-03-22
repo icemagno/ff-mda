@@ -7,7 +7,8 @@ $( document ).ready(function() {
   		console.log( data );
   		$("#orgName").val( data.orgName );
   		$("#nodeName").val( data.nodeName);
-  		
+  		$("#ipAddress").val( data.ipAddress );
+  		$("#hostName").val( data.hostName);  		
 		checkConfig( data );
   		
   });
@@ -16,7 +17,10 @@ $( document ).ready(function() {
   $("#updateOrgName").click( ()=>{
 		let orgName = $("#orgName").val();
 		let nodeName = $("#nodeName").val();
-		let data = { orgName: orgName, nodeName: nodeName }
+		let hostName = $("#hostName").val();
+		let ipAddress = $("#ipAddress").val();
+
+		let data = { orgName: orgName, nodeName: nodeName, ipAddress: ipAddress, hostName: hostName }
 		$.ajax ({
 		    url: "/v1/org/save",
 		    type: "POST",
@@ -24,7 +28,7 @@ $( document ).ready(function() {
 		    dataType: "json",
 		    contentType: "application/json; charset=utf-8",
 		    success: function( data ){
-		        checkConfig( data )
+		        location.reload();
 		    }
 		});		
   });

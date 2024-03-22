@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import br.com.j1scorpii.ffmda.services.LocalService;
 
@@ -29,6 +30,13 @@ public class WEBRouteController {
         return "local";
     }
 
+    @GetMapping("/component")
+    public String component( @RequestParam(value = "name", required = true) String name, Model model) {
+    	this.setGenericModel( model );
+    	model.addAttribute("componentName", name);
+        return "component";
+    }
+    
     @GetMapping("/remote")
     public String remote(Model model) {
     	this.setGenericModel( model );
@@ -38,8 +46,6 @@ public class WEBRouteController {
     private void setGenericModel( Model model ) {
    	
         model.addAttribute("appName", appName);
-        model.addAttribute("serverIpAddress", "192.168.1.202");
-        model.addAttribute("serverHostName", "firefly.s1");
         model.addAttribute("walletAddress", localService.getWallet().getAddress() );
         model.addAttribute("systemReady", localService.amIReady() );
         model.addAttribute("walletBalance", localService.getMyWalletBalance() );
@@ -49,6 +55,9 @@ public class WEBRouteController {
         model.addAttribute("stackIsLocked", config.getJSONObject("stackStatus").getBoolean("locked") );
         model.addAttribute("orgName", config.getString("orgName") );
         model.addAttribute("nodeName", config.getString("nodeName") );
+        model.addAttribute("serverIpAddress", config.getString("ipAddress") );
+        model.addAttribute("serverHostName", config.getString("hostName"));
+        
     }
     
     

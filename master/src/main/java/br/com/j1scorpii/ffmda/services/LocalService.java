@@ -12,7 +12,6 @@ import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.UUID;
 
-import org.apache.commons.io.FileUtils;
 import org.json.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -57,9 +56,11 @@ public class LocalService {
 		// If a new password was generated then we need to recriate the wallet too.
 		// Delete any file in wallet folder.
 		// NOTE: This is very dangerous since we may lost funds or access to contracts.
+		/*
 		if ( isNew ) {
 			try { FileUtils.cleanDirectory(f); } catch (Exception e) { e.printStackTrace();	}
 		}
+		*/
 		
 		
 		// If we don't have any password at this point then everything was broken
@@ -109,6 +110,9 @@ public class LocalService {
 				
 				this.agentConfig.put("orgName", "");
 				this.agentConfig.put("nodeName", "");
+				// TODO: Try to get IP and name from Docker NAT
+				this.agentConfig.put("hostName", "");
+				this.agentConfig.put("ipAddress", "");
 				this.agentConfig.put("stackStatus", stackStatus);
 				
 				saveConfig();
@@ -124,34 +128,18 @@ public class LocalService {
 		
 		// Start the PKI Manager
 		if( this.imReady ) {
-			String pkiACAlias = "MDA.FireFly";
-			pkiManager = new PKIManager( localDataFolder, this.myPassword, pkiACAlias );
-			pkiManager.genAc();
+			pkiManager = new PKIManager( localDataFolder, this.myPassword, "MDA.FireFly" );
+			// Just to avoid someone unlock the config by changing the JSON config file
+			// we will check if we have the CA files (certificate) already created. 
+			// If so, will lock config again
+			if( pkiManager.caWasCreated() ) {
+				this.agentConfig.getJSONObject("stackStatus").put("locked", true);	
+				try { this.saveConfig(); } catch (Exception e) { e.printStackTrace(); }
+			}
 		}
 	}
 	
-	private void saveConfig() throws Exception {
-		BufferedWriter writer = new BufferedWriter( new FileWriter( myConfigFile) );
-		writer.write( this.agentConfig.toString() );
-		writer.close();			
-	}
-	
-	public String getMyWalletBalance() {
-		return this.myBalance + " ETH";
-	}
-	
-	public JSONObject getAgentConfig() {
-		return this.agentConfig;
-	}
-	
-	public boolean amIReady() {
-		return this.imReady;
-	}
-	
-	public Wallet getWallet() {
-		return myWallet;
-	}
-	
+	// Read password from file or create a new one.
 	private boolean readPassword() {
 		try {
 			File pFile = new File( myPasswordFile );
@@ -192,25 +180,28 @@ public class LocalService {
 	}
 	
 	
-	private String readFile(String path, Charset encoding)  throws IOException {
-		byte[] encoded = Files.readAllBytes(Paths.get(path));
-		return new String(encoded, encoding);
-	}
-	
-	private void loadConfig() throws Exception {
-		String content = readFile( myConfigFile , StandardCharsets.UTF_8);
-		this.agentConfig = new JSONObject(content);		
-	}
-
 	// Save Organization name and NOde name to configuration
-	public JSONObject saveOrgAndNodeNames(String data) throws Exception {
-		JSONObject obj = new JSONObject( data );
-		if( obj.has("data") ) {
-			obj = obj.getJSONObject("data");
-			if( obj.has("orgName") ) this.agentConfig.put("orgName", obj.getString("orgName") );
-			if( obj.has("nodeName") ) this.agentConfig.put("nodeName", obj.getString("nodeName") );
-			this.saveConfig();
+	public JSONObject saveOrgData(String data) throws Exception {
+		// Will only save Org config if it is open
+		if ( this.agentConfig.getJSONObject("stackStatus").getBoolean("locked") == false ) {
+			JSONObject obj = new JSONObject( data );
+			if( obj.has("data") ) {
+				obj = obj.getJSONObject("data");
+				if( obj.has("orgName") ) this.agentConfig.put("orgName", obj.getString("orgName") );
+				if( obj.has("nodeName") ) this.agentConfig.put("nodeName", obj.getString("nodeName") );
+				if( obj.has("ipAddress") ) this.agentConfig.put("ipAddress", obj.getString("ipAddress") );
+				if( obj.has("hostName") ) this.agentConfig.put("hostName", obj.getString("hostName") );	
+				// Lock this part of configuration
+				this.agentConfig.getJSONObject("stackStatus").put("locked", true);	
+				this.saveConfig();
+				
+				// Create the Certificate Authority for all Conglomerate
+				// Because it is running on the Master Agent, this server will 
+				// represent the Certificate Authority that will sign the certificates of the Data Exchange nodes.
+				pkiManager.genAc( obj.getString("hostName"), obj.getString("orgName"), obj.getString("nodeName") );
+			}
 		}
+		// Just return current config ( changed or not )
 		return this.agentConfig;
 	}
 
@@ -223,7 +214,36 @@ public class LocalService {
 		}
 	}		
 	
+	private String readFile(String path, Charset encoding)  throws IOException {
+		byte[] encoded = Files.readAllBytes(Paths.get(path));
+		return new String(encoded, encoding);
+	}
 	
+	private void loadConfig() throws Exception {
+		String content = readFile( myConfigFile , StandardCharsets.UTF_8);
+		this.agentConfig = new JSONObject(content);
+	}
 	
+	public String getMyWalletBalance() {
+		return this.myBalance + " ETH";
+	}
+	
+	public JSONObject getAgentConfig() {
+		return this.agentConfig;
+	}
+	
+	public boolean amIReady() {
+		return this.imReady;
+	}
+	
+	public Wallet getWallet() {
+		return myWallet;
+	}
+	
+	private void saveConfig() throws Exception {
+		BufferedWriter writer = new BufferedWriter( new FileWriter( myConfigFile) );
+		writer.write( this.agentConfig.toString() );
+		writer.close();			
+	}	
 	
 }

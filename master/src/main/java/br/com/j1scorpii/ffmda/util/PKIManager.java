@@ -75,9 +75,21 @@ public class PKIManager {
 	}
     
     
+    /*
+		CN: CommonName
+		OU: OrganizationalUnit
+		O: Organization
+		L: Locality
+		S: StateOrProvinceName
+		C: CountryName   
+    */
     //private void genAc( String certAlias, String keyStoreFile, String certificateFile, String storePassword, String privateKeyPassword, X500Name subjectName, X500Name issuerName ) {
-    public void genAc( ) {	
-        X500Name acIssuerName = new X500Name("CN=TESTE Autoridade Certificadora Raiz Brasileira, O=ICP-Brasil, OU=Instituto Nacional de Tecnologia da Informacao - ITI, OU=CERTIFICADO DE TESTE,ST=TESTE CASNAV, C=BR");
+    public void genAc( String commonName, String organization, String organizationalUnit ) {	
+        X500Name acIssuerName = new X500Name(
+        		"CN=" + commonName + 
+        		", O=" + organization +
+        		", OU=" + organizationalUnit +
+        		", OU=Multiparty Deployer Agent");
         try {
         	char[] pkPassword = this.password.toCharArray();
         	KeyPair keyPair = generateKeyPair();
@@ -99,6 +111,10 @@ public class PKIManager {
         } catch (Exception e) {
             e.printStackTrace();
         }
+    }
+    
+    public boolean caWasCreated() {
+    	return new File(this.issuerCertificateFile).exists();
     }
     
     private void saveCertificate( String file, X509Certificate cert) throws IOException {

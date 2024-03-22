@@ -36,11 +36,12 @@ public class LocalAgentController {
 
     // Save Organization name and Node name into config file
     @PostMapping( value="/org/save", consumes= MediaType.APPLICATION_JSON_VALUE )
-    public ResponseEntity<String> saveOrgAndNodeNames( @RequestBody String data  ) {
+    public ResponseEntity<String> saveOrgData( @RequestBody String data  ) {
     	try {
-    		JSONObject result = this.localService.saveOrgAndNodeNames( data );
+    		JSONObject result = this.localService.saveOrgData( data );
     		return new ResponseEntity<>( result.toString(), HttpStatus.OK );
     	} catch (Exception e) {
+    		e.printStackTrace();
     		return new ResponseEntity<>( e.getMessage() , HttpStatus.INTERNAL_SERVER_ERROR );
 		}
     }    
