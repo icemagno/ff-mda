@@ -1,2 +1,2 @@
 # ff-mda
-FireFly Multiparty Deployer Agent
+Multiparty Deployer Agent for FireFly
