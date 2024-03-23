@@ -1,5 +1,8 @@
 #! /bin/sh
 
+
+mvn clean package
+
 docker network create ffmda
 
 docker rmi magnoabreu/ffmda-master:0.1
