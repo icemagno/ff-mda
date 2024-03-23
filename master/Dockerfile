@@ -1,4 +1,4 @@
-FROM openjdk:11-jdk-slim
+FROM openjdk:17.0.1-jdk-slim
 LABEL maintainer "Carlos M. Abreu <magno.mabreu@gmail.com>"
 
 COPY ./target/ffmda-0.1.jar /opt/lib/

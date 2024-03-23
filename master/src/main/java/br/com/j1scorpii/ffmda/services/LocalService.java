@@ -51,7 +51,7 @@ public class LocalService {
 		f.mkdirs();
 		
 		// We need a password to manage the wallet
-		boolean isNew = this.readPassword();
+		this.readPassword();
 		
 		// If we don't have any password at this point then everything was broken
 		if( this.myPassword == null ) {
