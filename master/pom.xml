@@ -12,7 +12,7 @@
 	
 	<groupId>br.com.j1scorpii</groupId>
 	<artifactId>ffmda</artifactId>
-	<version>0.0.1-SNAPSHOT</version>
+	<version>0.1</version>
 	<name>master</name>
 	<description>FireFly Multiparty Deployer Agent Master</description>
 
@@ -23,10 +23,32 @@
 		<maven.test.skip>true</maven.test.skip>
 		<webj3.version>5.0.0</webj3.version>
 		<bc.version>1.70</bc.version>
-		<bc-old.version>1.54</bc-old.version>
+		<docker-java.version>3.3.6</docker-java.version>
 	</properties>
 
 	<dependencies>
+		
+		<!-- https://mvnrepository.com/artifact/com.github.docker-java/docker-java -->
+		<dependency>
+		    <groupId>com.github.docker-java</groupId>
+		    <artifactId>docker-java</artifactId>
+		    <version>${docker-java.version}</version>
+		</dependency>
+		
+		<!-- https://mvnrepository.com/artifact/com.github.docker-java/docker-java-core -->
+		<dependency>
+		    <groupId>com.github.docker-java</groupId>
+		    <artifactId>docker-java-core</artifactId>
+		    <version>${docker-java.version}</version>
+		</dependency>
+
+		<!-- https://mvnrepository.com/artifact/com.github.docker-java/docker-java-transport-httpclient5 -->
+		<dependency>
+		    <groupId>com.github.docker-java</groupId>
+		    <artifactId>docker-java-transport-httpclient5</artifactId>
+		    <version>${docker-java.version}</version>
+		</dependency>
+		
 		
 		<dependency>
 		    <groupId>com.github.ipfs-shipyard</groupId>

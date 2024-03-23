@@ -53,16 +53,6 @@ public class LocalService {
 		// We need a password to manage the wallet
 		boolean isNew = this.readPassword();
 		
-		// If a new password was generated then we need to recriate the wallet too.
-		// Delete any file in wallet folder.
-		// NOTE: This is very dangerous since we may lost funds or access to contracts.
-		/*
-		if ( isNew ) {
-			try { FileUtils.cleanDirectory(f); } catch (Exception e) { e.printStackTrace();	}
-		}
-		*/
-		
-		
 		// If we don't have any password at this point then everything was broken
 		if( this.myPassword == null ) {
 			logger.error("can't create the wallet password. ABORTING!");
