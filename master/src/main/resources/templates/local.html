@@ -83,11 +83,8 @@
 						<div th:if="${stackIsLocked}" class="box">
 							<div class="box-header ui-sortable-handle">
 								<i class="fa fa-gears"></i>
-
 								<h3 class="box-title">Supernode Configuration</h3>
-								<!-- tools box -->
 								<div class="pull-right box-tools">&nbsp;</div>
-								<!-- /. tools -->
 							</div>
 							<div class="box-body">
 								<div class="form-group">
@@ -111,6 +108,18 @@
 										th:text="${serverHostName}"></spam>
 								</div>								
 							</div>
+							
+							<div class="box-footer clearfix">
+							
+								<button type="button" class="pull-right btn btn-default margin" id="dlPeerCert">
+									<i class="fa fa-download"></i> Peer Certificate 
+								</button>							
+							
+								<button type="button" class="pull-right btn btn-default margin" id="dlCACert">
+									<i class="fa fa-download"></i> CA Certificate
+								</button>								
+							</div>
+							
 						</div>						
 
 					</section>
@@ -227,9 +236,6 @@
 									</li>
 								</ul>
 							</div>
-
-							<div class="box-footer text-center">Footer</div>
-
 						</div>
 					</section>
 				</div>

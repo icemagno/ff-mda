@@ -1,5 +1,8 @@
 package br.com.j1scorpii.ffmda.controller;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -9,6 +12,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import br.com.j1scorpii.ffmda.services.LocalService;
+import jakarta.annotation.PostConstruct;
 
 @Controller
 public class WEBRouteController {
@@ -16,8 +20,24 @@ public class WEBRouteController {
     @Value("${spring.application.name}")
     String appName;
     
+    private Map<String,String> componentNames = new HashMap<String,String>();
+    
     @Autowired private LocalService localService;
 
+    
+    @PostConstruct
+    private void init() {
+    	componentNames.put("dataexchange", "Data Exchange");
+    	componentNames.put("postgres", "PostgreSQL Database");
+    	componentNames.put("ipfs", "IPFS Node");
+    	componentNames.put("besu", "HyperLedger Besu Node");
+    	componentNames.put("tokens", "FireFly Tokens");
+    	componentNames.put("signer", "FireFly Signer");
+    	componentNames.put("evmconnect", "FireFly EVM Connector");
+    	componentNames.put("sandbox", "FireFly Sandbox");
+    	componentNames.put("core", "HyperLedger FireFly Core");
+    }
+    
     @GetMapping("/")
     public String homePage(Model model) {
     	this.setGenericModel( model );
@@ -33,8 +53,9 @@ public class WEBRouteController {
     @GetMapping("/component")
     public String component( @RequestParam(value = "name", required = true) String name, Model model) {
     	this.setGenericModel( model );
-    	model.addAttribute("componentName", name);
-        return "component";
+    	model.addAttribute("componentName", this.componentNames.get(name) );
+    	model.addAttribute("componentShortName", name );
+        return "components/" + name ;
     }
     
     @GetMapping("/remote")

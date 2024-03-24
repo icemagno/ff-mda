@@ -24,7 +24,7 @@ public class ContainerManager {
 	@PostConstruct
 	private void init() {
 		logger.info("init");
-		this.updateContainers();
+		//this.updateContainers();
 	}
 
 	public void updateContainers() {

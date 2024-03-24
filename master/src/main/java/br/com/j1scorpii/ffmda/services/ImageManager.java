@@ -25,7 +25,7 @@ public class ImageManager {
 	@PostConstruct
 	private void init() {
 		logger.info("init");
-		updateImageCache();
+		//updateImageCache();
 	}
 	
 	public boolean exists( String imageName ) {

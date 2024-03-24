@@ -3,7 +3,7 @@
 
 $( document ).ready(function() {
 	 
-  $.get("/v1/config/get", function(data, status) {
+	$.get("/v1/config/get", function(data, status) {
   		console.log( data );
   		$("#orgName").val( data.orgName );
   		$("#nodeName").val( data.nodeName);
@@ -11,10 +11,19 @@ $( document ).ready(function() {
   		$("#hostName").val( data.hostName);  		
 		checkConfig( data );
   		
-  });
+	});
   
-  // Save Organization and Node names to configuration
-  $("#updateOrgName").click( ()=>{
+	$("#dlPeerCert").click( ()=>{
+		console.log("Download this peer certificate");
+	});
+	
+	$("#dlCACert").click( ()=>{
+		console.log("Download the C.A. certificate");
+	});
+
+  
+	// Save Organization and Node names to configuration
+	$("#updateOrgName").click( ()=>{
 		let orgName = $("#orgName").val();
 		let nodeName = $("#nodeName").val();
 		let hostName = $("#hostName").val();
@@ -31,7 +40,7 @@ $( document ).ready(function() {
 		        location.reload();
 		    }
 		});		
-  });
+	});
 	 
 	 
 });

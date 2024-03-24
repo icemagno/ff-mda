@@ -32,7 +32,7 @@ public class DockerService {
 	@PostConstruct
 	private void init() {
 		logger.info("init");
-		
+		/*
 		this.config = DefaultDockerClientConfig.createDefaultConfigBuilder()
 			    .withDockerHost("unix:///var/run/docker.sock")
 			    .build();
@@ -44,7 +44,8 @@ public class DockerService {
 			    .responseTimeout(Duration.ofSeconds(45))
 			    .build();
 		
-		logger.info("Docker Service Status: " + pingDockerService() );		
+		logger.info("Docker Service Status: " + pingDockerService() );
+		*/		
 	}	
 	
 	private String pingDockerService() {
