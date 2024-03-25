@@ -1,10 +1,15 @@
 package br.com.j1scorpii.ffmda.services;
 
+import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
+import java.nio.file.Paths;
+
 import org.json.JSONArray;
 import org.json.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import com.github.dockerjava.transport.DockerHttpClient.Request;
@@ -17,18 +22,26 @@ public class ContainerManager {
 	private Logger logger = LoggerFactory.getLogger( ContainerManager.class );
 	private JSONArray containers;
 	
+	@Value("${ffmda.local.data.folder}")
+	private String localDataFolder;	
+	
 	@Autowired
 	private DockerService dockerService;
 	
+	@Value("${spring.profiles.active}")
+	private String activeProfile;	
 	
 	@PostConstruct
 	private void init() {
 		logger.info("init");
-		//this.updateContainers();
+		this.updateContainers();
 	}
 
 	public void updateContainers() {
 		this.containers = new JSONArray( getContainers() );
+		
+		System.out.println( this.containers.toString(5) );
+		
 	}
 	
 	public String create( JSONObject container ) {
@@ -126,8 +139,15 @@ public class ContainerManager {
 	}
 
 	public String getContainers() {
-		String result = dockerService.getResponse( Request.Method.GET, "/containers/json?all=true&size=true", null );
-		return result;
+		if( this.activeProfile.equals("dev") ) {
+			try {	
+				byte[] encoded = Files.readAllBytes(Paths.get( this.localDataFolder + "/containers-mock.json" ));
+				return new String(encoded, StandardCharsets.UTF_8 );
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+		}
+		return dockerService.getResponse( Request.Method.GET, "/containers/json?all=true&size=true", null );
 	}
 
 	public void stopAllButMe(String myName) {

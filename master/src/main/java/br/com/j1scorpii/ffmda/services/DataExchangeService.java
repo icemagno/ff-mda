@@ -15,7 +15,13 @@ public class DataExchangeService {
 		JSONObject result = new JSONObject();
 		boolean exists = imageManager.exists(COMPONENT_NAME);
 		result.put("exists", exists);
-		if( exists ) result.put("imageName", imageManager.getImageForComponent(COMPONENT_NAME) ); 
+
+		
+		if( exists ) {
+			result.put("imageName", imageManager.getImageForComponent(COMPONENT_NAME) ); 
+		}
+		
+		
 		return result.toString();
 	}
 	
