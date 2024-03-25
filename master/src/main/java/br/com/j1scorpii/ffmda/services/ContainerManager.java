@@ -37,11 +37,26 @@ public class ContainerManager {
 		this.updateContainers();
 	}
 
+	public boolean exists( String componentName ) {
+		for( int x=0; x < this.containers.length(); x++  ) {
+			JSONObject container = this.containers.getJSONObject(x);
+			String name = container.getJSONArray("Names").getString(0).replace("/", "");
+			if( name.toUpperCase().equals( componentName.toUpperCase()) ) return true;
+		}
+		return false;
+	}
+	
+	public JSONObject getContainer(String componentName) {
+		for( int x=0; x < this.containers.length(); x++  ) {
+			JSONObject container = this.containers.getJSONObject(x);
+			String name = container.getJSONArray("Names").getString(0).replace("/", "");
+			if( name.toUpperCase().equals( componentName.toUpperCase()) ) return container;
+		}
+		return new JSONObject();
+	}	
+	
 	public void updateContainers() {
 		this.containers = new JSONArray( getContainers() );
-		
-		System.out.println( this.containers.toString(5) );
-		
 	}
 	
 	public String create( JSONObject container ) {

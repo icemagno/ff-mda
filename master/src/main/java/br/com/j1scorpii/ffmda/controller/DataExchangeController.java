@@ -16,10 +16,17 @@ public class DataExchangeController {
 	
 	@Autowired private DataExchangeService dataExchangeService;
 
-	// Return the config data
+	// Check if we have the image already
     @GetMapping( value="/image/pulled", produces= MediaType.APPLICATION_JSON_VALUE )
     public ResponseEntity<String> imagePulled( ) {
     	return new ResponseEntity<>( this.dataExchangeService.imagePulled() , HttpStatus.OK);
     }	
-	
+
+    // Get the container information if we have any. Empty JSON object if not.
+    @GetMapping( value="/container/get", produces= MediaType.APPLICATION_JSON_VALUE )
+    public ResponseEntity<String> getContainer( ) {
+    	return new ResponseEntity<>( this.dataExchangeService.getContainer() , HttpStatus.OK);
+    }	
+    
+    
 }
