@@ -33,9 +33,9 @@ public class LocalService {
 	@Value("${ffmda.local.data.folder}")
 	private String localDataFolder;	
 
-	private String localWalletFolder 	= localDataFolder + "/wallets";
-	private String myPasswordFile 		= localDataFolder + "/.password.txt";
-	private String myConfigFile			= localDataFolder + "/agent-config.json";
+	private String localWalletFolder;
+	private String myPasswordFile;
+	private String myConfigFile;
 
 	private Wallet myWallet;
 	private String myPassword;
@@ -46,6 +46,11 @@ public class LocalService {
 	
 	@PostConstruct
 	private void init() {
+		
+		localWalletFolder 	= localDataFolder + "/wallets";
+		myPasswordFile 		= localDataFolder + "/.password.txt";
+		myConfigFile		= localDataFolder + "/agent-config.json";		
+		
 		logger.info("init");
 		
 		File f = new File( localWalletFolder );
