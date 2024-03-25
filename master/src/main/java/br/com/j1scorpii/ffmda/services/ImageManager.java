@@ -48,6 +48,7 @@ public class ImageManager {
 	// Search docker images to see if the image from the component exists
 	// I will get the image name for that component from the manifest file
 	public boolean exists( String componentName ) {
+		updateImageCache();
 		String imageAndTag = getImageForComponent(componentName);
 		if( imageAndTag == null ) return false;
 		String imageName = imageAndTag.split(":")[0];
