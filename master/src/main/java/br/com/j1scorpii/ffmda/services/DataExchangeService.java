@@ -27,5 +27,10 @@ public class DataExchangeService {
 		JSONObject container = containerManager.getContainer( COMPONENT_NAME ); 
 		return container.toString();
 	}
+
+
+	public String pullImage() {
+		return imageManager.pullImage(COMPONENT_NAME, true);
+	}
 	
 }

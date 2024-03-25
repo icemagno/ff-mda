@@ -63,7 +63,9 @@ public class ImageManager {
 	
 	
 	private String doPull( String imageName ) {
-		return dockerService.getResponse( Request.Method.POST, "/images/create?fromImage="+imageName, null );
+		//return dockerService.getResponse( Request.Method.POST, "/images/create?fromImage="+imageName, null );
+		dockerService.pullImage(imageName);
+		return "requested";
 	}
 	public String pullImage( String componentName, boolean evenIfExists ) {
 		String imageName = getImageForComponent( componentName );
