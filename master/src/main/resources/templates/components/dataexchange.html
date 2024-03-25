@@ -34,8 +34,12 @@
 								<i class="fa fa-gears"></i>
 								<h3 class="box-title">Container Execution</h3>
 							</div>
-							<div class="box-body clearfix">
+							<div class="box-body ">
 							
+								<span id="imageName" ></span>
+								
+							</div>
+							<div class="box-footer clearfix">
 								<div class="btn-group pull-right">
 
 									<button type="button" class="btn btn-default disabled" id="startCont" style="margin-right:5px">
@@ -49,40 +53,21 @@
 									<button type="button" class="btn btn-default disabled" id="restartCont" style="margin-right:5px">
 										<i class="fa fa-refresh"></i> Restart 
 									</button>							
+
+									<button type="button" class="btn btn-default" id="pullImage" style="margin-right:5px">
+										<i class="fa fa-download"></i> Pull 
+									</button>	
 	
 									<button type="button" class="btn btn-danger disabled" id="removeCont">
 										<i class="fa fa-trash-o"></i> Remove 
 									</button>
 									
-								</div>
-								
+								</div>							
 							</div>
 						</div>
 
 					</section>
 					<section class="col-lg-6">
-
-<!-- 
-						<div class="box box-primary">
-							<div class="box-header ui-sortable-handle">
-								<i class="fa fa-server"></i>
-								<h3 class="box-title">Image Name</h3>
-							</div>
-							<div class="box-body">
-								<form action="#" method="post">
-									<div class="form-group">
-										<input type="text" class="form-control" name="imageName"
-											placeholder="Image Name" value="ghcr.io/hyperledger/firefly-dataexchange-https:latest">
-									</div>
-								</form>
-							</div>
-							<div class="box-footer clearfix">
-								<button type="button" class="pull-right btn btn-default margin" id="pullImge">
-									<i class="fa fa-download"></i> Pull
-								</button>
-							</div>
-						</div>
- -->
 
 						<div class="box box-primary">
 							<div class="box-header with-border">
@@ -247,7 +232,7 @@
 	<script src="common/websocket/sockjs.min.js"></script>
 	<script src="common/websocket/stomp.min.js"></script>
 	<script src="common/script.js"></script>
-	<script src="common/components.js"></script>
+	<script src="common/dataexchange.js"></script>
 </body>
 
 </html>

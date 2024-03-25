@@ -15,6 +15,7 @@ import java.util.UUID;
 import org.json.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.web3j.crypto.Bip39Wallet;
 import org.web3j.crypto.Credentials;
@@ -29,7 +30,9 @@ import jakarta.annotation.PostConstruct;
 public class LocalService {
 	private Logger logger = LoggerFactory.getLogger( LocalService.class );
 	
-	private String localDataFolder 		= "/srv/ffmda";
+	@Value("${ffmda.local.data.folder}")
+	private String localDataFolder;	
+
 	private String localWalletFolder 	= localDataFolder + "/wallets";
 	private String myPasswordFile 		= localDataFolder + "/.password.txt";
 	private String myConfigFile			= localDataFolder + "/agent-config.json";

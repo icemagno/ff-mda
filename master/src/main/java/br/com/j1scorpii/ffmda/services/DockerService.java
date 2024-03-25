@@ -10,6 +10,7 @@ import org.apache.commons.io.IOUtils;
 import org.json.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import com.github.dockerjava.core.DefaultDockerClientConfig;
@@ -29,23 +30,27 @@ public class DockerService {
 	private DockerHttpClient httpClient;
 	private DockerClientConfig config;
 	
+	@Value("${spring.profiles.active}")
+	private String activeProfile;	
+	
 	@PostConstruct
 	private void init() {
 		logger.info("init");
-		
-		this.config = DefaultDockerClientConfig.createDefaultConfigBuilder()
-			    .withDockerHost("unix:///var/run/docker.sock")
-			    .build();
-		
-		this.httpClient = new ApacheDockerHttpClient.Builder()
-			    .dockerHost( config.getDockerHost() )
-			    .maxConnections(100)
-			    .connectionTimeout(Duration.ofSeconds(30))
-			    .responseTimeout(Duration.ofSeconds(45))
-			    .build();
-		
-		logger.info("Docker Service Status: " + pingDockerService() );
+		// If active profile is DEV then I can't activate Docker socket because I'm on Windows.
+		if( !this.activeProfile.equals("dev") ) { 
+			this.config = DefaultDockerClientConfig.createDefaultConfigBuilder()
+				    .withDockerHost("unix:///var/run/docker.sock")
+				    .build();
 			
+			this.httpClient = new ApacheDockerHttpClient.Builder()
+				    .dockerHost( config.getDockerHost() )
+				    .maxConnections(100)
+				    .connectionTimeout(Duration.ofSeconds(30))
+				    .responseTimeout(Duration.ofSeconds(45))
+				    .build();
+			
+			logger.info("Docker Service Status: " + pingDockerService() );
+		}		
 	}	
 	
 	private String pingDockerService() {
