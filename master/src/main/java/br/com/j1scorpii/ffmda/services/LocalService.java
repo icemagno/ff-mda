@@ -29,7 +29,7 @@ import jakarta.annotation.PostConstruct;
 public class LocalService {
 	private Logger logger = LoggerFactory.getLogger( LocalService.class );
 	
-	private String localDataFolder 		= "/ffmda";
+	private String localDataFolder 		= "/srv/ffmda";
 	private String localWalletFolder 	= localDataFolder + "/wallets";
 	private String myPasswordFile 		= localDataFolder + "/.password.txt";
 	private String myConfigFile			= localDataFolder + "/agent-config.json";

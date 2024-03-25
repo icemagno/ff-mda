@@ -25,7 +25,7 @@ public class ImageManager {
 	@PostConstruct
 	private void init() {
 		logger.info("init");
-		//updateImageCache();
+		updateImageCache();
 	}
 	
 	public boolean exists( String imageName ) {
@@ -37,6 +37,7 @@ public class ImageManager {
 	
 	public void updateImageCache() {
 		this.images = new JSONArray( this.getImages() );
+		System.out.println( this.images.toString(5) );
 	}
 	
 	

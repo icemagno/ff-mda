@@ -95,6 +95,9 @@
 							<div class="box-body">
 								<span class="font-family:Courier New" id="peersFound"></span>
 							</div>
+							<div class="box-footer">
+								<span class="pull-left footer-tip" style="width:100%"><i>No Remote Agent have been registered yet. Go to "<a href="/remote">Remote Node</a>" and register. Don't forget to run the remote agent on the registered server so I can connect to it.</i></span>
+							</div>							
 						</div>
 						
 						<div class="box box-primary">
@@ -120,13 +123,24 @@
 								<h3 class="box-title">Component Configuration</h3>
 							</div>
 							<div class="box-body">
-
-
+								<textarea class="form-control" style="height:500px;font-family:Courier New" disabled>
+{
+  "api": {
+    "hostname":"0.0.0.0",
+    "port":3000
+  },
+  "p2p": {
+    "hostname":"0.0.0.0",
+    "port":3001
+  },
+  "peers":[]
+}</textarea>							
 							</div>
 							
-							<div class="box-footer text-center">
+							<div class="box-footer">
+								<span class="pull-left footer-tip"><i>The configuration of this component is automatic.</i></span>
 								<div class="btn-group pull-right">
-									<button type="button" class="btn btn-default" id="startCont" style="margin-right:5px">
+									<button type="button" class="btn btn-default disabled"  style="margin-right:5px">
 										<i class="fa fa-save"></i> Save 
 									</button>
 								</div>							

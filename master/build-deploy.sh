@@ -5,6 +5,9 @@ mvn clean package
 
 docker network create ffmda
 
+mkdir /srv/ffmda
+cp manifest.json /srv/ffmda
+
 docker rmi magnoabreu/ffmda-master:0.1
 docker build --tag=magnoabreu/ffmda-master:0.1 --rm=true .
 
