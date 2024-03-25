@@ -1,0 +1,2446 @@
+[
+     {
+          "Status": "Up 4 seconds",
+          "Mounts": [
+               {
+                    "Destination": "/srv",
+                    "Type": "bind",
+                    "Propagation": "rprivate",
+                    "RW": true,
+                    "Mode": "",
+                    "Source": "/srv"
+               },
+               {
+                    "Destination": "/var/run/docker.sock",
+                    "Type": "bind",
+                    "Propagation": "rprivate",
+                    "RW": true,
+                    "Mode": "",
+                    "Source": "/var/run/docker.sock"
+               }
+
+          ],
+          "SizeRw": 32768,
+          "Ports": [
+               {
+                    "Type": "tcp",
+                    "IP": "0.0.0.0",
+                    "PrivatePort": 8080,
+                    "PublicPort": 36780
+               },
+               {
+                    "Type": "tcp",
+                    "IP": "::",
+                    "PrivatePort": 8080,
+                    "PublicPort": 36780
+               }
+
+          ],
+          "Labels": {"maintainer": "Carlos M. Abreu <magno.mabreu@gmail.com>"},
+          "Image": "magnoabreu/ffmda-master:0.1",
+          "Created": 1711372178,
+          "Names": ["/ffmda-master"],
+          "NetworkSettings": {"Networks": {"ffmda": {
+               "GlobalIPv6Address": "",
+               "IPPrefixLen": 16,
+               "GlobalIPv6PrefixLen": 0,
+               "Aliases": null,
+               "NetworkID": "30fa65f499874f0f040c2a2fd3453e5da2b1722b1036e60b6a17322ec97a52d1",
+               "MacAddress": "02:42:ac:19:00:02",
+               "IPAMConfig": null,
+               "DriverOpts": null,
+               "Gateway": "172.25.0.1",
+               "EndpointID": "892022e166a4a7302d93cc760f9258372c04fae9e22d591cbde434df4b2690cb",
+               "Links": null,
+               "IPv6Gateway": "",
+               "IPAddress": "172.25.0.2"
+          }}},
+          "SizeRootFs": 515836250,
+          "Command": "java -jar /opt/lib/ffmda-0.1.jar",
+          "State": "running",
+          "ImageID": "sha256:913633107f9692bb6b37f6e38badc7d757df030327b7ae6ee0a88f706b34365e",
+          "HostConfig": {"NetworkMode": "ffmda"},
+          "Id": "177ff3a944f593c6a2a1bc36c53c811fdafa5b7f1fee7039566562ebc2d5bb75"
+     },
+     {
+          "Status": "Up 5 days",
+          "Mounts": [{
+               "Destination": "/usr/local/apache2/htdocs/d",
+               "Type": "bind",
+               "Propagation": "rprivate",
+               "RW": true,
+               "Mode": "",
+               "Source": "/srv/geoportal"
+          }],
+          "SizeRw": 2,
+          "Ports": [
+               {
+                    "Type": "tcp",
+                    "IP": "0.0.0.0",
+                    "PrivatePort": 80,
+                    "PublicPort": 36250
+               },
+               {
+                    "Type": "tcp",
+                    "IP": "::",
+                    "PrivatePort": 80,
+                    "PublicPort": 36250
+               }
+
+          ],
+          "Labels": {"MAINTAINER": "joaquim.femar@marinha.mil.br"},
+          "Image": "hiparco/geoportal-sisgeodef:1.0",
+          "Created": 1710939137,
+          "Names": ["/geoportal-ui"],
+          "NetworkSettings": {"Networks": {"sisgeodef": {
+               "GlobalIPv6Address": "",
+               "IPPrefixLen": 16,
+               "GlobalIPv6PrefixLen": 0,
+               "Aliases": null,
+               "NetworkID": "e791a906b374a0d477e90d7e300f212f2bb630daae8914ac1c4ceb082876b22b",
+               "MacAddress": "02:42:ac:12:00:03",
+               "IPAMConfig": null,
+               "DriverOpts": null,
+               "Gateway": "172.18.0.1",
+               "EndpointID": "1eab2204fe8fbaa918d4af7abbf832bafffe29b87d3033dc22692fcdef71be18",
+               "Links": null,
+               "IPv6Gateway": "",
+               "IPAddress": "172.18.0.3"
+          }}},
+          "SizeRootFs": 583641892,
+          "Command": "httpd-foreground",
+          "State": "running",
+          "ImageID": "sha256:3f340e428ce6d14a0bdf6afa0009efb94472fb0fc9ed637295d7f3645a6f3d9d",
+          "HostConfig": {"NetworkMode": "sisgeodef"},
+          "Id": "88a19771cf204b750319a5524209786f98b025d14b6e934f3f3001f1d11fdb42"
+     },
+     {
+          "Status": "Up 5 days",
+          "Mounts": [
+               {
+                    "Destination": "/etc/localtime",
+                    "Type": "bind",
+                    "Propagation": "rprivate",
+                    "RW": false,
+                    "Mode": "ro",
+                    "Source": "/etc/localtime"
+               },
+               {
+                    "Destination": "/etc/nginx/conf.d",
+                    "Type": "bind",
+                    "Propagation": "rprivate",
+                    "RW": true,
+                    "Mode": "",
+                    "Source": "/srv/gatekeeper-nginx/conf"
+               }
+
+          ],
+          "SizeRw": 2,
+          "Ports": [
+               {
+                    "Type": "tcp",
+                    "IP": "0.0.0.0",
+                    "PrivatePort": 80,
+                    "PublicPort": 80
+               },
+               {
+                    "Type": "tcp",
+                    "IP": "::",
+                    "PrivatePort": 80,
+                    "PublicPort": 80
+               }
+
+          ],
+          "Labels": {
+               "MAINTAINER": "alt.femar@marinha.mil.br",
+               "maintainer": "NGINX Docker Maintainers <docker-maint@nginx.com>"
+
+          },
+          "Image": "hiparco/gatekeeper-nginx:1.0",
+          "Created": 1710177444,
+          "Names": ["/gatekeeper-nginx"],
+          "NetworkSettings": {"Networks": {"sisgeodef": {
+               "GlobalIPv6Address": "",
+               "IPPrefixLen": 16,
+               "GlobalIPv6PrefixLen": 0,
+               "Aliases": null,
+               "NetworkID": "e791a906b374a0d477e90d7e300f212f2bb630daae8914ac1c4ceb082876b22b",
+               "MacAddress": "02:42:ac:12:00:05",
+               "IPAMConfig": null,
+               "DriverOpts": null,
+               "Gateway": "172.18.0.1",
+               "EndpointID": "e6af7b1ec1533131cbad201d7ed9273a32dbdd5a5c92a6a9bf79e66d96b4441d",
+               "Links": null,
+               "IPv6Gateway": "",
+               "IPAddress": "172.18.0.5"
+          }}},
+          "SizeRootFs": 186721005,
+          "Command": "/docker-entrypoint.sh nginx -g 'daemon off;'",
+          "State": "running",
+          "ImageID": "sha256:5d90a83a2f079edfaf146cfd0c93da311b608f1e356a7a5f6bd87f5104cc3cf7",
+          "HostConfig": {"NetworkMode": "sisgeodef"},
+          "Id": "288506ad35911303e727083d2b604e0bd80268517e7e30b8637792f5bda65602"
+     },
+     {
+          "Status": "Up 2 weeks",
+          "Mounts": [{
+               "Destination": "/etc/localtime",
+               "Type": "bind",
+               "Propagation": "rprivate",
+               "RW": false,
+               "Mode": "ro",
+               "Source": "/etc/localtime"
+          }],
+          "SizeRw": 32768,
+          "Ports": [
+               {
+                    "Type": "tcp",
+                    "IP": "0.0.0.0",
+                    "PrivatePort": 36193,
+                    "PublicPort": 36193
+               },
+               {
+                    "Type": "tcp",
+                    "IP": "::",
+                    "PrivatePort": 36193,
+                    "PublicPort": 36193
+               }
+
+          ],
+          "Labels": {},
+          "Image": "hiparco/geodataflow:1.0",
+          "Created": 1709655465,
+          "Names": ["/geodataflow"],
+          "NetworkSettings": {"Networks": {"sisgeodef": {
+               "GlobalIPv6Address": "",
+               "IPPrefixLen": 16,
+               "GlobalIPv6PrefixLen": 0,
+               "Aliases": null,
+               "NetworkID": "e791a906b374a0d477e90d7e300f212f2bb630daae8914ac1c4ceb082876b22b",
+               "MacAddress": "02:42:ac:12:00:19",
+               "IPAMConfig": null,
+               "DriverOpts": null,
+               "Gateway": "172.18.0.1",
+               "EndpointID": "e350feeeeb4f00159ce787e629f93ce5641998e973533d8872da248b2e6e35bd",
+               "Links": null,
+               "IPv6Gateway": "",
+               "IPAddress": "172.18.0.25"
+          }}},
+          "SizeRootFs": 402402921,
+          "Command": "java -jar /opt/lib/geodataflow-1.0.war",
+          "State": "running",
+          "ImageID": "sha256:9fcbb87b5fc3dec37004a0a2db48737ade2e281711586a252031a86fd49f8296",
+          "HostConfig": {"NetworkMode": "sisgeodef"},
+          "Id": "28d62593ba2abe2241006d042f3cc9635441ba32f62e503a4de9dfe6dca51410"
+     },
+     {
+          "Status": "Up 2 weeks",
+          "Mounts": [{
+               "Destination": "/etc/localtime",
+               "Type": "bind",
+               "Propagation": "rprivate",
+               "RW": false,
+               "Mode": "ro",
+               "Source": "/etc/localtime"
+          }],
+          "SizeRw": 2,
+          "Ports": [{
+               "Type": "tcp",
+               "PrivatePort": 80
+          }],
+          "Labels": {"MAINTAINER": "arthur.femar@marinha.mil.br"},
+          "Image": "hiparco/mca-ui:2.0",
+          "Created": 1709649134,
+          "Names": ["/mca-ui"],
+          "NetworkSettings": {"Networks": {"sisgeodef": {
+               "GlobalIPv6Address": "",
+               "IPPrefixLen": 16,
+               "GlobalIPv6PrefixLen": 0,
+               "Aliases": null,
+               "NetworkID": "e791a906b374a0d477e90d7e300f212f2bb630daae8914ac1c4ceb082876b22b",
+               "MacAddress": "02:42:ac:12:00:17",
+               "IPAMConfig": null,
+               "DriverOpts": null,
+               "Gateway": "172.18.0.1",
+               "EndpointID": "eba1729c4587e26f5b4a87c1577f708631959636c7a0b2318483385eb4d42cc8",
+               "Links": null,
+               "IPv6Gateway": "",
+               "IPAddress": "172.18.0.23"
+          }}},
+          "SizeRootFs": 191858621,
+          "Command": "httpd-foreground",
+          "State": "running",
+          "ImageID": "sha256:b88b0f986ed5a308685b514905f22ef5610555d78ed6bfd1b13f3b4b4a6c0ba8",
+          "HostConfig": {"NetworkMode": "sisgeodef"},
+          "Id": "07dec6b76dbb4f98b5d7761ba708be539f32b52b328b1a1ff2d756b20b38b20a"
+     },
+     {
+          "Status": "Up 4 weeks",
+          "Mounts": [
+               {
+                    "Destination": "/srv/calisto",
+                    "Type": "bind",
+                    "Propagation": "rprivate",
+                    "RW": true,
+                    "Mode": "",
+                    "Source": "/srv/calisto"
+               },
+               {
+                    "Destination": "/srv/storage",
+                    "Type": "bind",
+                    "Propagation": "rprivate",
+                    "RW": true,
+                    "Mode": "",
+                    "Source": "/srv/geoportal"
+               }
+
+          ],
+          "SizeRw": 32768,
+          "Ports": [
+               {
+                    "Type": "tcp",
+                    "IP": "0.0.0.0",
+                    "PrivatePort": 36740,
+                    "PublicPort": 36740
+               },
+               {
+                    "Type": "tcp",
+                    "IP": "::",
+                    "PrivatePort": 36740,
+                    "PublicPort": 36740
+               }
+
+          ],
+          "Labels": {"MAINTAINER": "magno.mabreu@gmail.com"},
+          "Image": "hiparco/comunicador:1.0",
+          "Created": 1708692802,
+          "Names": ["/comunicador"],
+          "NetworkSettings": {"Networks": {"sisgeodef": {
+               "GlobalIPv6Address": "",
+               "IPPrefixLen": 16,
+               "GlobalIPv6PrefixLen": 0,
+               "Aliases": null,
+               "NetworkID": "e791a906b374a0d477e90d7e300f212f2bb630daae8914ac1c4ceb082876b22b",
+               "MacAddress": "02:42:ac:12:00:0a",
+               "IPAMConfig": null,
+               "DriverOpts": null,
+               "Gateway": "172.18.0.1",
+               "EndpointID": "e348aa5808267b37f9f7232a16d0f4e8d49361ed22949402f305c5fcea80d6ca",
+               "Links": null,
+               "IPv6Gateway": "",
+               "IPAddress": "172.18.0.10"
+          }}},
+          "SizeRootFs": 751652743,
+          "Command": "java -jar /opt/lib/comunicador-1.0.war",
+          "State": "running",
+          "ImageID": "sha256:c8bb03cfff31ab36dc75f20b3229e388f0bdf0d085d0142bdf6d386796f53d2f",
+          "HostConfig": {"NetworkMode": "sisgeodef"},
+          "Id": "19943137b29cf31c38e631534cf3482af68c44561e3c7a1665cca3680ac27cee"
+     },
+     {
+          "Status": "Up 4 weeks",
+          "Mounts": [
+               {
+                    "Destination": "/etc/localtime",
+                    "Type": "bind",
+                    "Propagation": "rprivate",
+                    "RW": false,
+                    "Mode": "ro",
+                    "Source": "/etc/localtime"
+               },
+               {
+                    "Destination": "/interope",
+                    "Type": "bind",
+                    "Propagation": "rprivate",
+                    "RW": true,
+                    "Mode": "",
+                    "Source": "/srv/interope"
+               },
+               {
+                    "Destination": "/srv/calisto",
+                    "Type": "bind",
+                    "Propagation": "rprivate",
+                    "RW": true,
+                    "Mode": "",
+                    "Source": "/srv/calisto"
+               }
+
+          ],
+          "SizeRw": 32768,
+          "Ports": [
+               {
+                    "Type": "tcp",
+                    "IP": "0.0.0.0",
+                    "PrivatePort": 36215,
+                    "PublicPort": 36215
+               },
+               {
+                    "Type": "tcp",
+                    "IP": "::",
+                    "PrivatePort": 36215,
+                    "PublicPort": 36215
+               }
+
+          ],
+          "Labels": {},
+          "Image": "hiparco/atlas-livre:2.5",
+          "Created": 1708431554,
+          "Names": ["/atlas"],
+          "NetworkSettings": {"Networks": {"sisgeodef": {
+               "GlobalIPv6Address": "",
+               "IPPrefixLen": 16,
+               "GlobalIPv6PrefixLen": 0,
+               "Aliases": null,
+               "NetworkID": "e791a906b374a0d477e90d7e300f212f2bb630daae8914ac1c4ceb082876b22b",
+               "MacAddress": "02:42:ac:12:00:16",
+               "IPAMConfig": null,
+               "DriverOpts": null,
+               "Gateway": "172.18.0.1",
+               "EndpointID": "7148973ad2d913eae3ba1edb3021072e106f271794b8f4025de2b23a9d62083b",
+               "Links": null,
+               "IPv6Gateway": "",
+               "IPAddress": "172.18.0.22"
+          }}},
+          "SizeRootFs": 403442504,
+          "Command": "java -jar /opt/lib/atlaslivre-2.5.war",
+          "State": "running",
+          "ImageID": "sha256:9eba4ef80b57772ebd88e46cb3fd8a458b6f3c116c786755e26a811df17439ba",
+          "HostConfig": {"NetworkMode": "sisgeodef"},
+          "Id": "3f79663e60bdae1641822f2421efa9d3f6790cc388229338d98b97be1f910d38"
+     },
+     {
+          "Status": "Up 6 weeks",
+          "Mounts": [
+               {
+                    "Destination": "/etc/localtime",
+                    "Type": "bind",
+                    "Propagation": "rprivate",
+                    "RW": false,
+                    "Mode": "ro",
+                    "Source": "/etc/localtime"
+               },
+               {
+                    "Destination": "/var/lib/postgresql",
+                    "Type": "bind",
+                    "Propagation": "rprivate",
+                    "RW": true,
+                    "Mode": "",
+                    "Source": "/srv/thundercloud-db"
+               }
+
+          ],
+          "SizeRw": 281500,
+          "Ports": [{
+               "Type": "tcp",
+               "PrivatePort": 5432
+          }],
+          "Labels": {},
+          "Image": "hiparco/thundercloud-db:1.0",
+          "Created": 1707229572,
+          "Names": ["/thundercloud-db"],
+          "NetworkSettings": {"Networks": {"sisgeodef": {
+               "GlobalIPv6Address": "",
+               "IPPrefixLen": 16,
+               "GlobalIPv6PrefixLen": 0,
+               "Aliases": null,
+               "NetworkID": "e791a906b374a0d477e90d7e300f212f2bb630daae8914ac1c4ceb082876b22b",
+               "MacAddress": "02:42:ac:12:00:10",
+               "IPAMConfig": null,
+               "DriverOpts": null,
+               "Gateway": "172.18.0.1",
+               "EndpointID": "f489b4df515aef3e7650cd35ed549cb1f8987f7ace3859d422df2061eb9a8a6c",
+               "Links": null,
+               "IPv6Gateway": "",
+               "IPAddress": "172.18.0.16"
+          }}},
+          "SizeRootFs": 1483094306,
+          "Command": "/bin/sh -c /scripts/docker-entrypoint.sh",
+          "State": "running",
+          "ImageID": "sha256:8e8febad46db175e332062c8185423fce64ba18f934576414e8d6303664a6f7f",
+          "HostConfig": {"NetworkMode": "sisgeodef"},
+          "Id": "a76284a7edc6312d8cbfc86eff9b0ff2a31e70b9eaaeaf87120e5d4908a789e5"
+     },
+     {
+          "Status": "Up 5 months",
+          "Mounts": [
+               {
+                    "Destination": "/calisto",
+                    "Type": "bind",
+                    "Propagation": "rprivate",
+                    "RW": true,
+                    "Mode": "",
+                    "Source": "/srv/calisto"
+               },
+               {
+                    "Destination": "/etc/localtime",
+                    "Type": "bind",
+                    "Propagation": "rprivate",
+                    "RW": false,
+                    "Mode": "ro",
+                    "Source": "/etc/localtime"
+               },
+               {
+                    "Destination": "/host_drive",
+                    "Type": "bind",
+                    "Propagation": "rprivate",
+                    "RW": true,
+                    "Mode": "",
+                    "Source": "/srv"
+               },
+               {
+                    "Destination": "/scripts",
+                    "Type": "bind",
+                    "Propagation": "rprivate",
+                    "RW": true,
+                    "Mode": "",
+                    "Source": "/srv/geoprocessor"
+               },
+               {
+                    "Destination": "/sisgeodef",
+                    "Type": "bind",
+                    "Propagation": "rprivate",
+                    "RW": true,
+                    "Mode": "",
+                    "Source": "/sisgeodef"
+               }
+
+          ],
+          "SizeRw": 32768,
+          "Ports": [
+               {
+                    "Type": "tcp",
+                    "IP": "0.0.0.0",
+                    "PrivatePort": 36006,
+                    "PublicPort": 36006
+               },
+               {
+                    "Type": "tcp",
+                    "IP": "::",
+                    "PrivatePort": 36006,
+                    "PublicPort": 36006
+               }
+
+          ],
+          "Labels": {"maintainer": "Carlos M. Abreu <magno.mabreu@gmail.com>"},
+          "Image": "hiparco/geoprocessor:1.0",
+          "Created": 1697566270,
+          "Names": ["/geoprocessor"],
+          "NetworkSettings": {"Networks": {"sisgeodef": {
+               "GlobalIPv6Address": "",
+               "IPPrefixLen": 16,
+               "GlobalIPv6PrefixLen": 0,
+               "Aliases": null,
+               "NetworkID": "e791a906b374a0d477e90d7e300f212f2bb630daae8914ac1c4ceb082876b22b",
+               "MacAddress": "02:42:ac:12:00:18",
+               "IPAMConfig": null,
+               "DriverOpts": null,
+               "Gateway": "172.18.0.1",
+               "EndpointID": "ff3c1e3838cb269e5ea87ecc5a70c4023370c6f4efc0dd6e9cf809f13795dbad",
+               "Links": null,
+               "IPv6Gateway": "",
+               "IPAddress": "172.18.0.24"
+          }}},
+          "SizeRootFs": 4331627537,
+          "Command": "java -jar /opt/lib/geoprocessor-1.0.war",
+          "State": "running",
+          "ImageID": "sha256:6a582656715548df2721cea4c338d4d8713edac291a9f434a7a0bac740539912",
+          "HostConfig": {"NetworkMode": "sisgeodef"},
+          "Id": "44d1ae13867c1086b78bbcd30b3f0e05e558c2db50c0bd9e3e48268dec02bb72"
+     },
+     {
+          "Status": "Up 4 months",
+          "Mounts": [
+               {
+                    "Destination": "/etc/localtime",
+                    "Type": "bind",
+                    "Propagation": "rprivate",
+                    "RW": false,
+                    "Mode": "ro",
+                    "Source": "/etc/localtime"
+               },
+               {
+                    "Destination": "/srv/osm-searcher/files",
+                    "Type": "bind",
+                    "Propagation": "rprivate",
+                    "RW": true,
+                    "Mode": "",
+                    "Source": "/srv/osm-searcher/files"
+               },
+               {
+                    "Destination": "/srv/osm-searcher/indexedFiles",
+                    "Type": "bind",
+                    "Propagation": "rprivate",
+                    "RW": true,
+                    "Mode": "",
+                    "Source": "/srv/osm-searcher/indexedFiles"
+               },
+               {
+                    "Destination": "/srv/osm-searcher/simple-jndi",
+                    "Type": "bind",
+                    "Propagation": "rprivate",
+                    "RW": true,
+                    "Mode": "",
+                    "Source": "/srv/osm-searcher/simple-jndi"
+               }
+
+          ],
+          "SizeRw": 32768,
+          "Ports": [
+               {
+                    "Type": "tcp",
+                    "IP": "0.0.0.0",
+                    "PrivatePort": 36511,
+                    "PublicPort": 36502
+               },
+               {
+                    "Type": "tcp",
+                    "IP": "::",
+                    "PrivatePort": 36511,
+                    "PublicPort": 36502
+               }
+
+          ],
+          "Labels": {},
+          "Image": "apolo/osm-searcher:1.0",
+          "Created": 1690804717,
+          "Names": ["/osm-searcher"],
+          "NetworkSettings": {"Networks": {"apolo": {
+               "GlobalIPv6Address": "",
+               "IPPrefixLen": 16,
+               "GlobalIPv6PrefixLen": 0,
+               "Aliases": null,
+               "NetworkID": "039248192ec55c1aae16afab9866dce682ca7d70f51e573c84338eb7ee530a25",
+               "MacAddress": "02:42:ac:13:00:03",
+               "IPAMConfig": null,
+               "DriverOpts": null,
+               "Gateway": "172.19.0.1",
+               "EndpointID": "7ec9a9aee8b75ab3f0a421dab731d3ed1be3d43a1f9f987b151b9ae9918b8e28",
+               "Links": null,
+               "IPv6Gateway": "",
+               "IPAddress": "172.19.0.3"
+          }}},
+          "SizeRootFs": 431396762,
+          "Command": "/bin/sh -c /entrypoint.sh",
+          "State": "running",
+          "ImageID": "sha256:e94bb17241a96517850ecb774aad6eec08042a12ccf318844750a78b300fcec9",
+          "HostConfig": {"NetworkMode": "apolo"},
+          "Id": "615eb84bfd65b8dda9a887d6784c9d947f2d54ae554a7d76a17d1d843b937204"
+     },
+     {
+          "Status": "Up 6 months",
+          "Mounts": [
+               {
+                    "Destination": "/etc/localtime",
+                    "Type": "bind",
+                    "Propagation": "rprivate",
+                    "RW": false,
+                    "Mode": "ro",
+                    "Source": "/etc/localtime"
+               },
+               {
+                    "Destination": "/var/lib/postgresql",
+                    "Type": "bind",
+                    "Propagation": "rprivate",
+                    "RW": true,
+                    "Mode": "",
+                    "Source": "/srv/osmsearcher-db"
+               }
+
+          ],
+          "SizeRw": 270535,
+          "Ports": [
+               {
+                    "Type": "tcp",
+                    "IP": "0.0.0.0",
+                    "PrivatePort": 5432,
+                    "PublicPort": 33431
+               },
+               {
+                    "Type": "tcp",
+                    "IP": "::",
+                    "PrivatePort": 5432,
+                    "PublicPort": 33431
+               }
+
+          ],
+          "Labels": {"MAINTAINER": "magno.mabreu@gmail.com"},
+          "Image": "apolo/osmsearcher-db:1.0",
+          "Created": 1690394824,
+          "Names": ["/osmsearcher-db"],
+          "NetworkSettings": {"Networks": {
+               "apolo": {
+                    "GlobalIPv6Address": "",
+                    "IPPrefixLen": 16,
+                    "GlobalIPv6PrefixLen": 0,
+                    "Aliases": null,
+                    "NetworkID": "039248192ec55c1aae16afab9866dce682ca7d70f51e573c84338eb7ee530a25",
+                    "MacAddress": "02:42:ac:13:00:02",
+                    "IPAMConfig": null,
+                    "DriverOpts": null,
+                    "Gateway": "172.19.0.1",
+                    "EndpointID": "62888305dbe703a920be8eb8257e10c87ba61ea6d2f00a9e4e6f98e41c4708e8",
+                    "Links": null,
+                    "IPv6Gateway": "",
+                    "IPAddress": "172.19.0.2"
+               },
+               "sisgeodef": {
+                    "GlobalIPv6Address": "",
+                    "IPPrefixLen": 16,
+                    "GlobalIPv6PrefixLen": 0,
+                    "Aliases": null,
+                    "NetworkID": "e791a906b374a0d477e90d7e300f212f2bb630daae8914ac1c4ceb082876b22b",
+                    "MacAddress": "02:42:ac:12:00:04",
+                    "IPAMConfig": null,
+                    "DriverOpts": null,
+                    "Gateway": "172.18.0.1",
+                    "EndpointID": "74be51d067bba05966cbeff52ca89e91fbea8eea6bbd79eacb1752b5fb369e70",
+                    "Links": null,
+                    "IPv6Gateway": "",
+                    "IPAddress": "172.18.0.4"
+               }
+          }},
+          "SizeRootFs": 742733663,
+          "Command": "/bin/sh -c /docker-entrypoint.sh",
+          "State": "running",
+          "ImageID": "sha256:3973658d2468e2554afec3ecc4160539810ae0c05f689f629a68d08519d1db6b",
+          "HostConfig": {"NetworkMode": "apolo"},
+          "Id": "281ba435e4904793802308fe7a2d231b30d36ee59d96306f1faccb4bf536ef6b"
+     },
+     {
+          "Status": "Up 6 months",
+          "Mounts": [
+               {
+                    "Destination": "/var/lib/pgadmin",
+                    "Type": "volume",
+                    "Propagation": "",
+                    "RW": true,
+                    "Mode": "",
+                    "Driver": "local",
+                    "Source": "",
+                    "Name": "849003adc3010265b1add698d9868297bdec8728deeb93579b0e3fde822ecbb8"
+               },
+               {
+                    "Destination": "/etc/localtime",
+                    "Type": "bind",
+                    "Propagation": "rprivate",
+                    "RW": false,
+                    "Mode": "ro",
+                    "Source": "/etc/localtime"
+               }
+
+          ],
+          "SizeRw": 464,
+          "Ports": [
+               {
+                    "Type": "tcp",
+                    "PrivatePort": 443
+               },
+               {
+                    "Type": "tcp",
+                    "IP": "0.0.0.0",
+                    "PrivatePort": 80,
+                    "PublicPort": 36321
+               },
+               {
+                    "Type": "tcp",
+                    "IP": "::",
+                    "PrivatePort": 80,
+                    "PublicPort": 36321
+               }
+
+          ],
+          "Labels": {},
+          "Image": "dpage/pgadmin4:latest",
+          "Created": 1687262375,
+          "Names": ["/pgadmin"],
+          "NetworkSettings": {"Networks": {"sisgeodef": {
+               "GlobalIPv6Address": "",
+               "IPPrefixLen": 16,
+               "GlobalIPv6PrefixLen": 0,
+               "Aliases": null,
+               "NetworkID": "e791a906b374a0d477e90d7e300f212f2bb630daae8914ac1c4ceb082876b22b",
+               "MacAddress": "02:42:ac:12:00:12",
+               "IPAMConfig": null,
+               "DriverOpts": null,
+               "Gateway": "172.18.0.1",
+               "EndpointID": "e7d444878f61aaa14fd6194d416e8a3680920b8cd79e76d80a4cb7d856861b2c",
+               "Links": null,
+               "IPv6Gateway": "",
+               "IPAddress": "172.18.0.18"
+          }}},
+          "SizeRootFs": 370763143,
+          "Command": "/entrypoint.sh",
+          "State": "running",
+          "ImageID": "sha256:caff58cad617174c39cdf860d5368090f502878d5f16ca94bbea93716895e367",
+          "HostConfig": {"NetworkMode": "sisgeodef"},
+          "Id": "1aa847c714e36f55f1981c89ae8e6f5bfe37fda3e6fc5c9a3262c1e5a3b2bf49"
+     },
+     {
+          "Status": "Up 6 months",
+          "Mounts": [
+               {
+                    "Destination": "/etc/localtime",
+                    "Type": "bind",
+                    "Propagation": "rprivate",
+                    "RW": false,
+                    "Mode": "ro",
+                    "Source": "/etc/localtime"
+               },
+               {
+                    "Destination": "/var/lib/postgresql",
+                    "Type": "bind",
+                    "Propagation": "rprivate",
+                    "RW": true,
+                    "Mode": "",
+                    "Source": "/sisgeodef/interop-db"
+               }
+
+          ],
+          "SizeRw": 278188,
+          "Ports": [
+               {
+                    "Type": "tcp",
+                    "IP": "0.0.0.0",
+                    "PrivatePort": 5432,
+                    "PublicPort": 36227
+               },
+               {
+                    "Type": "tcp",
+                    "IP": "::",
+                    "PrivatePort": 5432,
+                    "PublicPort": 36227
+               }
+
+          ],
+          "Labels": {"maintainer": "Tim Sutton<tim@kartoza.com>"},
+          "Image": "kartoza/postgis:13",
+          "Created": 1685982162,
+          "Names": ["/interop-db"],
+          "NetworkSettings": {"Networks": {"sisgeodef": {
+               "GlobalIPv6Address": "",
+               "IPPrefixLen": 16,
+               "GlobalIPv6PrefixLen": 0,
+               "Aliases": null,
+               "NetworkID": "e791a906b374a0d477e90d7e300f212f2bb630daae8914ac1c4ceb082876b22b",
+               "MacAddress": "02:42:ac:12:00:06",
+               "IPAMConfig": null,
+               "DriverOpts": null,
+               "Gateway": "172.18.0.1",
+               "EndpointID": "1fb602d3973f95d66341fe720b9e6c7faf3a8e71e63713d193fa1bdd754adb3b",
+               "Links": null,
+               "IPv6Gateway": "",
+               "IPAddress": "172.18.0.6"
+          }}},
+          "SizeRootFs": 1611560158,
+          "Command": "/bin/sh -c /scripts/docker-entrypoint.sh",
+          "State": "running",
+          "ImageID": "sha256:4b1081b3dae162a1d12f33a9a180931f4dd22bca3b1959513f3a2d3f11bc8dfe",
+          "HostConfig": {"NetworkMode": "sisgeodef"},
+          "Id": "863b90f1534a63b4b42a6f941dbf165f0dfcc3a415d68172f71fcd35dd2b41af"
+     },
+     {
+          "Status": "Up 6 months",
+          "Mounts": [{
+               "Destination": "/etc/localtime",
+               "Type": "bind",
+               "Propagation": "rprivate",
+               "RW": false,
+               "Mode": "ro",
+               "Source": "/etc/localtime"
+          }],
+          "SizeRw": 32768,
+          "Ports": [
+               {
+                    "Type": "tcp",
+                    "IP": "0.0.0.0",
+                    "PrivatePort": 36004,
+                    "PublicPort": 36004
+               },
+               {
+                    "Type": "tcp",
+                    "IP": "::",
+                    "PrivatePort": 36004,
+                    "PublicPort": 36004
+               }
+
+          ],
+          "Labels": {},
+          "Image": "hiparco/poseidon:1.0",
+          "Created": 1685365151,
+          "Names": ["/poseidon"],
+          "NetworkSettings": {"Networks": {"sisgeodef": {
+               "GlobalIPv6Address": "",
+               "IPPrefixLen": 16,
+               "GlobalIPv6PrefixLen": 0,
+               "Aliases": null,
+               "NetworkID": "e791a906b374a0d477e90d7e300f212f2bb630daae8914ac1c4ceb082876b22b",
+               "MacAddress": "02:42:ac:12:00:1b",
+               "IPAMConfig": null,
+               "DriverOpts": null,
+               "Gateway": "172.18.0.1",
+               "EndpointID": "5e8bc2fb14bebda1fa76cbc1d495c7e834c155ade2ce47ebc5de924f60db73f6",
+               "Links": null,
+               "IPv6Gateway": "",
+               "IPAddress": "172.18.0.27"
+          }}},
+          "SizeRootFs": 738338970,
+          "Command": "java -jar /opt/lib/poseidon-1.0.war",
+          "State": "running",
+          "ImageID": "sha256:f663ebbf1cdf8615c59a311281953d92488de67f5660ddf48572a54d049cc7be",
+          "HostConfig": {"NetworkMode": "sisgeodef"},
+          "Id": "e7ac82fc45ce30b22d95656f565740c7cfeb311fca557cd516d7368383a815b2"
+     },
+     {
+          "Status": "Up 6 months",
+          "Mounts": [
+               {
+                    "Destination": "/var/lib/postgresql",
+                    "Type": "bind",
+                    "Propagation": "rprivate",
+                    "RW": true,
+                    "Mode": "",
+                    "Source": "/srv/cerberus-db"
+               },
+               {
+                    "Destination": "/etc/localtime",
+                    "Type": "bind",
+                    "Propagation": "rprivate",
+                    "RW": false,
+                    "Mode": "ro",
+                    "Source": "/etc/localtime"
+               }
+
+          ],
+          "SizeRw": 280501,
+          "Ports": [{
+               "Type": "tcp",
+               "PrivatePort": 5432
+          }],
+          "Labels": {
+               "cache.invalidation.number": "1",
+               "maintainer": "Tim Sutton<tim@kartoza.com>"
+
+          },
+          "Image": "hiparco/comunicador-db:1.0",
+          "Created": 1684264186,
+          "Names": ["/cerberus-db"],
+          "NetworkSettings": {"Networks": {"sisgeodef": {
+               "GlobalIPv6Address": "",
+               "IPPrefixLen": 16,
+               "GlobalIPv6PrefixLen": 0,
+               "Aliases": null,
+               "NetworkID": "e791a906b374a0d477e90d7e300f212f2bb630daae8914ac1c4ceb082876b22b",
+               "MacAddress": "02:42:ac:12:00:07",
+               "IPAMConfig": null,
+               "DriverOpts": null,
+               "Gateway": "172.18.0.1",
+               "EndpointID": "cfd3f5ac09b261e6be06c3fc551f0cd420aee69f7f895fde3b83311fdd274f6b",
+               "Links": null,
+               "IPv6Gateway": "",
+               "IPAddress": "172.18.0.7"
+          }}},
+          "SizeRootFs": 1627566613,
+          "Command": "/bin/sh -c /scripts/docker-entrypoint.sh",
+          "State": "running",
+          "ImageID": "sha256:f1113bf7283ee2a33f54756fa84acd4d512b07c5d30be579b2ad193bedf94ab1",
+          "HostConfig": {"NetworkMode": "sisgeodef"},
+          "Id": "d1ce19785947b7a857a8197cc0923432743ec09fa8a819c0b161aec2427ada22"
+     },
+     {
+          "Status": "Up 6 weeks",
+          "Mounts": [
+               {
+                    "Destination": "/calisto",
+                    "Type": "bind",
+                    "Propagation": "rprivate",
+                    "RW": true,
+                    "Mode": "",
+                    "Source": "/srv/calisto"
+               },
+               {
+                    "Destination": "/etc/localtime",
+                    "Type": "bind",
+                    "Propagation": "rprivate",
+                    "RW": false,
+                    "Mode": "ro",
+                    "Source": "/etc/localtime"
+               },
+               {
+                    "Destination": "/interope",
+                    "Type": "bind",
+                    "Propagation": "rprivate",
+                    "RW": true,
+                    "Mode": "",
+                    "Source": "/srv/interope"
+               },
+               {
+                    "Destination": "/thundercloud",
+                    "Type": "bind",
+                    "Propagation": "rprivate",
+                    "RW": true,
+                    "Mode": "",
+                    "Source": "/srv/thundercloud"
+               }
+
+          ],
+          "SizeRw": 32768,
+          "Ports": [
+               {
+                    "Type": "tcp",
+                    "IP": "0.0.0.0",
+                    "PrivatePort": 36003,
+                    "PublicPort": 36003
+               },
+               {
+                    "Type": "tcp",
+                    "IP": "::",
+                    "PrivatePort": 36003,
+                    "PublicPort": 36003
+               }
+
+          ],
+          "Labels": {},
+          "Image": "hiparco/thundercloud:1.0",
+          "Created": 1684169105,
+          "Names": ["/thundercloud"],
+          "NetworkSettings": {"Networks": {"sisgeodef": {
+               "GlobalIPv6Address": "",
+               "IPPrefixLen": 16,
+               "GlobalIPv6PrefixLen": 0,
+               "Aliases": null,
+               "NetworkID": "e791a906b374a0d477e90d7e300f212f2bb630daae8914ac1c4ceb082876b22b",
+               "MacAddress": "02:42:ac:12:00:1c",
+               "IPAMConfig": null,
+               "DriverOpts": null,
+               "Gateway": "172.18.0.1",
+               "EndpointID": "3c23ae9dbc6245987f55c8ad193acdebbc777beda286bfe365845b75fdd8fccb",
+               "Links": null,
+               "IPv6Gateway": "",
+               "IPAddress": "172.18.0.28"
+          }}},
+          "SizeRootFs": 744332034,
+          "Command": "java -jar /opt/lib/thundercloud-1.0.war",
+          "State": "running",
+          "ImageID": "sha256:134ba45cfd03d6a3d5176d7cae40d97f8094b453d36c55741d17f3c0e30bbfe8",
+          "HostConfig": {"NetworkMode": "sisgeodef"},
+          "Id": "573a21122b2afd8f33d333ce7d9840105dc4085456cc4c84bd49259873b45736"
+     },
+     {
+          "Status": "Up 6 months",
+          "Mounts": [],
+          "SizeRw": 32768,
+          "Ports": [
+               {
+                    "Type": "tcp",
+                    "IP": "0.0.0.0",
+                    "PrivatePort": 36340,
+                    "PublicPort": 36340
+               },
+               {
+                    "Type": "tcp",
+                    "IP": "::",
+                    "PrivatePort": 36340,
+                    "PublicPort": 36340
+               }
+
+          ],
+          "Labels": {},
+          "Image": "hiparco/interc2:1.0",
+          "Created": 1682429381,
+          "Names": ["/interc2"],
+          "NetworkSettings": {"Networks": {"sisgeodef": {
+               "GlobalIPv6Address": "",
+               "IPPrefixLen": 16,
+               "GlobalIPv6PrefixLen": 0,
+               "Aliases": null,
+               "NetworkID": "e791a906b374a0d477e90d7e300f212f2bb630daae8914ac1c4ceb082876b22b",
+               "MacAddress": "02:42:ac:12:00:1d",
+               "IPAMConfig": null,
+               "DriverOpts": null,
+               "Gateway": "172.18.0.1",
+               "EndpointID": "26552f1a0c1f0d9945f0584f9e995182c814bd033001f5ff0f55b8e148a078a3",
+               "Links": null,
+               "IPv6Gateway": "",
+               "IPAddress": "172.18.0.29"
+          }}},
+          "SizeRootFs": 751608132,
+          "Command": "java -jar /opt/lib/interc2-1.0.war",
+          "State": "running",
+          "ImageID": "sha256:e2322fbb7b784b0f23c2a60bd143fc5a1f51d0c81a05939ff6a4cb532d21e5c5",
+          "HostConfig": {"NetworkMode": "sisgeodef"},
+          "Id": "4fd6caf7f2d2275c51e3432773c29bdf78bef67c8342f3bf93c5e9007afeb954"
+     },
+     {
+          "Status": "Up 6 months",
+          "Mounts": [
+               {
+                    "Destination": "/etc/localtime",
+                    "Type": "bind",
+                    "Propagation": "rprivate",
+                    "RW": false,
+                    "Mode": "ro",
+                    "Source": "/etc/localtime"
+               },
+               {
+                    "Destination": "/var/lib/postgresql",
+                    "Type": "bind",
+                    "Propagation": "rprivate",
+                    "RW": true,
+                    "Mode": "",
+                    "Source": "/srv/interc2-db"
+               }
+
+          ],
+          "SizeRw": 285865,
+          "Ports": [{
+               "Type": "tcp",
+               "PrivatePort": 5432
+          }],
+          "Labels": {
+               "cache.invalidation.number": "1",
+               "maintainer": "Tim Sutton<tim@kartoza.com>"
+
+          },
+          "Image": "hiparco/comunicador-db:1.0",
+          "Created": 1681913990,
+          "Names": ["/interc2-db"],
+          "NetworkSettings": {"Networks": {"sisgeodef": {
+               "GlobalIPv6Address": "",
+               "IPPrefixLen": 16,
+               "GlobalIPv6PrefixLen": 0,
+               "Aliases": null,
+               "NetworkID": "e791a906b374a0d477e90d7e300f212f2bb630daae8914ac1c4ceb082876b22b",
+               "MacAddress": "02:42:ac:12:00:08",
+               "IPAMConfig": null,
+               "DriverOpts": null,
+               "Gateway": "172.18.0.1",
+               "EndpointID": "5fd790a684dd188d7d7163dddfd8066f01dcb4158066318672a81bfc83f930e9",
+               "Links": null,
+               "IPv6Gateway": "",
+               "IPAddress": "172.18.0.8"
+          }}},
+          "SizeRootFs": 1627571977,
+          "Command": "/bin/sh -c /scripts/docker-entrypoint.sh",
+          "State": "running",
+          "ImageID": "sha256:f1113bf7283ee2a33f54756fa84acd4d512b07c5d30be579b2ad193bedf94ab1",
+          "HostConfig": {"NetworkMode": "sisgeodef"},
+          "Id": "4e97b78a40c0ad7e8baa153c2c8becebe6bc54acec21cd2bcd3496025cbf12e8"
+     },
+     {
+          "Status": "Up 6 weeks",
+          "Mounts": [
+               {
+                    "Destination": "/etc/localtime",
+                    "Type": "bind",
+                    "Propagation": "rprivate",
+                    "RW": false,
+                    "Mode": "ro",
+                    "Source": "/etc/localtime"
+               },
+               {
+                    "Destination": "/var/lib/postgresql",
+                    "Type": "bind",
+                    "Propagation": "rprivate",
+                    "RW": true,
+                    "Mode": "",
+                    "Source": "/srv/comunicador-db"
+               }
+
+          ],
+          "SizeRw": 294379,
+          "Ports": [{
+               "Type": "tcp",
+               "PrivatePort": 5432
+          }],
+          "Labels": {
+               "cache.invalidation.number": "1",
+               "maintainer": "Tim Sutton<tim@kartoza.com>"
+
+          },
+          "Image": "hiparco/comunicador-db:1.0",
+          "Created": 1681820054,
+          "Names": ["/comunicador-db"],
+          "NetworkSettings": {"Networks": {"sisgeodef": {
+               "GlobalIPv6Address": "",
+               "IPPrefixLen": 16,
+               "GlobalIPv6PrefixLen": 0,
+               "Aliases": null,
+               "NetworkID": "e791a906b374a0d477e90d7e300f212f2bb630daae8914ac1c4ceb082876b22b",
+               "MacAddress": "02:42:ac:12:00:09",
+               "IPAMConfig": null,
+               "DriverOpts": null,
+               "Gateway": "172.18.0.1",
+               "EndpointID": "e8690aa36c196ce005818eda3baf69deb3584763cf133775f5c83de8e582e9d1",
+               "Links": null,
+               "IPv6Gateway": "",
+               "IPAddress": "172.18.0.9"
+          }}},
+          "SizeRootFs": 1627580491,
+          "Command": "/bin/sh -c /scripts/docker-entrypoint.sh",
+          "State": "running",
+          "ImageID": "sha256:f1113bf7283ee2a33f54756fa84acd4d512b07c5d30be579b2ad193bedf94ab1",
+          "HostConfig": {"NetworkMode": "sisgeodef"},
+          "Id": "49cf7a221674b159509deddda8dcc54bf3502d74d6f6b2c85fbb38aebef7ebae"
+     },
+     {
+          "Status": "Up 6 months",
+          "Mounts": [{
+               "Destination": "/etc/localtime",
+               "Type": "bind",
+               "Propagation": "rprivate",
+               "RW": false,
+               "Mode": "ro",
+               "Source": "/etc/localtime"
+          }],
+          "SizeRw": 32768,
+          "Ports": [
+               {
+                    "Type": "tcp",
+                    "IP": "0.0.0.0",
+                    "PrivatePort": 36002,
+                    "PublicPort": 36002
+               },
+               {
+                    "Type": "tcp",
+                    "IP": "::",
+                    "PrivatePort": 36002,
+                    "PublicPort": 36002
+               }
+
+          ],
+          "Labels": {},
+          "Image": "hiparco/daedalus:1.0",
+          "Created": 1679070682,
+          "Names": ["/daedalus"],
+          "NetworkSettings": {"Networks": {"sisgeodef": {
+               "GlobalIPv6Address": "",
+               "IPPrefixLen": 16,
+               "GlobalIPv6PrefixLen": 0,
+               "Aliases": null,
+               "NetworkID": "e791a906b374a0d477e90d7e300f212f2bb630daae8914ac1c4ceb082876b22b",
+               "MacAddress": "02:42:ac:12:00:1f",
+               "IPAMConfig": null,
+               "DriverOpts": null,
+               "Gateway": "172.18.0.1",
+               "EndpointID": "9ffeb96f1b2cbee93186eca831ebfa2912067f70d9fdde0563893d440580798a",
+               "Links": null,
+               "IPv6Gateway": "",
+               "IPAddress": "172.18.0.31"
+          }}},
+          "SizeRootFs": 753350327,
+          "Command": "java -jar /opt/lib/daedalus-1.0.war",
+          "State": "running",
+          "ImageID": "sha256:8ac67198ae1cbab8afc473054d0bea192063572bd41625c468156cf25de5f6cf",
+          "HostConfig": {"NetworkMode": "default"},
+          "Id": "f7084564d6251c18782322a7212cd52320291023c6dce0a76270fb44dceebcb2"
+     },
+     {
+          "Status": "Up 6 months",
+          "Mounts": [
+               {
+                    "Destination": "/cartas",
+                    "Type": "bind",
+                    "Propagation": "rprivate",
+                    "RW": true,
+                    "Mode": "",
+                    "Source": "/sisgeodef/smaps/cartas"
+               },
+               {
+                    "Destination": "/etc/localtime",
+                    "Type": "bind",
+                    "Propagation": "rprivate",
+                    "RW": false,
+                    "Mode": "ro",
+                    "Source": "/etc/localtime"
+               },
+               {
+                    "Destination": "/import",
+                    "Type": "bind",
+                    "Propagation": "rprivate",
+                    "RW": true,
+                    "Mode": "",
+                    "Source": "/sisgeodef/smaps/s57"
+               },
+               {
+                    "Destination": "/tiles",
+                    "Type": "bind",
+                    "Propagation": "rprivate",
+                    "RW": true,
+                    "Mode": "",
+                    "Source": "/sisgeodef/smaps/tiles"
+               }
+
+          ],
+          "SizeRw": 32768,
+          "Ports": [
+               {
+                    "Type": "tcp",
+                    "IP": "0.0.0.0",
+                    "PrivatePort": 36800,
+                    "PublicPort": 36800
+               },
+               {
+                    "Type": "tcp",
+                    "IP": "::",
+                    "PrivatePort": 36800,
+                    "PublicPort": 36800
+               }
+
+          ],
+          "Labels": {},
+          "Image": "hiparco/smaps:1.0",
+          "Created": 1679070661,
+          "Names": ["/smaps"],
+          "NetworkSettings": {"Networks": {"sisgeodef": {
+               "GlobalIPv6Address": "",
+               "IPPrefixLen": 16,
+               "GlobalIPv6PrefixLen": 0,
+               "Aliases": null,
+               "NetworkID": "e791a906b374a0d477e90d7e300f212f2bb630daae8914ac1c4ceb082876b22b",
+               "MacAddress": "02:42:ac:12:00:20",
+               "IPAMConfig": null,
+               "DriverOpts": null,
+               "Gateway": "172.18.0.1",
+               "EndpointID": "01ed8a33b87c3b1f99833614a4e1ce0c36fce5ec04dde4c911f3dfe74441f394",
+               "Links": null,
+               "IPv6Gateway": "",
+               "IPAddress": "172.18.0.32"
+          }}},
+          "SizeRootFs": 534783243,
+          "Command": "java -jar /opt/lib/smaps-1.0.war",
+          "State": "running",
+          "ImageID": "sha256:a1b71fc5a33b9c4cd1c245828e8f94da9f08eea366ac61bdfca5c2bc1f7fd17a",
+          "HostConfig": {"NetworkMode": "default"},
+          "Id": "8882b95662e10e27b4e8b81cdb7227b858f940ff4bb93ffcfddd993129dc35c6"
+     },
+     {
+          "Status": "Up 6 months",
+          "Mounts": [
+               {
+                    "Destination": "/etc/localtime",
+                    "Type": "bind",
+                    "Propagation": "rprivate",
+                    "RW": false,
+                    "Mode": "ro",
+                    "Source": "/etc/localtime"
+               },
+               {
+                    "Destination": "/var/lib/rabbitmq",
+                    "Type": "bind",
+                    "Propagation": "rprivate",
+                    "RW": true,
+                    "Mode": "",
+                    "Source": "/srv/rabbitmq"
+               }
+
+          ],
+          "Ports": [
+               {
+                    "Type": "tcp",
+                    "PrivatePort": 4369
+               },
+               {
+                    "Type": "tcp",
+                    "PrivatePort": 5671
+               },
+               {
+                    "Type": "tcp",
+                    "PrivatePort": 36317
+               },
+               {
+                    "Type": "tcp",
+                    "PrivatePort": 15672
+               },
+               {
+                    "Type": "tcp",
+                    "PrivatePort": 15691
+               },
+               {
+                    "Type": "tcp",
+                    "PrivatePort": 15692
+               },
+               {
+                    "Type": "tcp",
+                    "PrivatePort": 25672
+               },
+               {
+                    "Type": "tcp",
+                    "IP": "0.0.0.0",
+                    "PrivatePort": 5672,
+                    "PublicPort": 36317
+               },
+               {
+                    "Type": "tcp",
+                    "IP": "::",
+                    "PrivatePort": 5672,
+                    "PublicPort": 36317
+               },
+               {
+                    "Type": "tcp",
+                    "PrivatePort": 15671
+               }
+
+          ],
+          "Labels": {},
+          "Image": "hiparco/rabbitmq:1.0",
+          "Created": 1679070627,
+          "Names": ["/rabbitmq"],
+          "NetworkSettings": {"Networks": {"sisgeodef": {
+               "GlobalIPv6Address": "",
+               "IPPrefixLen": 16,
+               "GlobalIPv6PrefixLen": 0,
+               "Aliases": null,
+               "NetworkID": "e791a906b374a0d477e90d7e300f212f2bb630daae8914ac1c4ceb082876b22b",
+               "MacAddress": "02:42:ac:12:00:21",
+               "IPAMConfig": null,
+               "DriverOpts": null,
+               "Gateway": "172.18.0.1",
+               "EndpointID": "13192ba5208bcf54eff6bbb96d313a51a9a4aa59e72de95b9b32f8a9d2ae493b",
+               "Links": null,
+               "IPv6Gateway": "",
+               "IPAddress": "172.18.0.33"
+          }}},
+          "SizeRootFs": 176936117,
+          "Command": "docker-entrypoint.sh rabbitmq-server",
+          "State": "running",
+          "ImageID": "sha256:b91cbe247f06517a7cacaa5dff370a1088e504cdfa32146cbb5e5a2dedef041b",
+          "HostConfig": {"NetworkMode": "default"},
+          "Id": "988545a2a83c0b5e465b12118387788d3df239e091005a09ab820d161b11fa39"
+     },
+     {
+          "Status": "Up 6 months",
+          "Mounts": [
+               {
+                    "Destination": "/data/tilesets/terrain/ion",
+                    "Type": "bind",
+                    "Propagation": "rprivate",
+                    "RW": true,
+                    "Mode": "",
+                    "Source": "/sisgeodef/olimpo/tilesets/terrain/cesium"
+               },
+               {
+                    "Destination": "/etc/localtime",
+                    "Type": "bind",
+                    "Propagation": "rprivate",
+                    "RW": false,
+                    "Mode": "ro",
+                    "Source": "/etc/localtime"
+               }
+
+          ],
+          "SizeRw": 32768,
+          "Ports": [
+               {
+                    "Type": "tcp",
+                    "IP": "0.0.0.0",
+                    "PrivatePort": 36094,
+                    "PublicPort": 36094
+               },
+               {
+                    "Type": "tcp",
+                    "IP": "::",
+                    "PrivatePort": 36094,
+                    "PublicPort": 36094
+               }
+
+          ],
+          "Labels": {},
+          "Image": "hiparco/heimdal:1.0",
+          "Created": 1679070615,
+          "Names": ["/heimdal"],
+          "NetworkSettings": {"Networks": {"sisgeodef": {
+               "GlobalIPv6Address": "",
+               "IPPrefixLen": 16,
+               "GlobalIPv6PrefixLen": 0,
+               "Aliases": null,
+               "NetworkID": "e791a906b374a0d477e90d7e300f212f2bb630daae8914ac1c4ceb082876b22b",
+               "MacAddress": "02:42:ac:12:00:22",
+               "IPAMConfig": null,
+               "DriverOpts": null,
+               "Gateway": "172.18.0.1",
+               "EndpointID": "5a70d0a7424d6f2c61c2628895afd7f0bfc97d50d0b85cc65aba094d4878a45e",
+               "Links": null,
+               "IPv6Gateway": "",
+               "IPAddress": "172.18.0.34"
+          }}},
+          "SizeRootFs": 398853568,
+          "Command": "java -jar /opt/lib/heimdal-1.0.war",
+          "State": "running",
+          "ImageID": "sha256:2dde1755a5ae58eba926b85613d7dfb5c5d9d4e4bc55585fe30eb498d54f7b8e",
+          "HostConfig": {"NetworkMode": "default"},
+          "Id": "f838547257b3ca7f484ead5d11a3068c3382c6bd4b2222b8985512354b0aeb6a"
+     },
+     {
+          "Status": "Up 6 months",
+          "Mounts": [
+               {
+                    "Destination": "/data",
+                    "Type": "bind",
+                    "Propagation": "rprivate",
+                    "RW": true,
+                    "Mode": "",
+                    "Source": "/sisgeodef/olimpo"
+               },
+               {
+                    "Destination": "/etc/localtime",
+                    "Type": "bind",
+                    "Propagation": "rprivate",
+                    "RW": false,
+                    "Mode": "ro",
+                    "Source": "/etc/localtime"
+               }
+
+          ],
+          "SizeRw": 32768,
+          "Ports": [
+               {
+                    "Type": "tcp",
+                    "IP": "0.0.0.0",
+                    "PrivatePort": 36503,
+                    "PublicPort": 36503
+               },
+               {
+                    "Type": "tcp",
+                    "IP": "::",
+                    "PrivatePort": 36503,
+                    "PublicPort": 36503
+               }
+
+          ],
+          "Labels": {},
+          "Image": "hiparco/olimpo:1.0",
+          "Created": 1679070473,
+          "Names": ["/olimpo"],
+          "NetworkSettings": {"Networks": {"sisgeodef": {
+               "GlobalIPv6Address": "",
+               "IPPrefixLen": 16,
+               "GlobalIPv6PrefixLen": 0,
+               "Aliases": null,
+               "NetworkID": "e791a906b374a0d477e90d7e300f212f2bb630daae8914ac1c4ceb082876b22b",
+               "MacAddress": "02:42:ac:12:00:23",
+               "IPAMConfig": null,
+               "DriverOpts": null,
+               "Gateway": "172.18.0.1",
+               "EndpointID": "c2cc84dc2d22fe19c7ea2c83ef26d37bfca3786bcdfdc889b501738cbdcdee92",
+               "Links": null,
+               "IPv6Gateway": "",
+               "IPAddress": "172.18.0.35"
+          }}},
+          "SizeRootFs": 384594598,
+          "Command": "java -jar /opt/lib/olimpo-1.0.war",
+          "State": "running",
+          "ImageID": "sha256:fad4227b6c1d229ce076b145f7b237d5a29678a08e9a2ff41302b19f97d8fc62",
+          "HostConfig": {"NetworkMode": "default"},
+          "Id": "a7582e8a1aa288f56a6379cc431c481b5997f96777d1dfbf2589ef65f8926b30"
+     },
+     {
+          "Status": "Up 6 months",
+          "Mounts": [
+               {
+                    "Destination": "/var/lib/geonetwork_data",
+                    "Type": "bind",
+                    "Propagation": "rprivate",
+                    "RW": true,
+                    "Mode": "",
+                    "Source": "/srv/nyx"
+               },
+               {
+                    "Destination": "/etc/localtime",
+                    "Type": "bind",
+                    "Propagation": "rprivate",
+                    "RW": false,
+                    "Mode": "ro",
+                    "Source": "/etc/localtime"
+               }
+
+          ],
+          "SizeRw": 22650027,
+          "Ports": [
+               {
+                    "Type": "tcp",
+                    "PrivatePort": 36318
+               },
+               {
+                    "Type": "tcp",
+                    "IP": "0.0.0.0",
+                    "PrivatePort": 8080,
+                    "PublicPort": 36318
+               },
+               {
+                    "Type": "tcp",
+                    "IP": "::",
+                    "PrivatePort": 8080,
+                    "PublicPort": 36318
+               }
+
+          ],
+          "Labels": {},
+          "Image": "hiparco/nyx:1.0",
+          "Created": 1679070461,
+          "Names": ["/nyx"],
+          "NetworkSettings": {"Networks": {"sisgeodef": {
+               "GlobalIPv6Address": "",
+               "IPPrefixLen": 16,
+               "GlobalIPv6PrefixLen": 0,
+               "Aliases": null,
+               "NetworkID": "e791a906b374a0d477e90d7e300f212f2bb630daae8914ac1c4ceb082876b22b",
+               "MacAddress": "02:42:ac:12:00:2e",
+               "IPAMConfig": null,
+               "DriverOpts": null,
+               "Gateway": "172.18.0.1",
+               "EndpointID": "8a21f17ddb0cff83eaaab3459c6b64238fbaa6af7cada236f31c87f8cbff247f",
+               "Links": null,
+               "IPv6Gateway": "",
+               "IPAddress": "172.18.0.46"
+          }}},
+          "SizeRootFs": 978550040,
+          "Command": "/entrypoint.sh catalina.sh run",
+          "State": "running",
+          "ImageID": "sha256:55fad103ec4495433e4fe5400d7bc681ec1000091c685a34b53938c3401f15e6",
+          "HostConfig": {"NetworkMode": "default"},
+          "Id": "066c8285308720498251298ef177d863b037edcbf628b1b82fa95955000c9b5e"
+     },
+     {
+          "Status": "Up 6 months",
+          "Mounts": [
+               {
+                    "Destination": "/etc/localtime",
+                    "Type": "bind",
+                    "Propagation": "rprivate",
+                    "RW": false,
+                    "Mode": "ro",
+                    "Source": "/etc/localtime"
+               },
+               {
+                    "Destination": "/usr/local/tomcat/webapps/ROOT/print-apps",
+                    "Type": "bind",
+                    "Propagation": "rprivate",
+                    "RW": true,
+                    "Mode": "",
+                    "Source": "/srv/mapfish"
+               }
+
+          ],
+          "SizeRw": 21780642,
+          "Ports": [
+               {
+                    "Type": "tcp",
+                    "PrivatePort": 36510
+               },
+               {
+                    "Type": "tcp",
+                    "PrivatePort": 8080
+               }
+
+          ],
+          "Labels": {
+               "maintener": "Carlos M. Abreu <magno.mabreu@gmail.com>",
+               "maintainer": "Camptocamp <info@camptocamp.com>"
+
+          },
+          "Image": "hiparco/mapfish:latest",
+          "Created": 1679070324,
+          "Names": ["/mapfish"],
+          "NetworkSettings": {"Networks": {"sisgeodef": {
+               "GlobalIPv6Address": "",
+               "IPPrefixLen": 16,
+               "GlobalIPv6PrefixLen": 0,
+               "Aliases": null,
+               "NetworkID": "e791a906b374a0d477e90d7e300f212f2bb630daae8914ac1c4ceb082876b22b",
+               "MacAddress": "02:42:ac:12:00:25",
+               "IPAMConfig": null,
+               "DriverOpts": null,
+               "Gateway": "172.18.0.1",
+               "EndpointID": "ddd869440e7097bc358c32f70b99ffecbe0197b456e131f95786906e141fd656",
+               "Links": null,
+               "IPv6Gateway": "",
+               "IPAddress": "172.18.0.37"
+          }}},
+          "SizeRootFs": 634813955,
+          "Command": "/usr/local/tomcat/bin/docker-start-print",
+          "State": "running",
+          "ImageID": "sha256:809b02a5960abbd26a3dacfe90d0c79a12ff3a4ac2e71ead412a45af95ee3212",
+          "HostConfig": {"NetworkMode": "default"},
+          "Id": "7e6350213904ac1afe902b20201d22f5a191c980365848b0765b47303e33cc75"
+     },
+     {
+          "Status": "Up 6 months",
+          "Mounts": [{
+               "Destination": "/etc/localtime",
+               "Type": "bind",
+               "Propagation": "rprivate",
+               "RW": false,
+               "Mode": "ro",
+               "Source": "/etc/localtime"
+          }],
+          "SizeRw": 32768,
+          "Ports": [
+               {
+                    "Type": "tcp",
+                    "IP": "0.0.0.0",
+                    "PrivatePort": 36500,
+                    "PublicPort": 36500
+               },
+               {
+                    "Type": "tcp",
+                    "IP": "::",
+                    "PrivatePort": 36500,
+                    "PublicPort": 36500
+               }
+
+          ],
+          "Labels": {},
+          "Image": "hiparco/styler:1.0",
+          "Created": 1679070012,
+          "Names": ["/styler"],
+          "NetworkSettings": {"Networks": {"sisgeodef": {
+               "GlobalIPv6Address": "",
+               "IPPrefixLen": 16,
+               "GlobalIPv6PrefixLen": 0,
+               "Aliases": null,
+               "NetworkID": "e791a906b374a0d477e90d7e300f212f2bb630daae8914ac1c4ceb082876b22b",
+               "MacAddress": "02:42:ac:12:00:28",
+               "IPAMConfig": null,
+               "DriverOpts": null,
+               "Gateway": "172.18.0.1",
+               "EndpointID": "df1e9077feb26779721a5da9c3e8d74a2713eb17b85418221def1a47f2e0e932",
+               "Links": null,
+               "IPv6Gateway": "",
+               "IPAddress": "172.18.0.40"
+          }}},
+          "SizeRootFs": 750085212,
+          "Command": "java -jar /opt/lib/styler-1.0.war",
+          "State": "running",
+          "ImageID": "sha256:b3306a90ef6f67150743b85c247e7b7bb8441955ac9929ebbbeaf191cf9ec012",
+          "HostConfig": {"NetworkMode": "default"},
+          "Id": "4c26b72442fd6eb38bb6c5ed0ce919b7a3aa0818b84e2ea3ae03f06ca80ac538"
+     },
+     {
+          "Status": "Up 6 months",
+          "Mounts": [
+               {
+                    "Destination": "/etc/localtime",
+                    "Type": "bind",
+                    "Propagation": "rprivate",
+                    "RW": false,
+                    "Mode": "ro",
+                    "Source": "/etc/localtime"
+               },
+               {
+                    "Destination": "/var/lib/postgresql",
+                    "Type": "bind",
+                    "Propagation": "rprivate",
+                    "RW": true,
+                    "Mode": "",
+                    "Source": "/srv/poseidon-db"
+               }
+
+          ],
+          "SizeRw": 267300,
+          "Ports": [{
+               "Type": "tcp",
+               "PrivatePort": 5432
+          }],
+          "Labels": {},
+          "Image": "hiparco/poseidon-db:1.0",
+          "Created": 1679070000,
+          "Names": ["/poseidon-db"],
+          "NetworkSettings": {"Networks": {"sisgeodef": {
+               "GlobalIPv6Address": "",
+               "IPPrefixLen": 16,
+               "GlobalIPv6PrefixLen": 0,
+               "Aliases": null,
+               "NetworkID": "e791a906b374a0d477e90d7e300f212f2bb630daae8914ac1c4ceb082876b22b",
+               "MacAddress": "02:42:ac:12:00:0b",
+               "IPAMConfig": null,
+               "DriverOpts": null,
+               "Gateway": "172.18.0.1",
+               "EndpointID": "166f9ae4427dfb53659662db992463e1d3217a3db75f5b79f741a3c8e84c1766",
+               "Links": null,
+               "IPv6Gateway": "",
+               "IPAddress": "172.18.0.11"
+          }}},
+          "SizeRootFs": 1483080106,
+          "Command": "/bin/sh -c /scripts/docker-entrypoint.sh",
+          "State": "running",
+          "ImageID": "sha256:8e8febad46db175e332062c8185423fce64ba18f934576414e8d6303664a6f7f",
+          "HostConfig": {"NetworkMode": "default"},
+          "Id": "a934811e7dcc3d74587cf3cafc32c7b1bfa329aa7cda8dc763d94b9b9964a14a"
+     },
+     {
+          "Status": "Up 6 months",
+          "Mounts": [
+               {
+                    "Destination": "/etc/localtime",
+                    "Type": "bind",
+                    "Propagation": "rprivate",
+                    "RW": false,
+                    "Mode": "ro",
+                    "Source": "/etc/localtime"
+               },
+               {
+                    "Destination": "/var/lib/postgresql",
+                    "Type": "bind",
+                    "Propagation": "rprivate",
+                    "RW": true,
+                    "Mode": "",
+                    "Source": "/srv/nyx-db"
+               }
+
+          ],
+          "SizeRw": 288308,
+          "Ports": [{
+               "Type": "tcp",
+               "PrivatePort": 5432
+          }],
+          "Labels": {},
+          "Image": "hiparco/nyx-db:1.0",
+          "Created": 1679069995,
+          "Names": ["/nyx-db"],
+          "NetworkSettings": {"Networks": {"sisgeodef": {
+               "GlobalIPv6Address": "",
+               "IPPrefixLen": 16,
+               "GlobalIPv6PrefixLen": 0,
+               "Aliases": null,
+               "NetworkID": "e791a906b374a0d477e90d7e300f212f2bb630daae8914ac1c4ceb082876b22b",
+               "MacAddress": "02:42:ac:12:00:0c",
+               "IPAMConfig": null,
+               "DriverOpts": null,
+               "Gateway": "172.18.0.1",
+               "EndpointID": "b4d7220f658fb0786b696af585ac3929e8edf97db2bfff960ac8cd5548ffdf2e",
+               "Links": null,
+               "IPv6Gateway": "",
+               "IPAddress": "172.18.0.12"
+          }}},
+          "SizeRootFs": 1092556356,
+          "Command": "/bin/sh -c /docker-entrypoint.sh",
+          "State": "running",
+          "ImageID": "sha256:61146a557aeca2f568a66e867674053f8c796bb8401f5058234cd784d827effe",
+          "HostConfig": {"NetworkMode": "default"},
+          "Id": "7ff44f4e8be439e052e33b133db9e6b27b854b63755a90d561f6d146c43dc43a"
+     },
+     {
+          "Status": "Up 6 months",
+          "Mounts": [
+               {
+                    "Destination": "/etc/localtime",
+                    "Type": "bind",
+                    "Propagation": "rprivate",
+                    "RW": false,
+                    "Mode": "ro",
+                    "Source": "/etc/localtime"
+               },
+               {
+                    "Destination": "/var/lib/postgresql",
+                    "Type": "bind",
+                    "Propagation": "rprivate",
+                    "RW": true,
+                    "Mode": "",
+                    "Source": "/srv/mapfish-db"
+               }
+
+          ],
+          "SizeRw": 267299,
+          "Ports": [{
+               "Type": "tcp",
+               "PrivatePort": 5432
+          }],
+          "Labels": {},
+          "Image": "hiparco/mapfish-db:1.0",
+          "Created": 1679069952,
+          "Names": ["/mapfish-db"],
+          "NetworkSettings": {"Networks": {"sisgeodef": {
+               "GlobalIPv6Address": "",
+               "IPPrefixLen": 16,
+               "GlobalIPv6PrefixLen": 0,
+               "Aliases": null,
+               "NetworkID": "e791a906b374a0d477e90d7e300f212f2bb630daae8914ac1c4ceb082876b22b",
+               "MacAddress": "02:42:ac:12:00:0d",
+               "IPAMConfig": null,
+               "DriverOpts": null,
+               "Gateway": "172.18.0.1",
+               "EndpointID": "78ecbbd229dc66ffd561904e093e2885f1a0bae38a0d171a5f7d64e6b7abf274",
+               "Links": null,
+               "IPv6Gateway": "",
+               "IPAddress": "172.18.0.13"
+          }}},
+          "SizeRootFs": 1483080105,
+          "Command": "/bin/sh -c /scripts/docker-entrypoint.sh",
+          "State": "running",
+          "ImageID": "sha256:8e8febad46db175e332062c8185423fce64ba18f934576414e8d6303664a6f7f",
+          "HostConfig": {"NetworkMode": "default"},
+          "Id": "e79cff2203ce32eca8d6538e1d80780cfd7ea54edf5370325d08493ca3492150"
+     },
+     {
+          "Status": "Up 6 weeks",
+          "Mounts": [
+               {
+                    "Destination": "/etc/localtime",
+                    "Type": "bind",
+                    "Propagation": "rprivate",
+                    "RW": false,
+                    "Mode": "ro",
+                    "Source": "/etc/localtime"
+               },
+               {
+                    "Destination": "/var/lib/postgresql",
+                    "Type": "bind",
+                    "Propagation": "rprivate",
+                    "RW": true,
+                    "Mode": "",
+                    "Source": "/srv/atlas-db"
+               }
+
+          ],
+          "SizeRw": 289378,
+          "Ports": [{
+               "Type": "tcp",
+               "PrivatePort": 5432
+          }],
+          "Labels": {
+               "cache.invalidation.number": "1",
+               "maintainer": "Tim Sutton<tim@kartoza.com>"
+
+          },
+          "Image": "hiparco/atlas-db:1.0",
+          "Created": 1679069873,
+          "Names": ["/atlas-db"],
+          "NetworkSettings": {"Networks": {"sisgeodef": {
+               "GlobalIPv6Address": "",
+               "IPPrefixLen": 16,
+               "GlobalIPv6PrefixLen": 0,
+               "Aliases": null,
+               "NetworkID": "e791a906b374a0d477e90d7e300f212f2bb630daae8914ac1c4ceb082876b22b",
+               "MacAddress": "02:42:ac:12:00:0e",
+               "IPAMConfig": null,
+               "DriverOpts": null,
+               "Gateway": "172.18.0.1",
+               "EndpointID": "1969ef1a88142176cfee2053c707d3f0e6980df621b7c623853fee6046ce805e",
+               "Links": null,
+               "IPv6Gateway": "",
+               "IPAddress": "172.18.0.14"
+          }}},
+          "SizeRootFs": 1627575490,
+          "Command": "/bin/sh -c /scripts/docker-entrypoint.sh",
+          "State": "running",
+          "ImageID": "sha256:f1113bf7283ee2a33f54756fa84acd4d512b07c5d30be579b2ad193bedf94ab1",
+          "HostConfig": {"NetworkMode": "default"},
+          "Id": "86cce339ad29856530d8913504638ef2a6e23fc14af3b3b9d74ed1716c05c4de"
+     },
+     {
+          "Status": "Up 6 months",
+          "Mounts": [{
+               "Destination": "/etc/localtime",
+               "Type": "bind",
+               "Propagation": "rprivate",
+               "RW": false,
+               "Mode": "ro",
+               "Source": "/etc/localtime"
+          }],
+          "SizeRw": 32768,
+          "Ports": [
+               {
+                    "Type": "tcp",
+                    "IP": "0.0.0.0",
+                    "PrivatePort": 36219,
+                    "PublicPort": 36219
+               },
+               {
+                    "Type": "tcp",
+                    "IP": "::",
+                    "PrivatePort": 36219,
+                    "PublicPort": 36219
+               }
+
+          ],
+          "Labels": {},
+          "Image": "hiparco/draco:1.0",
+          "Created": 1679069813,
+          "Names": ["/draco"],
+          "NetworkSettings": {"Networks": {"sisgeodef": {
+               "GlobalIPv6Address": "",
+               "IPPrefixLen": 16,
+               "GlobalIPv6PrefixLen": 0,
+               "Aliases": null,
+               "NetworkID": "e791a906b374a0d477e90d7e300f212f2bb630daae8914ac1c4ceb082876b22b",
+               "MacAddress": "02:42:ac:12:00:29",
+               "IPAMConfig": null,
+               "DriverOpts": null,
+               "Gateway": "172.18.0.1",
+               "EndpointID": "58c83d55c072f3f22240c178fc271a1da6e4ec67654288e6e651f439b37d793c",
+               "Links": null,
+               "IPv6Gateway": "",
+               "IPAddress": "172.18.0.41"
+          }}},
+          "SizeRootFs": 388064438,
+          "Command": "java -jar /opt/lib/draco-1.0.war",
+          "State": "running",
+          "ImageID": "sha256:d1f41c4d6ff55e02147bcf38a2296ea516515faf7de9ee2e3818c625e6420706",
+          "HostConfig": {"NetworkMode": "default"},
+          "Id": "d7836747373da7c4930f51a0b5014002dec19b4d610c055ed61ca397a70c7f1d"
+     },
+     {
+          "Status": "Up 6 months",
+          "Mounts": [{
+               "Destination": "/etc/localtime",
+               "Type": "bind",
+               "Propagation": "rprivate",
+               "RW": false,
+               "Mode": "ro",
+               "Source": "/etc/localtime"
+          }],
+          "SizeRw": 32768,
+          "Ports": [
+               {
+                    "Type": "tcp",
+                    "IP": "0.0.0.0",
+                    "PrivatePort": 36204,
+                    "PublicPort": 36204
+               },
+               {
+                    "Type": "tcp",
+                    "IP": "::",
+                    "PrivatePort": 36204,
+                    "PublicPort": 36204
+               }
+
+          ],
+          "Labels": {},
+          "Image": "hiparco/delphos:1.0",
+          "Created": 1679069797,
+          "Names": ["/delphos"],
+          "NetworkSettings": {"Networks": {"sisgeodef": {
+               "GlobalIPv6Address": "",
+               "IPPrefixLen": 16,
+               "GlobalIPv6PrefixLen": 0,
+               "Aliases": null,
+               "NetworkID": "e791a906b374a0d477e90d7e300f212f2bb630daae8914ac1c4ceb082876b22b",
+               "MacAddress": "02:42:ac:12:00:11",
+               "IPAMConfig": null,
+               "DriverOpts": null,
+               "Gateway": "172.18.0.1",
+               "EndpointID": "af13d2799b778cb2a095214804660af66b87dcf78592d06d765bb2a20ba33d0a",
+               "Links": null,
+               "IPv6Gateway": "",
+               "IPAddress": "172.18.0.17"
+          }}},
+          "SizeRootFs": 382194041,
+          "Command": "java -jar /opt/lib/delphos-1.0.war",
+          "State": "running",
+          "ImageID": "sha256:90c7fee2c64822bfab173dfbd7a06f20dce808748d7bb69425977b1c72157e25",
+          "HostConfig": {"NetworkMode": "default"},
+          "Id": "cfb6610ccae44f1debacf1b6e86f273f6043dc6eb929f24943454f8d5d331cd8"
+     },
+     {
+          "Status": "Up 6 months",
+          "Mounts": [{
+               "Destination": "/etc/localtime",
+               "Type": "bind",
+               "Propagation": "rprivate",
+               "RW": false,
+               "Mode": "ro",
+               "Source": "/etc/localtime"
+          }],
+          "SizeRw": 32782,
+          "Ports": [
+               {
+                    "Type": "tcp",
+                    "IP": "0.0.0.0",
+                    "PrivatePort": 36208,
+                    "PublicPort": 36208
+               },
+               {
+                    "Type": "tcp",
+                    "IP": "::",
+                    "PrivatePort": 36208,
+                    "PublicPort": 36208
+               }
+
+          ],
+          "Labels": {},
+          "Image": "hiparco/admin:1.0",
+          "Created": 1679069782,
+          "Names": ["/admin"],
+          "NetworkSettings": {"Networks": {"sisgeodef": {
+               "GlobalIPv6Address": "",
+               "IPPrefixLen": 16,
+               "GlobalIPv6PrefixLen": 0,
+               "Aliases": null,
+               "NetworkID": "e791a906b374a0d477e90d7e300f212f2bb630daae8914ac1c4ceb082876b22b",
+               "MacAddress": "02:42:ac:12:00:13",
+               "IPAMConfig": null,
+               "DriverOpts": null,
+               "Gateway": "172.18.0.1",
+               "EndpointID": "e66b8010f48342c1c0f76146cbabf1cc04bd663baa6c41e1d6ed2bd345cafee8",
+               "Links": null,
+               "IPv6Gateway": "",
+               "IPAddress": "172.18.0.19"
+          }}},
+          "SizeRootFs": 387938745,
+          "Command": "java -jar /opt/lib/admin-1.0.war",
+          "State": "running",
+          "ImageID": "sha256:4bef6dc67d4d119a11631c39e14b268fd0703544b1be4a030ae8ef18b6c5add2",
+          "HostConfig": {"NetworkMode": "default"},
+          "Id": "2f7c3890b99b78189cfa6a3b943887552ccb23efbf2c33a5b756eec6ef57b435"
+     },
+     {
+          "Status": "Up 6 months",
+          "Mounts": [
+               {
+                    "Destination": "/images",
+                    "Type": "bind",
+                    "Propagation": "rprivate",
+                    "RW": true,
+                    "Mode": "",
+                    "Source": "/srv/sistram"
+               },
+               {
+                    "Destination": "/etc/localtime",
+                    "Type": "bind",
+                    "Propagation": "rprivate",
+                    "RW": false,
+                    "Mode": "ro",
+                    "Source": "/etc/localtime"
+               }
+
+          ],
+          "SizeRw": 32768,
+          "Ports": [
+               {
+                    "Type": "tcp",
+                    "IP": "0.0.0.0",
+                    "PrivatePort": 36001,
+                    "PublicPort": 36001
+               },
+               {
+                    "Type": "tcp",
+                    "IP": "::",
+                    "PrivatePort": 36001,
+                    "PublicPort": 36001
+               }
+
+          ],
+          "Labels": {},
+          "Image": "hiparco/sistram:1.0",
+          "Created": 1679003214,
+          "Names": ["/sistram"],
+          "NetworkSettings": {"Networks": {"sisgeodef": {
+               "GlobalIPv6Address": "",
+               "IPPrefixLen": 16,
+               "GlobalIPv6PrefixLen": 0,
+               "Aliases": null,
+               "NetworkID": "e791a906b374a0d477e90d7e300f212f2bb630daae8914ac1c4ceb082876b22b",
+               "MacAddress": "02:42:ac:12:00:2a",
+               "IPAMConfig": null,
+               "DriverOpts": null,
+               "Gateway": "172.18.0.1",
+               "EndpointID": "a563482029645194d0d1ac40e521143b53749b79cb91381b421d157f8a044815",
+               "Links": null,
+               "IPv6Gateway": "",
+               "IPAddress": "172.18.0.42"
+          }}},
+          "SizeRootFs": 733149761,
+          "Command": "java -jar /opt/lib/sistram-1.0.war",
+          "State": "running",
+          "ImageID": "sha256:ad9f1986eb7fb7f2ce27086b0034038bf3721a48963911ca2588c570e0326e55",
+          "HostConfig": {"NetworkMode": "sisgeodef"},
+          "Id": "f30bb88fae21d267a9c8441b57160e146502ccdba4ca0e826e66d64035e9ac36"
+     },
+     {
+          "Status": "Up 6 months",
+          "Mounts": [
+               {
+                    "Destination": "/usr/local/apache2/htdocs",
+                    "Type": "bind",
+                    "Propagation": "rprivate",
+                    "RW": true,
+                    "Mode": "",
+                    "Source": "/srv/edgv-catalogo"
+               },
+               {
+                    "Destination": "/etc/localtime",
+                    "Type": "bind",
+                    "Propagation": "rprivate",
+                    "RW": false,
+                    "Mode": "ro",
+                    "Source": "/etc/localtime"
+               }
+
+          ],
+          "SizeRw": 2,
+          "Ports": [
+               {
+                    "Type": "tcp",
+                    "IP": "0.0.0.0",
+                    "PrivatePort": 36280,
+                    "PublicPort": 36281
+               },
+               {
+                    "Type": "tcp",
+                    "IP": "::",
+                    "PrivatePort": 36280,
+                    "PublicPort": 36281
+               },
+               {
+                    "Type": "tcp",
+                    "PrivatePort": 80
+               }
+
+          ],
+          "Labels": {},
+          "Image": "hiparco/calisto:1.0",
+          "Created": 1679002905,
+          "Names": ["/edgv-catalogo"],
+          "NetworkSettings": {"Networks": {"sisgeodef": {
+               "GlobalIPv6Address": "",
+               "IPPrefixLen": 16,
+               "GlobalIPv6PrefixLen": 0,
+               "Aliases": null,
+               "NetworkID": "e791a906b374a0d477e90d7e300f212f2bb630daae8914ac1c4ceb082876b22b",
+               "MacAddress": "02:42:ac:12:00:14",
+               "IPAMConfig": null,
+               "DriverOpts": null,
+               "Gateway": "172.18.0.1",
+               "EndpointID": "5de9dea1e36a5fcc8cc55aaa7100d0c8acda183129fe5a7008d21277c7410f41",
+               "Links": null,
+               "IPv6Gateway": "",
+               "IPAddress": "172.18.0.20"
+          }}},
+          "SizeRootFs": 58175632,
+          "Command": "httpd-foreground",
+          "State": "running",
+          "ImageID": "sha256:dab3745534b1c2eee4719f4b691e5c8a59246405d564d62f0e9b24ba34ce540e",
+          "HostConfig": {"NetworkMode": "sisgeodef"},
+          "Id": "2deded2d2c6b23e0a0085a796a2abf112256c78d4c6a8dbb5e63efb8ba86aa16"
+     },
+     {
+          "Status": "Up 6 months",
+          "Mounts": [
+               {
+                    "Destination": "/etc/localtime",
+                    "Type": "bind",
+                    "Propagation": "rprivate",
+                    "RW": false,
+                    "Mode": "ro",
+                    "Source": "/etc/localtime"
+               },
+               {
+                    "Destination": "/usr/local/apache2/htdocs",
+                    "Type": "bind",
+                    "Propagation": "rprivate",
+                    "RW": true,
+                    "Mode": "",
+                    "Source": "/srv/calisto"
+               }
+
+          ],
+          "SizeRw": 7,
+          "Ports": [
+               {
+                    "Type": "tcp",
+                    "IP": "0.0.0.0",
+                    "PrivatePort": 36280,
+                    "PublicPort": 36280
+               },
+               {
+                    "Type": "tcp",
+                    "IP": "::",
+                    "PrivatePort": 36280,
+                    "PublicPort": 36280
+               },
+               {
+                    "Type": "tcp",
+                    "PrivatePort": 80
+               }
+
+          ],
+          "Labels": {},
+          "Image": "hiparco/calisto:1.0",
+          "Created": 1679002840,
+          "Names": ["/calisto"],
+          "NetworkSettings": {"Networks": {"sisgeodef": {
+               "GlobalIPv6Address": "",
+               "IPPrefixLen": 16,
+               "GlobalIPv6PrefixLen": 0,
+               "Aliases": null,
+               "NetworkID": "e791a906b374a0d477e90d7e300f212f2bb630daae8914ac1c4ceb082876b22b",
+               "MacAddress": "02:42:ac:12:00:15",
+               "IPAMConfig": null,
+               "DriverOpts": null,
+               "Gateway": "172.18.0.1",
+               "EndpointID": "2785bb5afee84b3fa34d34db3c64cb9f91643eba1de5e15d3b88d455cb3ce210",
+               "Links": null,
+               "IPv6Gateway": "",
+               "IPAddress": "172.18.0.21"
+          }}},
+          "SizeRootFs": 58175637,
+          "Command": "httpd-foreground",
+          "State": "running",
+          "ImageID": "sha256:dab3745534b1c2eee4719f4b691e5c8a59246405d564d62f0e9b24ba34ce540e",
+          "HostConfig": {"NetworkMode": "sisgeodef"},
+          "Id": "acaf0738380f6b9046e8a698d4641e24a697ba3d75360319b0603baf01c29f6e"
+     },
+     {
+          "Status": "Up 6 months",
+          "Mounts": [
+               {
+                    "Destination": "/archimedes",
+                    "Type": "bind",
+                    "Propagation": "rprivate",
+                    "RW": true,
+                    "Mode": "",
+                    "Source": "/srv/archimedes"
+               },
+               {
+                    "Destination": "/etc/localtime",
+                    "Type": "bind",
+                    "Propagation": "rprivate",
+                    "RW": false,
+                    "Mode": "ro",
+                    "Source": "/etc/localtime"
+               }
+
+          ],
+          "SizeRw": 32782,
+          "Ports": [
+               {
+                    "Type": "tcp",
+                    "IP": "0.0.0.0",
+                    "PrivatePort": 36206,
+                    "PublicPort": 36206
+               },
+               {
+                    "Type": "tcp",
+                    "IP": "::",
+                    "PrivatePort": 36206,
+                    "PublicPort": 36206
+               }
+
+          ],
+          "Labels": {},
+          "Image": "hiparco/archimedes:1.0",
+          "Created": 1679002801,
+          "Names": ["/archimedes"],
+          "NetworkSettings": {"Networks": {"sisgeodef": {
+               "GlobalIPv6Address": "",
+               "IPPrefixLen": 16,
+               "GlobalIPv6PrefixLen": 0,
+               "Aliases": null,
+               "NetworkID": "e791a906b374a0d477e90d7e300f212f2bb630daae8914ac1c4ceb082876b22b",
+               "MacAddress": "02:42:ac:12:00:0f",
+               "IPAMConfig": null,
+               "DriverOpts": null,
+               "Gateway": "172.18.0.1",
+               "EndpointID": "c95e877600200faac9800724d9f371fae61e56a4885da452c54fc735fa17472b",
+               "Links": null,
+               "IPv6Gateway": "",
+               "IPAddress": "172.18.0.15"
+          }}},
+          "SizeRootFs": 369818754,
+          "Command": "java -jar /opt/lib/archimedes-1.0.war",
+          "State": "running",
+          "ImageID": "sha256:583fd3f21ef6da3728da2eb9657b99c45ea97216732a2fe8c5230950f0b3d286",
+          "HostConfig": {"NetworkMode": "sisgeodef"},
+          "Id": "04556f9ba5a42bda5988139ae5c202282dd5fb4dd9eb0061567626b3c4fde42c"
+     },
+     {
+          "Status": "Up 6 months",
+          "Mounts": [
+               {
+                    "Destination": "/data",
+                    "Type": "volume",
+                    "Propagation": "",
+                    "RW": true,
+                    "Mode": "z",
+                    "Driver": "local",
+                    "Source": "/var/lib/docker/volumes/portainer_data/_data",
+                    "Name": "portainer_data"
+               },
+               {
+                    "Destination": "/var/run/docker.sock",
+                    "Type": "bind",
+                    "Propagation": "rprivate",
+                    "RW": true,
+                    "Mode": "",
+                    "Source": "/var/run/docker.sock"
+               }
+
+          ],
+          "Ports": [
+               {
+                    "Type": "tcp",
+                    "IP": "0.0.0.0",
+                    "PrivatePort": 8000,
+                    "PublicPort": 8000
+               },
+               {
+                    "Type": "tcp",
+                    "IP": "::",
+                    "PrivatePort": 8000,
+                    "PublicPort": 8000
+               },
+               {
+                    "Type": "tcp",
+                    "IP": "0.0.0.0",
+                    "PrivatePort": 9000,
+                    "PublicPort": 9000
+               },
+               {
+                    "Type": "tcp",
+                    "IP": "::",
+                    "PrivatePort": 9000,
+                    "PublicPort": 9000
+               },
+               {
+                    "Type": "tcp",
+                    "IP": "0.0.0.0",
+                    "PrivatePort": 9443,
+                    "PublicPort": 9443
+               },
+               {
+                    "Type": "tcp",
+                    "IP": "::",
+                    "PrivatePort": 9443,
+                    "PublicPort": 9443
+               }
+
+          ],
+          "Labels": {
+               "org.opencontainers.image.title": "Portainer",
+               "org.opencontainers.image.vendor": "Portainer.io",
+               "com.docker.extension.additional-urls": "[{\"title\":\"Website\",\"url\":\"https://www.portainer.io?utm_campaign=DockerCon&utm_source=DockerDesktop\"},{\"title\":\"Documentation\",\"url\":\"https://docs.portainer.io\"},{\"title\":\"Support\",\"url\":\"https://join.slack.com/t/portainer/shared_invite/zt-txh3ljab-52QHTyjCqbe5RibC2lcjKA\"}]",
+               "io.portainer.server": "true",
+               "com.docker.extension.detailed-description": "<p data-renderer-start-pos=\"226\">Portainer&rsquo;s Docker Desktop extension gives you access to all of Portainer&rsquo;s rich management functionality within your docker desktop experience.<\/p><h2 data-renderer-start-pos=\"374\">With Portainer you can:<\/h2><ul><li>See all your running containers<\/li><li>Easily view all of your container logs<\/li><li>Console into containers<\/li><li>Easily deploy your code into containers using a simple form<\/li><li>Turn your YAML into custom templates for easy reuse<\/li><\/ul><h2 data-renderer-start-pos=\"660\">About Portainer&nbsp;<\/h2><p data-renderer-start-pos=\"680\">Portainer is the worlds&rsquo; most popular universal container management platform with more than 650,000 active monthly users. Portainer can be used to manage Docker Standalone, Kubernetes, Docker Swarm and Nomad environments through a single common interface. It includes a simple GitOps automation engine and a Kube API.&nbsp;<\/p><p data-renderer-start-pos=\"1006\">Portainer Business Edition is our fully supported commercial grade product for business-wide use. It includes all the functionality that businesses need to manage containers at scale. Visit <a class=\"sc-jKJlTe dPfAtb\" href=\"http://portainer.io/\" title=\"http://Portainer.io\" data-renderer-mark=\"true\">Portainer.io<\/a> to learn more about Portainer Business and <a class=\"sc-jKJlTe dPfAtb\" href=\"http://portainer.io/take5?utm_campaign=DockerCon&amp;utm_source=Docker%20Desktop\" title=\"http://portainer.io/take5?utm_campaign=DockerCon&amp;utm_source=Docker%20Desktop\" data-renderer-mark=\"true\">get 5 free nodes.<\/a><\/p>",
+               "com.docker.extension.screenshots": "[{\"alt\": \"screenshot one\", \"url\": \"https://portainer-io-assets.sfo2.digitaloceanspaces.com/screenshots/docker-extension-1.png\"},{\"alt\": \"screenshot two\", \"url\": \"https://portainer-io-assets.sfo2.digitaloceanspaces.com/screenshots/docker-extension-2.png\"},{\"alt\": \"screenshot three\", \"url\": \"https://portainer-io-assets.sfo2.digitaloceanspaces.com/screenshots/docker-extension-3.png\"},{\"alt\": \"screenshot four\", \"url\": \"https://portainer-io-assets.sfo2.digitaloceanspaces.com/screenshots/docker-extension-4.png\"},{\"alt\": \"screenshot five\", \"url\": \"https://portainer-io-assets.sfo2.digitaloceanspaces.com/screenshots/docker-extension-5.png\"},{\"alt\": \"screenshot six\", \"url\": \"https://portainer-io-assets.sfo2.digitaloceanspaces.com/screenshots/docker-extension-6.png\"},{\"alt\": \"screenshot seven\", \"url\": \"https://portainer-io-assets.sfo2.digitaloceanspaces.com/screenshots/docker-extension-7.png\"},{\"alt\": \"screenshot eight\", \"url\": \"https://portainer-io-assets.sfo2.digitaloceanspaces.com/screenshots/docker-extension-8.png\"},{\"alt\": \"screenshot nine\", \"url\": \"https://portainer-io-assets.sfo2.digitaloceanspaces.com/screenshots/docker-extension-9.png\"}]",
+               "com.docker.desktop.extension.icon": "https://portainer-io-assets.sfo2.cdn.digitaloceanspaces.com/logos/portainer.png",
+               "com.docker.desktop.extension.api.version": ">= 0.2.2",
+               "org.opencontainers.image.description": "Docker container management made simple, with the world\u2019s most popular GUI-based container management platform.",
+               "com.docker.extension.publisher-url": "https://www.portainer.io"
+
+          },
+          "Image": "portainer/portainer-ce",
+          "Created": 1679002678,
+          "Names": ["/portainer"],
+          "NetworkSettings": {"Networks": {"sisgeodef": {
+               "GlobalIPv6Address": "",
+               "IPPrefixLen": 16,
+               "GlobalIPv6PrefixLen": 0,
+               "Aliases": null,
+               "NetworkID": "e791a906b374a0d477e90d7e300f212f2bb630daae8914ac1c4ceb082876b22b",
+               "MacAddress": "02:42:ac:12:00:02",
+               "IPAMConfig": null,
+               "DriverOpts": null,
+               "Gateway": "172.18.0.1",
+               "EndpointID": "dee0ba9f3701638c18edbe0391499d3a8a81c271c7286efbecd93954eb1c3a9a",
+               "Links": null,
+               "IPv6Gateway": "",
+               "IPAddress": "172.18.0.2"
+          }}},
+          "SizeRootFs": 272497683,
+          "Command": "/portainer",
+          "State": "running",
+          "ImageID": "sha256:a87d51c7a32408ba63e65888d023ad7d4328fd575d8a4c8bd8cffa495fcd055c",
+          "HostConfig": {"NetworkMode": "sisgeodef"},
+          "Id": "266ca96db0d006afa0b36e3b60aa3342a1563df3100401c7736aa50d45722ec5"
+     }
+]
