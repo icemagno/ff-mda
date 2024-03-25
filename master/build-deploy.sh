@@ -20,5 +20,5 @@ docker run --name ffmda-master --network=ffmda --hostname=ffmda-master \
 -v /srv:/srv \
 magnoabreu/ffmda-master:0.1
 
-docker push magnoabreu/ffmda-master:0.1
+# docker push magnoabreu/ffmda-master:0.1
 

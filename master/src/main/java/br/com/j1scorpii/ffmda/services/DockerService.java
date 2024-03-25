@@ -64,31 +64,30 @@ public class DockerService {
 	}
 
 	public void pullImage(String imageName, String callBackChannel	) {
+		
 		PullImageResultCallback callback = new PullImageResultCallback() {
 			
 			@Override
 			public void onNext(PullResponseItem item) {
-				System.out.println( new JSONObject( item ).toString() );
-				messagingTemplate.convertAndSend( "/docker", new JSONObject( item ).put("imageName", imageName).toString() );
+				messagingTemplate.convertAndSend( callBackChannel, new JSONObject( item ).put("imageName", imageName).toString() );
 				super.onNext(item);
 			}
 			
 			@Override
 			public void onComplete() {
-				messagingTemplate.convertAndSend( "/docker", new JSONObject( ).put("message", "complete").put("imageName", imageName).toString() );
+				messagingTemplate.convertAndSend( callBackChannel, new JSONObject( ).put("status", "Pull Complete.").put("imageName", imageName).toString() );
 				super.onComplete();
 			}
 			
 			@Override
 			public void onStart(Closeable stream) {
-				messagingTemplate.convertAndSend( "/docker", new JSONObject( ).put("message", "start").put("imageName", imageName).toString() );
+				messagingTemplate.convertAndSend( callBackChannel, new JSONObject( ).put("status", "Pull Start").put("imageName", imageName).toString() );
 				super.onStart(stream);
 			}
-
+			
 			@Override
 			public void onError(Throwable throwable) {
-				System.out.println( new JSONObject( ).put("error", throwable).toString() );
-				messagingTemplate.convertAndSend( "/docker", new JSONObject( ).put("error", throwable).put("imageName", imageName).toString() );
+				messagingTemplate.convertAndSend( callBackChannel, new JSONObject( ).put("status", "Error: " + throwable.getMessage() ).put("imageName", imageName).toString() );
 				super.onError(throwable);
 			}
 			

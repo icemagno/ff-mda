@@ -101,13 +101,17 @@ public class ImageManager {
 		List<String> result = new ArrayList<String>();
 		for( int x=0; x < images.length(); x++ ) {
 			JSONObject img = images.getJSONObject(x);
-			String name = null;
-			try { 
-				name = img.getJSONArray("RepoTags").getString(0);
-			} catch( Exception e ) {
-				name = img.getJSONArray("RepoDigests").getString(0).split("@")[0];
+			JSONArray nameList = img.getJSONArray("RepoTags");
+			
+			if( nameList.length() > 0 ) {
+				result.add( nameList.getString(0) );
+			} else {
+				nameList = img.getJSONArray("RepoDigests");
+				if( nameList.length() > 0 ) {
+					result.add( nameList.getString(0).split("@")[0] );
+				}
 			}
-			result.add( name.trim() );
+			
 		}
 		return result;
 	}
