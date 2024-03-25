@@ -16,19 +16,21 @@ $( document ).ready(function() {
 	stompClient.connect( thisheaders , (frame) => {
 		console.log('WebSocket Conected.');  
 		
-		stompClient.subscribe('/docker', (message) => {
-			 console.log( message.body );
+		stompClient.subscribe('/docker/dataexchange/pull', (message) => {
+			let payload = JSON.parse( message.body );
+			$("#containerLog").append( payload.status );
+
 		});
-	});	 
+	});	
+	
+	
+	$("#pullImage").click( ()=>{
+		$.get("/v1/dataexchange/image/pull", function(data, status) {
+			console.log( data );
+		});
+	});	
 	 
 });
-
-function pullImage(){
-	
-	$.get("/v1/dataexchange/image/pull", function(data, status) {
-		console.log( data );
-	});
-}
 
 
 function updateData(){

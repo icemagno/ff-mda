@@ -63,7 +63,7 @@ public class DockerService {
 		}
 	}
 
-	public void pullImage(String imageName) {
+	public void pullImage(String imageName, String callBackChannel	) {
 		PullImageResultCallback callback = new PullImageResultCallback() {
 			
 			@Override

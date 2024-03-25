@@ -62,19 +62,19 @@ public class ImageManager {
 	}
 	
 	
-	private String doPull( String imageName ) {
-		//return dockerService.getResponse( Request.Method.POST, "/images/create?fromImage="+imageName, null );
-		dockerService.pullImage(imageName);
+	private String doPull( String imageName, String callbackChannel ) {
+		dockerService.pullImage( imageName, callbackChannel );
 		return "requested";
 	}
 	public String pullImage( String componentName, boolean evenIfExists ) {
+		String callbackChannel = "/docker/"+componentName+"/pull";
 		String imageName = getImageForComponent( componentName );
 		if( imageName == null ) {
 			return new JSONObject().put("response", "Component '" + componentName + "' has no image entry in manifest file.").toString();
 		}
 		if( evenIfExists ) {
-			return doPull(imageName);
-		} else if( !exists(imageName) ) return doPull(imageName);
+			return doPull( imageName, callbackChannel );
+		} else if( !exists(imageName) ) return doPull( imageName, callbackChannel );
 		return new JSONObject().put("response", "Image '" + imageName + "' already exists.").toString();
 	}
 	

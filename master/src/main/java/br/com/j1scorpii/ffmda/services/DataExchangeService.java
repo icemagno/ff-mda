@@ -30,7 +30,7 @@ public class DataExchangeService {
 
 
 	public String pullImage() {
-		return imageManager.pullImage(COMPONENT_NAME, true);
+		return imageManager.pullImage(COMPONENT_NAME, true );
 	}
 	
 }
