@@ -224,6 +224,7 @@ public class PKIManager {
     
     private AuthorityKeyIdentifier createAuthorityKeyIdentifier( X509Certificate cert ) throws Exception {
     	AuthorityKeyIdentifier authorityKeyIdentifier = new JcaX509ExtensionUtils().createAuthorityKeyIdentifier(cert);
+    	System.out.println("-------->>> Adding Authority ID");
     	return authorityKeyIdentifier;
     }    
     
