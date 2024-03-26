@@ -26,8 +26,8 @@ public class ContainerManager {
 	@Value("${ffmda.local.data.folder}")
 	private String localDataFolder;	
 	
-	@Autowired
-	private DockerService dockerService;
+	@Autowired private DockerService dockerService;
+	@Autowired private NetworkManager networkManager;
 	
 	@Value("${spring.profiles.active}")
 	private String activeProfile;	
@@ -61,12 +61,11 @@ public class ContainerManager {
 	}
 	
 	public String create( JSONObject container ) {
-		
-		
-		
 		String name = container.getString("name");
 		String fromImage = container.getString("image");
 		logger.info("Creating container " + name + " based on " + fromImage + " image.");
+		
+		String network = container.getString("connectToNetwork");
 		
 		JSONObject hostConfig = new JSONObject();
 		if( container.has("volumes") ) 	hostConfig.put("Binds", container.getJSONArray("volumes") );
@@ -108,7 +107,11 @@ public class ContainerManager {
 		body.put("HostConfig", hostConfig);
 		body.put("Tty",true);
 
-		return this.dockerService.getResponse( Request.Method.POST, "/containers/create?name="+name, body );
+		JSONObject result = new JSONObject();
+		result.put("resultCreate", this.dockerService.getResponse( Request.Method.POST, "/containers/create?name="+name, body ) );
+		result.put("resultNetConnect", networkManager.connect( network, name ) );
+				
+		return result.toString();
 	}
 	
 	public ContainerStatus getStatus( String containerId ) {

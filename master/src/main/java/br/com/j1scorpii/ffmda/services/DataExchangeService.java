@@ -147,8 +147,8 @@ public class DataExchangeService {
 				JSONArray peers = new JSONArray();
 				
 				this.componentConfig
-				.put("api", new JSONObject().put("hostname", "0.0.0.0").put("port", "3000")  )
-				.put("p2p", new JSONObject().put("hostname", "0.0.0.0").put("port", "3001")  )
+				.put("api", new JSONObject().put("hostname", "0.0.0.0").put("port", 3000)  )
+				.put("p2p", new JSONObject().put("hostname", "0.0.0.0").put("port", 3001)  )
 				.put("peers", peers);
 				
 				saveConfig();
