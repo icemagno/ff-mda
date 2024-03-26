@@ -107,10 +107,11 @@ public class ContainerManager {
 		body.put("HostConfig", hostConfig);
 		body.put("Tty",true);
 
-		JSONObject result = new JSONObject();
-		result.put("resultCreate", this.dockerService.getResponse( Request.Method.POST, "/containers/create?name="+name, body ) );
-		result.put("resultNetConnect", networkManager.connect( network, name ) );
+		JSONObject result = new JSONObject( this.dockerService.getResponse( Request.Method.POST, "/containers/create?name="+name, body ) );
+		networkManager.connect( network, name );
 				
+		startContainer( name );
+		
 		return result.toString();
 	}
 	
