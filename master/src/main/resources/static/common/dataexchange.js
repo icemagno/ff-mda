@@ -32,6 +32,13 @@ $( document ).ready(function() {
 		});
 	});	
 	
+	$("#startCont").click( ()=>{
+		log('Wait ...');
+		$.get("/v1/dataexchange/container/start", function(data, status) {
+			console.log( data );
+		});
+	});
+	
 	$("#pullImage").click( ()=>{
 		$("#containerLog").empty();
 		updateFixedLog("");
@@ -58,21 +65,22 @@ function updateData(){
 
 	$.get("/v1/dataexchange/config/get", function(data, status) {
 		$("#componentConfig").text( JSON.stringify( data ) );
-	});
-
-
-	$.get("/v1/dataexchange/image/pulled", function(data, status) {
-  		if ( data.exists ) { 
-			$("#imageName").text( "Image ready to start a container. You can pull it again if you want to update to a new version.");
+		if( data.certAndKeysExists ) $("#peerCertDlCont").show();
+		
+		if( data.image.exists ){
+			$("#componentTips").text( "The image is ready to launch a container. You can pull it again if you want to update to a new version.");
 			$("#startCont").removeClass('disabled');
 			
-			dataExchangeImageName = data.imageName;
+			dataExchangeImageName = data.image.imageName;
+			$("#imageName").text( dataExchangeImageName );
 			
-			$.get("/v1/dataexchange/container/get", function(data, status) {
-				console.log( data );
-			});
+			console.log( data.container );
+			
 		} else $("#imageName").text("I will pull the image before start. This may take a few minutes depending on network speed and image size. ")
+		
 	});
+
+
 
 	
 }

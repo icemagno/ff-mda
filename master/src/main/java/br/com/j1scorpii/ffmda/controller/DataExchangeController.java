@@ -19,7 +19,7 @@ public class DataExchangeController {
 	// Check if we have the image already
     @GetMapping( value="/image/pulled", produces= MediaType.APPLICATION_JSON_VALUE )
     public ResponseEntity<String> imagePulled( ) {
-    	return new ResponseEntity<String>( this.dataExchangeService.imagePulled() , HttpStatus.OK);
+    	return new ResponseEntity<String>( this.dataExchangeService.imagePulled().toString() , HttpStatus.OK);
     }	
 
     @GetMapping( value="/image/pull", produces= MediaType.APPLICATION_JSON_VALUE )
@@ -35,8 +35,12 @@ public class DataExchangeController {
     // Get the container information if we have any. Empty JSON object if not.
     @GetMapping( value="/container/get", produces= MediaType.APPLICATION_JSON_VALUE )
     public ResponseEntity<String> getContainer( ) {
-    	return new ResponseEntity<String>( this.dataExchangeService.getContainer() , HttpStatus.OK);
+    	return new ResponseEntity<String>( this.dataExchangeService.getContainer().toString() , HttpStatus.OK);
     }	
 
+    @GetMapping( value="/container/start", produces= MediaType.APPLICATION_JSON_VALUE )
+    public ResponseEntity<String> startContainer( ) {
+    	return new ResponseEntity<String>( this.dataExchangeService.startContainer(), HttpStatus.OK);
+    }    
     
 }

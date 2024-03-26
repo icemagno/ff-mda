@@ -18,7 +18,6 @@ import java.security.PrivateKey;
 import java.security.PublicKey;
 import java.security.SecureRandom;
 import java.security.Security;
-import java.security.cert.Certificate;
 import java.security.cert.X509Certificate;
 import java.util.Calendar;
 import java.util.Date;
@@ -85,11 +84,11 @@ public class PKIManager {
 		S: StateOrProvinceName
 		C: CountryName   
     */
-    public void genAc( String commonName, String organization, String organizationalUnit ) {	
+    public void genAc( String organization, String nodeName ) {	
         X500Name acIssuerName = new X500Name(
-        		"CN=" + commonName + 
-        		", O=" + organization +
-        		", OU=" + organizationalUnit +
+        		"CN=" + nodeName + 
+        		", O=" + organization + " CA " +
+        		", OU=FireFly" +
         		", OU=Multiparty Deployer Agent");
         try {
         	char[] pkPassword = this.password.toCharArray();
@@ -150,7 +149,7 @@ public class PKIManager {
     
     
     
-    private X509Certificate createCert(X500Name issuerName, X500Name subjectName, String certFilePath, PublicKey publicKey, PrivateKey certSignerPrivateKey ) throws Exception {
+    private X509Certificate doCreateCert(X500Name issuerName, X500Name subjectName, String certFilePath, PublicKey publicKey, PrivateKey certSignerPrivateKey, boolean saveCert ) throws Exception {
         BigInteger serial = BigInteger.valueOf(new SecureRandom().nextInt());
         Calendar calendar = Calendar.getInstance();
         Date today = calendar.getTime();
@@ -158,24 +157,45 @@ public class PKIManager {
         calendar.add(Calendar.YEAR, 100);
         Date nextYear = calendar.getTime();
         Date AFTER = nextYear;
+        
         X509v3CertificateBuilder builder = new JcaX509v3CertificateBuilder(issuerName, serial, BEFORE, AFTER, subjectName, publicKey);
+        KeyUsage usage = new KeyUsage(KeyUsage.keyCertSign | KeyUsage.digitalSignature | KeyUsage.keyEncipherment | KeyUsage.dataEncipherment | KeyUsage.cRLSign);
+        
         builder.addExtension(Extension.subjectKeyIdentifier, false, createSubjectKeyIdentifier(publicKey));
         builder.addExtension(Extension.basicConstraints, true, new BasicConstraints(true));
-        KeyUsage usage = new KeyUsage(KeyUsage.keyCertSign | KeyUsage.digitalSignature | KeyUsage.keyEncipherment | KeyUsage.dataEncipherment | KeyUsage.cRLSign);
         builder.addExtension(Extension.keyUsage, false, usage);
+
         ASN1EncodableVector purposes = new ASN1EncodableVector();
         purposes.add(KeyPurposeId.id_kp_serverAuth);
         purposes.add(KeyPurposeId.id_kp_clientAuth);
         purposes.add(KeyPurposeId.anyExtendedKeyUsage);
         builder.addExtension(Extension.extendedKeyUsage, false, new DERSequence(purposes));
+
         X509Certificate cert = signCertificate(builder, certSignerPrivateKey);
-		File fil = new File(certFilePath);
-		FileOutputStream fos = new FileOutputStream( fil );
-		fos.write( cert.getEncoded() );
-		fos.flush();
-		fos.close();
+        
+        if( saveCert ) {
+			File fil = new File(certFilePath);
+			FileOutputStream fos = new FileOutputStream( fil );
+			fos.write( cert.getEncoded() );
+			fos.flush();
+			fos.close();
+        }
         return cert;
-    }	    
+    }    
+
+    
+    private X509Certificate createCert(X500Name issuerName, X500Name subjectName, String certFilePath, PublicKey publicKey, PrivateKey certSignerPrivateKey ) throws Exception {
+    	// This is for reorder the RDN order. When I create the X500 name by myself using string the certificate 
+    	// change the order and can't find the certificate signer later at createUserCertAndSignWithAC() result
+    	// even when the issuer is the actually the same. For some reason getIssuerX500Principal give the names in another order.
+    	// I've decided to make the BoucyCastle always tell the order instead I change it in the string on "new X500Name( ... )"  
+    	// so I create a temp cert and take the names in correct order with theTempCert.getIssuerX500Principal()
+    	X509Certificate theTempCert = doCreateCert(issuerName, subjectName, certFilePath, publicKey, certSignerPrivateKey, false);
+    	X500Name correctIssuerName = new X500Name(  theTempCert.getIssuerX500Principal().toString() );
+    	X500Name correctSubjectName = new X500Name(  theTempCert.getSubjectX500Principal().toString() );
+    	X509Certificate realCert = doCreateCert(correctIssuerName, correctSubjectName, certFilePath, publicKey, certSignerPrivateKey, true);
+    	return realCert;
+    }     
     
     
     private SubjectKeyIdentifier createSubjectKeyIdentifier(Key key) throws Exception {
@@ -196,22 +216,18 @@ public class PKIManager {
     
 	public void createAndSignKeysAndCert( String commonName, String toFolder) {
 		new File(toFolder).mkdirs();
-        X500Name requerente = new X500Name("CN="+commonName+", OU=Multiparty Deployer Agent");
+        X500Name requerente = new X500Name("CN="+commonName+", OU=Multiparty Deployer Agent, OU=FireFly");
 		createUserCertAndSignWithAC( commonName, toFolder, requerente );
 	}
 	
     private void createUserCertAndSignWithAC( String commonName, String toFolder,  X500Name subjectName ) {
     	
         String certificateFile = toFolder + "/" + commonName + ".cer";
-	    String pemPrivKeyFile = toFolder + "/" + commonName + ".key.pem";
-	    String pemCertFile = toFolder + "/" + commonName + ".cer.pem"; 
-        
-        System.out.println("Gerando certificado para " + subjectName.toString() );
-        
+	    String pemPrivKeyFile = toFolder + "/key.pem";
+	    String pemCertFile = toFolder + "/cert.pem"; 
         
     	try {
         	char[] pkPassword = this.password.toCharArray();
-        	
         	
         	KeyPair keyPair = generateKeyPair();
             PublicKey userPublicKey = keyPair.getPublic();
@@ -223,10 +239,7 @@ public class PKIManager {
 
             X509Certificate signerCert = (X509Certificate) ks.getCertificate(this.pkiACAlias);
             X500Name acIssuerName = new X500Name( signerCert.getIssuerX500Principal().getName() );
-            
-            System.out.println("Assinado por: ");
-            System.out.println( signerCert.getIssuerX500Principal().getName() );
-            
+          
             
             X509Certificate cert = createCert( acIssuerName, subjectName, certificateFile, userPublicKey, certSignerPrivateKey );
             X509Certificate[] outChain = { cert };

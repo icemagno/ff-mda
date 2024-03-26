@@ -131,10 +131,6 @@ public class LocalService {
 			// we will check if we have the CA files (certificate) already created. 
 			// If so, will lock config again
 			if( this.pkiManager.caWasCreated() ) {
-				
-				
-				this.pkiManager.createAndSignKeysAndCert("magno-loko", localDataFolder + "/magno" );
-				
 				this.agentConfig.getJSONObject("stackStatus").put("locked", true);	
 				try { this.saveConfig(); } catch (Exception e) { e.printStackTrace(); }
 			}
@@ -204,7 +200,7 @@ public class LocalService {
 				// Create the Certificate Authority for all Conglomerate
 				// Because it is running on the Master Agent, this server will 
 				// represent the Certificate Authority that will sign the certificates of the Data Exchange nodes.
-				pkiManager.genAc( obj.getString("hostName"), obj.getString("orgName"), obj.getString("nodeName") );
+				this.pkiManager.genAc( obj.getString("orgName"), obj.getString("nodeName") );
 			}
 		}
 		// Just return current config ( changed or not )

@@ -3,6 +3,7 @@ package br.com.j1scorpii.ffmda.services;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Paths;
+import java.util.Iterator;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -61,49 +62,43 @@ public class ContainerManager {
 	
 	public String create( JSONObject container ) {
 		String name = container.getString("name");
-		int port = container.getInt("port");
-		int internalPort = container.getInt("internalPort");
 		String fromImage = container.getString("image");
-		String restart = container.getString("restart");
-		
 		logger.info("Creating container " + name + " based on " + fromImage + " image.");
 		
 		JSONObject hostConfig = new JSONObject();
-		JSONObject portBindings = new JSONObject();
+		if( container.has("volumes") ) 	hostConfig.put("Binds", container.getJSONArray("volumes") );
+		if( container.has("restart") ) 	hostConfig.put("RestartPolicy", new JSONObject().put("Name", container.getString("restart") )  );
+		if( container.has("hosts") )  	hostConfig.put("ExtraHosts", container.getJSONArray("hosts") );
 
-		if( internalPort > 0) {
-			JSONArray mappedPort = new JSONArray();
-			mappedPort.put( new JSONObject().put("HostPort", String.valueOf(port) ) );
-			portBindings.put( internalPort + "/tcp", mappedPort);
-			hostConfig.put("PortBindings", portBindings );
-		}
-		
-		if( container.has("volumes") ) {
-			JSONArray volumes = container.getJSONArray("volumes");
-			hostConfig.put("Binds", volumes );
-		}
-
-		if( container.has("hosts") ) {
-			JSONArray addHosts = container.getJSONArray("hosts");
-			hostConfig.put("ExtraHosts", addHosts );
-		}		
-	
-		hostConfig.put("RestartPolicy", new JSONObject().put("Name", restart)  );
-
-		JSONObject exposedPorts = new JSONObject();
-		exposedPorts.put( port + "/tcp", new JSONObject() );		
-		
 		JSONObject body = new JSONObject();
+
+		if( container.has("ports") ) {
+			JSONObject portBindings = new JSONObject();
+			JSONObject exposedPorts = new JSONObject();
+
+			JSONObject thePorts = container.getJSONObject("ports");
+			Iterator<String> keys = thePorts.keys();
+			JSONArray mappedPort = new JSONArray();
+
+			while(keys.hasNext()) {
+			    String key = keys.next();
+			    String value = thePorts.getString(key);
+			    
+				mappedPort.put( new JSONObject().put("HostPort", String.valueOf(value) ) );
+				portBindings.put( key, mappedPort );
+				exposedPorts.put( key, new JSONObject() );			
+
+			}
+			
+			hostConfig.put("PortBindings", portBindings );			
+			body.put("ExposedPorts", exposedPorts );
+		}
+		
 		body.put("Hostname", name);
 		
-		if( container.has("environments")) {
-			JSONArray envs = container.getJSONArray("environments");
-			body.put("Env", envs);
-		}
-		
+		if( container.has("environments")) body.put("Env", container.getJSONArray("environments") );
 		body.put("Image", fromImage);
 		body.put("HostConfig", hostConfig);
-		body.put("ExposedPorts", exposedPorts);
 		body.put("Tty",true);
 
 		return this.dockerService.getResponse( Request.Method.POST, "/containers/create?name="+name, body );

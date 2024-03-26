@@ -33,6 +33,7 @@ public class DataExchangeService {
 	private String componentDataFolder;
 	private String peersFolder;
 	private String configFile;
+	private String imageName;
 	
 	private JSONObject componentConfig;
 	
@@ -44,31 +45,75 @@ public class DataExchangeService {
 		new File( this.peersFolder ).mkdirs();
 		loadConfig();
 	}
+
 	
-	public void startContainer() {
+	public boolean certAndKeysExists() {
+		String hostName = this.localService.getAgentConfig().getString("hostName");
+		String certificateFile = this.componentDataFolder + "/" + hostName + ".cer";
+		String pemCer = this.componentDataFolder + "/cert.pem";
+		String pemKey = this.componentDataFolder + "/key.pem";
+		boolean result = ( 
+				new File( certificateFile ).exists() &&
+				new File( pemCer ).exists() &&
+				new File( pemKey ).exists() );
+		return result;
+	}
+	
+
+	// We have the CA created, Org name and Node name.
+	// I think we can create the DataExchange key pair and sign the certificate with the CA.
+	private void createCertificateAndKeys() {
 		boolean stackIsLocked = localService.getAgentConfig().getJSONObject("stackStatus").getBoolean("locked");
+		String hostName = this.localService.getAgentConfig().getString("hostName");
 		boolean stackCertsWasCreated = this.localService.getPkiManager().caWasCreated();
-		if( stackIsLocked && stackCertsWasCreated  ) {
-			// We have the CA created, Org name and Node name.
-			// I think we can create the DataExchange keypair and sign the certificate with the CA.
-			
+		if( stackIsLocked && stackCertsWasCreated && !certAndKeysExists() ) {
+			this.localService.getPkiManager().createAndSignKeysAndCert( hostName , this.componentDataFolder );
 		}
 	}
 	
-	public String imagePulled() {
+	public String startContainer() {
+		
+		JSONObject portBidings = new JSONObject();
+		portBidings.put("10205", "3000");
+		portBidings.put("10204", "3001");
+		
+		JSONArray envs = new JSONArray();
+		
+		
+		JSONArray volumes = new JSONArray();
+		volumes.put("/etc/localtime:/etc/localtime:ro");
+		volumes.put(  this.componentDataFolder + ":/data");
+		
+		JSONObject containerDef = new JSONObject();
+		containerDef.put("name", COMPONENT_NAME);
+		containerDef.put("ports", portBidings );
+		containerDef.put("image", this.imageName );
+		containerDef.put("connectToNetwork", "ffmda");
+		containerDef.put("restart", "always");
+		containerDef.put("environments", envs);
+		containerDef.put("volumes", volumes);
+		
+		String result = this.containerManager.create( containerDef );
+		containerDef.put("result", result );
+		
+		return containerDef.toString();
+	}
+	
+	public JSONObject imagePulled() {
 		JSONObject result = new JSONObject();
 		boolean exists = imageManager.exists(COMPONENT_NAME);
 		result.put("exists", exists);
 		if( exists ) {
-			result.put("imageName", imageManager.getImageForComponent(COMPONENT_NAME) );
+			this.imageName = imageManager.getImageForComponent(COMPONENT_NAME);
+			result.put("imageName", this.imageName );
 		}
-		return result.toString();
+		return result;
 	}
 	
 	
-	public String getContainer() {
+	public JSONObject getContainer() {
 		JSONObject container = containerManager.getContainer( COMPONENT_NAME ); 
-		return container.toString();
+		return container;
 	}
 
 
@@ -77,14 +122,23 @@ public class DataExchangeService {
 	}
 	
 	public String getConfig() {
+		// If we don't have keys yet ...
+		createCertificateAndKeys();
+		// Refresh configuration variable
 		loadConfig();
-		return this.componentConfig.toString(5);
+		// Use a object wrapper to send component configuration 
+		// plus some relevant configuration to the UI.
+		JSONObject generalConfig = new JSONObject();
+		generalConfig.put("componentConfig", this.componentConfig);
+		generalConfig.put("certAndKeysExists", certAndKeysExists() );
+		generalConfig.put("image", imagePulled() );
+		generalConfig.put("container", getContainer() );
+		return generalConfig.toString(5);
 	}
 	
 	private void loadConfig() {
 		try {
 			if( new File( this.configFile ).exists() ) {
-				logger.info("Configuration file found.");
 				String content = readConfig( );
 				this.componentConfig = new JSONObject(content);
 			} else {
