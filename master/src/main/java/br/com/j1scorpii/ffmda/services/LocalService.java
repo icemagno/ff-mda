@@ -126,15 +126,23 @@ public class LocalService {
 		
 		// Start the PKI Manager
 		if( this.imReady ) {
-			pkiManager = new PKIManager( localDataFolder, this.myPassword, "MDA.FireFly" );
+			this.pkiManager = new PKIManager( localDataFolder, this.myPassword, "MDA.FireFly" );
 			// Just to avoid someone unlock the config by changing the JSON config file
 			// we will check if we have the CA files (certificate) already created. 
 			// If so, will lock config again
-			if( pkiManager.caWasCreated() ) {
+			if( this.pkiManager.caWasCreated() ) {
+				
+				
+				this.pkiManager.createAndSignKeysAndCert("magno-loko", localDataFolder + "/magno" );
+				
 				this.agentConfig.getJSONObject("stackStatus").put("locked", true);	
 				try { this.saveConfig(); } catch (Exception e) { e.printStackTrace(); }
 			}
 		}
+	}
+	
+	public PKIManager getPkiManager() {
+		return this.pkiManager;
 	}
 	
 	// Read password from file or create a new one.

@@ -2,8 +2,10 @@ package br.com.j1scorpii.ffmda.util;
 
 import java.io.ByteArrayInputStream;
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.OutputStream;
 import java.io.PrintWriter;
 import java.io.StringWriter;
@@ -16,6 +18,7 @@ import java.security.PrivateKey;
 import java.security.PublicKey;
 import java.security.SecureRandom;
 import java.security.Security;
+import java.security.cert.Certificate;
 import java.security.cert.X509Certificate;
 import java.util.Calendar;
 import java.util.Date;
@@ -74,7 +77,6 @@ public class PKIManager {
 	    this.issuerPemCertFile 		= pkiFolder + "/pki-pem-cert.cer.pem";		
 	}
     
-    
     /*
 		CN: CommonName
 		OU: OrganizationalUnit
@@ -83,7 +85,6 @@ public class PKIManager {
 		S: StateOrProvinceName
 		C: CountryName   
     */
-    //private void genAc( String certAlias, String keyStoreFile, String certificateFile, String storePassword, String privateKeyPassword, X500Name subjectName, X500Name issuerName ) {
     public void genAc( String commonName, String organization, String organizationalUnit ) {	
         X500Name acIssuerName = new X500Name(
         		"CN=" + commonName + 
@@ -154,7 +155,7 @@ public class PKIManager {
         Calendar calendar = Calendar.getInstance();
         Date today = calendar.getTime();
         Date BEFORE = today;
-        calendar.add(Calendar.YEAR, 1);
+        calendar.add(Calendar.YEAR, 100);
         Date nextYear = calendar.getTime();
         Date AFTER = nextYear;
         X509v3CertificateBuilder builder = new JcaX509v3CertificateBuilder(issuerName, serial, BEFORE, AFTER, subjectName, publicKey);
@@ -192,6 +193,72 @@ public class PKIManager {
         return new JcaX509CertificateConverter().setProvider(PROVIDER_NAME).getCertificate(certificateBuilder.build(signer));
     }    
     
+    
+	public void createAndSignKeysAndCert( String commonName, String toFolder) {
+		new File(toFolder).mkdirs();
+        X500Name requerente = new X500Name("CN="+commonName+", OU=Multiparty Deployer Agent");
+		createUserCertAndSignWithAC( commonName, toFolder, requerente );
+	}
 	
+    private void createUserCertAndSignWithAC( String commonName, String toFolder,  X500Name subjectName ) {
+    	
+        String certificateFile = toFolder + "/" + commonName + ".cer";
+	    String pemPrivKeyFile = toFolder + "/" + commonName + ".key.pem";
+	    String pemCertFile = toFolder + "/" + commonName + ".cer.pem"; 
+        
+        System.out.println("Gerando certificado para " + subjectName.toString() );
+        
+        
+    	try {
+        	char[] pkPassword = this.password.toCharArray();
+        	
+        	
+        	KeyPair keyPair = generateKeyPair();
+            PublicKey userPublicKey = keyPair.getPublic();
+       	
+        	
+            KeyStore ks = KeyStore.getInstance("PKCS12");
+            ks.load( getKeyStore( this.issuerKeyStore ) , pkPassword );
+            PrivateKey certSignerPrivateKey = (PrivateKey)ks.getKey( this.pkiACAlias, pkPassword );        	
+
+            X509Certificate signerCert = (X509Certificate) ks.getCertificate(this.pkiACAlias);
+            X500Name acIssuerName = new X500Name( signerCert.getIssuerX500Principal().getName() );
+            
+            System.out.println("Assinado por: ");
+            System.out.println( signerCert.getIssuerX500Principal().getName() );
+            
+            
+            X509Certificate cert = createCert( acIssuerName, subjectName, certificateFile, userPublicKey, certSignerPrivateKey );
+            X509Certificate[] outChain = { cert };
+
+            PublicKey certSignerPublicKey = signerCert.getPublicKey();
+            cert.checkValidity( new Date() );
+            cert.verify( certSignerPublicKey );            
+            
+            
+            ks.setKeyEntry( commonName, certSignerPrivateKey, pkPassword, outChain);
+            OutputStream writeStream = new FileOutputStream( this.issuerKeyStore );
+            ks.store( writeStream, pkPassword );
+            writeStream.close();
+            
+            savePrivKey( pemPrivKeyFile, certSignerPrivateKey );
+            saveCertificate( pemCertFile, cert);	 
+            
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    	
+    	
+    	
+    }
+    
+    private InputStream getKeyStore( String fileName  ) throws Exception {
+    	File fil = new File(fileName );
+    	if ( fil.exists() ) {
+    		return new FileInputStream( fileName );
+    	}
+    	return null;
+    }    
+    
 
 }

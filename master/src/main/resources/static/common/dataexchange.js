@@ -56,6 +56,11 @@ function log( what ){
 
 function updateData(){
 
+	$.get("/v1/dataexchange/config/get", function(data, status) {
+		$("#componentConfig").text( JSON.stringify( data ) );
+	});
+
+
 	$.get("/v1/dataexchange/image/pulled", function(data, status) {
   		if ( data.exists ) { 
 			$("#imageName").text( "Image ready to start a container. You can pull it again if you want to update to a new version.");

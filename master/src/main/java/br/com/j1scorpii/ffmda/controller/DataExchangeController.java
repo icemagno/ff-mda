@@ -27,7 +27,10 @@ public class DataExchangeController {
     	return new ResponseEntity<String>( this.dataExchangeService.pullImage() , HttpStatus.OK);
     }    
     
-    
+    @GetMapping( value="/config/get", produces= MediaType.APPLICATION_JSON_VALUE )
+    public ResponseEntity<String> getConfig( ) {
+    	return new ResponseEntity<String>( this.dataExchangeService.getConfig() , HttpStatus.OK);
+    }    
     
     // Get the container information if we have any. Empty JSON object if not.
     @GetMapping( value="/container/get", produces= MediaType.APPLICATION_JSON_VALUE )
