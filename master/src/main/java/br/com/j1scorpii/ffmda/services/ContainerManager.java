@@ -61,6 +61,9 @@ public class ContainerManager {
 	}
 	
 	public String create( JSONObject container ) {
+		
+		
+		
 		String name = container.getString("name");
 		String fromImage = container.getString("image");
 		logger.info("Creating container " + name + " based on " + fromImage + " image.");
@@ -74,29 +77,33 @@ public class ContainerManager {
 
 		if( container.has("ports") ) {
 			JSONObject portBindings = new JSONObject();
-			JSONObject exposedPorts = new JSONObject();
+			//JSONObject exposedPorts = new JSONObject();
 
 			JSONObject thePorts = container.getJSONObject("ports");
 			Iterator<String> keys = thePorts.keys();
-			JSONArray mappedPort = new JSONArray();
+			
 
 			while(keys.hasNext()) {
+				JSONArray mappedPort = new JSONArray();
 			    String key = keys.next();
 			    String value = thePorts.getString(key);
 			    
-				mappedPort.put( new JSONObject().put("HostPort", String.valueOf(value) ) );
+				mappedPort.put( new JSONObject().put("HostPort", value ) );
 				portBindings.put( key, mappedPort );
-				exposedPorts.put( key, new JSONObject() );			
+				//exposedPorts.put( key, new JSONObject() );			
 
 			}
 			
 			hostConfig.put("PortBindings", portBindings );			
-			body.put("ExposedPorts", exposedPorts );
+			//body.put("ExposedPorts", exposedPorts );
 		}
 		
 		body.put("Hostname", name);
 		
-		if( container.has("environments")) body.put("Env", container.getJSONArray("environments") );
+		if( container.has("environments")) {
+			JSONArray envs = container.getJSONArray("environments");
+			if( envs.length() > 0 ) body.put("Env", envs );
+		}
 		body.put("Image", fromImage);
 		body.put("HostConfig", hostConfig);
 		body.put("Tty",true);

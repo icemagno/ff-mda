@@ -94,7 +94,7 @@ public class DataExchangeService {
 		containerDef.put("volumes", volumes);
 		
 		String result = this.containerManager.create( containerDef );
-		containerDef.put("result", result );
+		containerDef.put("result", new JSONObject( result ) );
 		
 		return containerDef.toString();
 	}
