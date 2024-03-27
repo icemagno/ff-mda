@@ -4,6 +4,7 @@ LABEL maintainer "Carlos M. Abreu <magno.mabreu@gmail.com>"
 RUN mkdir /scripts
 
 COPY create-ca.sh /scripts
+COPY create-sign.sh /scripts
 
 RUN chmod 777 /scripts/*.sh
 
