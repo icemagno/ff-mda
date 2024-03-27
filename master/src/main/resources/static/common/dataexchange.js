@@ -76,7 +76,7 @@ function updateData(){
 			
 			console.log( data.container );
 			
-		} else $("#imageName").text("I will pull the image before start. This may take a few minutes depending on network speed and image size. ")
+		} else $("#componentTips").text("I will pull the image before start. This may take a few minutes depending on network speed and image size. ")
 		
 	});
 

@@ -12,24 +12,24 @@ import org.springframework.stereotype.Service;
 public class ShellRunnerService {
 	private Logger logger = LoggerFactory.getLogger( ShellRunnerService.class );
 	
+	// String[] command = { "./copyfiles.sh", this.w, this.s, this.e, this.n, sourceSSHIPAddress, sourceSSHPassword, sourceSSHUserName, from, to };
 	
-	public void runShell( String scriptName, String[] parameters ) {
+	public void runShell( String[] command, String workdir ) {
 
 		try {
 			String[] environments = null;
-			File workdir = new File( "/home/" );
-		    Process process = Runtime.getRuntime().exec(parameters, environments, workdir); 
+		    Process process = Runtime.getRuntime().exec(command, environments, new File( workdir ) ); 
 		    
 		    BufferedReader stdInput = new BufferedReader( new InputStreamReader( process.getInputStream() ) );
 		    BufferedReader stdError = new BufferedReader( new InputStreamReader( process.getErrorStream() ) );		    
 
 		    String s = null;
 		    while ((s = stdInput.readLine()) != null) {
-		        logger.info("  ["+scriptName+"] > " + s );
+		        logger.info("[ SHELL ] | " + s );
 		    }
 
 		    while ((s = stdError.readLine()) != null) {
-		        logger.error("  ["+scriptName+"] > " + s );
+		        logger.error("[ SHELL ] | " + s );
 		    }			    
 		    process.waitFor();
 		} catch ( Exception e ) {
@@ -38,12 +38,5 @@ public class ShellRunnerService {
 		
 		
 	}
-	
-	
-	public void runShell( String scriptName ) {
-		String[] command = { "./" + scriptName };
-		runShell( scriptName, command );
-	}
-	
 	
 }
