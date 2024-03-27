@@ -17,7 +17,7 @@ $( document ).ready(function() {
 	stompClient.connect( thisheaders , (frame) => {
 		console.log('WebSocket Conected.');  
 
-		stompClient.subscribe('/docker/dataexchange/pull', (message) => {
+		stompClient.subscribe('/shell/dataexchange', (message) => {
 			let payload = JSON.parse( message.body );
 			console.log( payload );
 		});

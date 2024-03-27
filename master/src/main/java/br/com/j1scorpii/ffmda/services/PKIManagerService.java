@@ -41,7 +41,7 @@ public class PKIManagerService {
 	// ./create-sign.sh '/CN=Node-01' /home/suporte/ff-mda/master/node-test /home/suporte/ff-mda/master/pki-test
 	public void createAndSignKeysAndCert(String componentName, String commonName, String toFolder) {
 		String callbackChannel = "/shell/"+componentName;
-	    String hostCn = "'/CN="+commonName+"/OU=FireFly/OU=Multiparty Deployer Agent'";
+	    String hostCn = "/CN="+commonName+"/OU=FireFly/OU=Multiparty Deployer Agent";
 	    String[] command = { "./create-sign.sh", hostCn , toFolder, this.pkiFolder };
 	    this.shellRunnerService.runShell(command, callbackChannel);
 	}
@@ -49,10 +49,10 @@ public class PKIManagerService {
 	//	./create-ca.sh "/CN=Common/O=Organization 01/OU=FireFly/OU=Multiparty Deployer Agent" /home/suporte/ff-mda/master/abc
 	public void genAc( String componentName, String organization, String nodeName ) {
 		String callbackChannel = "/shell/"+componentName;
-        String acCn = "'/CN=" + nodeName + 
-        		"/O=" + organization + " CA " +
+        String acCn = "/CN=" + nodeName + 
+        		"/O=" + organization + " CA" +
         		"/OU=FireFly" +
-        		"/OU=Multiparty Deployer Agent'";
+        		"/OU=Multiparty Deployer Agent";
 
         String[] command = { "./create-ca.sh", acCn , this.pkiFolder };
         this.shellRunnerService.runShell(command, callbackChannel );

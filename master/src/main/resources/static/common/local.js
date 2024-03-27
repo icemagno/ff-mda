@@ -2,7 +2,26 @@
 
 
 $( document ).ready(function() {
+	
+	const ws = new SockJS( "/ws" );
+	var stompClient = Stomp.over(ws);
+	stompClient.debug = null;
+
+	var thisheaders = {
+        "Origin": "*",
+        "withCredentials": 'false',
+	};	 
 	 
+	stompClient.connect( thisheaders , (frame) => {
+		console.log('WebSocket Conected.');  
+
+		stompClient.subscribe('/shell/ff-mda', (message) => {
+			let payload = JSON.parse( message.body );
+			console.log( payload );
+		});
+		
+	});		
+	
 	$.get("/v1/config/get", function(data, status) {
   		console.log( data );
   		$("#orgName").val( data.orgName );
