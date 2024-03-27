@@ -16,6 +16,11 @@ $( document ).ready(function() {
 	 
 	stompClient.connect( thisheaders , (frame) => {
 		console.log('WebSocket Conected.');  
+
+		stompClient.subscribe('/docker/dataexchange/pull', (message) => {
+			let payload = JSON.parse( message.body );
+			console.log( payload );
+		});
 		
 		stompClient.subscribe('/docker/dataexchange/pull', (message) => {
 			let payload = JSON.parse( message.body );

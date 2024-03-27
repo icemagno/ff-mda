@@ -67,7 +67,7 @@ public class DataExchangeService {
 		String hostName = this.localService.getAgentConfig().getString("hostName");
 		boolean stackCertsWasCreated = this.localService.getPkiManager().caWasCreated();
 		if( stackIsLocked && stackCertsWasCreated && !certAndKeysExists() ) {
-			this.localService.getPkiManager().createAndSignKeysAndCert( hostName , this.componentDataFolder );
+			this.localService.getPkiManager().createAndSignKeysAndCert( COMPONENT_NAME, hostName , this.componentDataFolder );
 		}
 	}
 	

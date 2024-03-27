@@ -15,6 +15,7 @@ import java.util.UUID;
 import org.json.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.web3j.crypto.Bip39Wallet;
@@ -23,7 +24,6 @@ import org.web3j.crypto.ECKeyPair;
 import org.web3j.crypto.WalletUtils;
 
 import br.com.j1scorpii.ffmda.model.Wallet;
-import br.com.j1scorpii.ffmda.util.PKIManager;
 import jakarta.annotation.PostConstruct;
 
 @Service
@@ -42,7 +42,8 @@ public class LocalService {
 	private boolean imReady = false;
 	private String myBalance = "0";
 	private JSONObject agentConfig;
-	private PKIManager pkiManager;
+	
+	@Autowired private PKIManagerService pkiManager;
 	
 	@PostConstruct
 	private void init() {
@@ -126,7 +127,6 @@ public class LocalService {
 		
 		// Start the PKI Manager
 		if( this.imReady ) {
-			this.pkiManager = new PKIManager( localDataFolder );
 			// Just to avoid someone unlock the config by changing the JSON config file
 			// we will check if we have the CA files (certificate) already created. 
 			// If so, will lock config again
@@ -137,7 +137,7 @@ public class LocalService {
 		}
 	}
 	
-	public PKIManager getPkiManager() {
+	public PKIManagerService getPkiManager() {
 		return this.pkiManager;
 	}
 	
@@ -200,7 +200,7 @@ public class LocalService {
 				// Create the Certificate Authority for all Conglomerate
 				// Because it is running on the Master Agent, this server will 
 				// represent the Certificate Authority that will sign the certificates of the Data Exchange nodes.
-				this.pkiManager.genAc( obj.getString("orgName"), obj.getString("nodeName") );
+				this.pkiManager.genAc( "ff-mda", obj.getString("orgName"), obj.getString("nodeName") );
 			}
 		}
 		// Just return current config ( changed or not )
