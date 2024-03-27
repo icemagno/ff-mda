@@ -1,6 +1,5 @@
 package br.com.j1scorpii.ffmda.util;
 
-import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
@@ -23,7 +22,6 @@ import java.util.Calendar;
 import java.util.Date;
 
 import org.bouncycastle.asn1.ASN1EncodableVector;
-import org.bouncycastle.asn1.ASN1InputStream;
 import org.bouncycastle.asn1.ASN1Sequence;
 import org.bouncycastle.asn1.DERSequence;
 import org.bouncycastle.asn1.x500.X500Name;
@@ -37,7 +35,6 @@ import org.bouncycastle.asn1.x509.SubjectPublicKeyInfo;
 import org.bouncycastle.cert.X509v3CertificateBuilder;
 import org.bouncycastle.cert.bc.BcX509ExtensionUtils;
 import org.bouncycastle.cert.jcajce.JcaX509CertificateConverter;
-import org.bouncycastle.cert.jcajce.JcaX509ExtensionUtils;
 import org.bouncycastle.cert.jcajce.JcaX509v3CertificateBuilder;
 import org.bouncycastle.jce.provider.BouncyCastleProvider;
 import org.bouncycastle.openssl.jcajce.JcaMiscPEMGenerator;
@@ -170,7 +167,7 @@ public class PKIManager {
         KeyUsage usage = new KeyUsage(KeyUsage.keyCertSign | KeyUsage.digitalSignature | KeyUsage.keyEncipherment | KeyUsage.dataEncipherment | KeyUsage.cRLSign);
         
         builder.addExtension(Extension.subjectKeyIdentifier, false, createSubjectKeyIdentifier(publicKey));
-        if( authorityCert != null ) builder.addExtension(Extension.authorityKeyIdentifier, false, createAuthorityKeyIdentifier( authorityCert ));
+        if( authorityCert != null ) builder.addExtension(Extension.authorityKeyIdentifier, false, createAuthorityKeyIdentifier( authorityCert.getPublicKey() ));
         builder.addExtension(Extension.basicConstraints, true, new BasicConstraints(true));
         builder.addExtension(Extension.keyUsage, false, usage);
 
@@ -214,18 +211,23 @@ public class PKIManager {
     
     
     private SubjectKeyIdentifier createSubjectKeyIdentifier(Key key) throws Exception {
+    	byte[] encoded = key.getEncoded();
+    	SubjectPublicKeyInfo info = SubjectPublicKeyInfo.getInstance( ASN1Sequence.getInstance(encoded) );
+        return new BcX509ExtensionUtils().createSubjectKeyIdentifier(info);
+    	/*
         ASN1InputStream is = new ASN1InputStream(new ByteArrayInputStream(key.getEncoded()));
         ASN1Sequence seq = (ASN1Sequence) is.readObject();
         is.close();
         @SuppressWarnings("deprecation")
         SubjectPublicKeyInfo info = new SubjectPublicKeyInfo(seq);
         return new BcX509ExtensionUtils().createSubjectKeyIdentifier(info);
+        */
     }
     
-    private AuthorityKeyIdentifier createAuthorityKeyIdentifier( X509Certificate cert ) throws Exception {
-    	AuthorityKeyIdentifier authorityKeyIdentifier = new JcaX509ExtensionUtils().createAuthorityKeyIdentifier(cert);
-    	System.out.println("-------->>> Adding Authority ID");
-    	return authorityKeyIdentifier;
+    private AuthorityKeyIdentifier createAuthorityKeyIdentifier( Key key ) throws Exception {
+    	byte[] encoded = key.getEncoded();
+    	SubjectPublicKeyInfo info = SubjectPublicKeyInfo.getInstance( ASN1Sequence.getInstance(encoded) );
+        return new BcX509ExtensionUtils().createAuthorityKeyIdentifier(info);
     }    
     
     private X509Certificate signCertificate(X509v3CertificateBuilder certificateBuilder, PrivateKey signedWithPrivateKey) throws Exception {
