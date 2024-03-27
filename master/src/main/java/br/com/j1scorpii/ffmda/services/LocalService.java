@@ -126,7 +126,7 @@ public class LocalService {
 		
 		// Start the PKI Manager
 		if( this.imReady ) {
-			this.pkiManager = new PKIManager( localDataFolder, this.myPassword, "MDA.FireFly" );
+			this.pkiManager = new PKIManager( localDataFolder );
 			// Just to avoid someone unlock the config by changing the JSON config file
 			// we will check if we have the CA files (certificate) already created. 
 			// If so, will lock config again

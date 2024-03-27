@@ -14,11 +14,11 @@ public class ShellRunnerService {
 	
 	// String[] command = { "./copyfiles.sh", this.w, this.s, this.e, this.n, sourceSSHIPAddress, sourceSSHPassword, sourceSSHUserName, from, to };
 	
-	public void runShell( String[] command, String workdir ) {
+	public void runShell( String[] command ) {
 
 		try {
 			String[] environments = null;
-		    Process process = Runtime.getRuntime().exec(command, environments, new File( workdir ) ); 
+		    Process process = Runtime.getRuntime().exec(command, environments, new File( "/scripts" ) ); 
 		    
 		    BufferedReader stdInput = new BufferedReader( new InputStreamReader( process.getInputStream() ) );
 		    BufferedReader stdError = new BufferedReader( new InputStreamReader( process.getErrorStream() ) );		    
