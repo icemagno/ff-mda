@@ -46,19 +46,12 @@ public class DataExchangeService {
 		loadConfig();
 	}
 
-	
 	public boolean certAndKeysExists() {
-		String hostName = this.localService.getAgentConfig().getString("hostName");
-		String certificateFile = this.componentDataFolder + "/" + hostName + ".cer";
 		String pemCer = this.componentDataFolder + "/cert.pem";
 		String pemKey = this.componentDataFolder + "/key.pem";
-		boolean result = ( 
-				new File( certificateFile ).exists() &&
-				new File( pemCer ).exists() &&
-				new File( pemKey ).exists() );
+		boolean result = ( new File( pemCer ).exists() && new File( pemKey ).exists() );
 		return result;
 	}
-	
 
 	// We have the CA created, Org name and Node name.
 	// I think we can create the DataExchange key pair and sign the certificate with the CA.
@@ -72,6 +65,13 @@ public class DataExchangeService {
 	}
 	
 	public String startContainer() {
+		
+		JSONObject container = getContainer();
+		if( container.has("State") ) {
+			String state = container.getString("State");
+			if( state.equals("running") ) return new JSONObject().put("result", "Already Running").toString();
+			return new JSONObject().put("result", containerManager.startContainer( COMPONENT_NAME ) ).toString();
+		}
 		
 		JSONObject portBidings = new JSONObject();
 		portBidings.put("10205", "3000");
@@ -121,7 +121,7 @@ public class DataExchangeService {
 		return imageManager.pullImage(COMPONENT_NAME, true );
 	}
 	
-	public String getConfig() {
+	public String getConfig( ) {
 		// If we don't have keys yet ...
 		createCertificateAndKeys();
 		// Refresh configuration variable
@@ -170,6 +170,18 @@ public class DataExchangeService {
 		byte[] encoded = Files.readAllBytes( Paths.get( this.configFile ) );
 		return new String(encoded, StandardCharsets.UTF_8 );
 	}
-	
+
+	public String getContainerLog() {
+		String log = this.containerManager.getLog( COMPONENT_NAME, "true" );
+		return new JSONObject().put("result", log).toString();
+	}
+
+	public String stopContainer() {
+		return new JSONObject().put("result", this.containerManager.stopContainer(COMPONENT_NAME) ).toString();
+	}
+
+	public String restartContainer() {
+		return new JSONObject().put("result", this.containerManager.reStartContainer( COMPONENT_NAME) ).toString();
+	}
 	
 }

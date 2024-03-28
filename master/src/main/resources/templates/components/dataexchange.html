@@ -47,15 +47,15 @@
 								
 								<div class="btn-group pull-right">
 
-									<button type="button" class="btn btn-default disabled" id="startCont" style="margin-right:5px">
+									<button type="button" class="btn btn-default" id="startCont" style="margin-right:5px">
 										<i class="fa fa-play"></i>  
 									</button>
 	
-									<button type="button" class="btn btn-default disabled" id="stopCont" style="margin-right:5px">
+									<button type="button" class="btn btn-default" id="stopCont" style="margin-right:5px">
 										<i class="fa fa-stop"></i>  
 									</button>							
 															
-									<button type="button" class="btn btn-default disabled" id="restartCont" style="margin-right:5px">
+									<button type="button" class="btn btn-default" id="restartCont" style="margin-right:5px">
 										<i class="fa fa-refresh"></i>  
 									</button>							
 
@@ -63,16 +63,37 @@
 										<i class="fa fa-download"></i>  
 									</button>	
 	
-									<button type="button" class="btn btn-danger disabled" id="removeCont">
+									<!--
+									<button type="button" class="btn btn-danger" id="removeCont">
 										<i class="fa fa-trash-o"></i>  
 									</button>
-									
+									-->
 								</div>							
 							</div>
 						</div>
 
+						<div class="box box-primary">
+							<div class="box-header with-border">
+								<i class="fa fa-edit"></i>
+								<h3 class="box-title">Component Configuration</h3>
+							</div>
+							<div class="box-body">
+								<textarea id="componentConfig" class="form-control" style="height:500px;font-family:Courier New" disabled></textarea>							
+							</div>
+							
+							<div class="box-footer">
+								<span class="pull-left footer-tip"><i>The configuration of this component is automatic.</i></span>
+								<div class="btn-group pull-right">
+									<button type="button" class="btn btn-default disabled"  style="margin-right:5px">
+										<i class="fa fa-save"></i> Save 
+									</button>
+								</div>							
+							</div>
+							
+						</div>
+
 					</section>
-					<section class="col-lg-6">
+					<section class="col-lg-9">
 						<div class="box box-primary">
 							<div class="box-header with-border">
 								<i class="fa fa-puzzle-piece"></i>
@@ -108,27 +129,6 @@
 					</section>
 
 
-					<section class="col-lg-3">
-						<div class="box box-primary">
-							<div class="box-header with-border">
-								<i class="fa fa-edit"></i>
-								<h3 class="box-title">Component Configuration</h3>
-							</div>
-							<div class="box-body">
-								<textarea id="componentConfig" class="form-control" style="height:500px;font-family:Courier New" disabled></textarea>							
-							</div>
-							
-							<div class="box-footer">
-								<span class="pull-left footer-tip"><i>The configuration of this component is automatic.</i></span>
-								<div class="btn-group pull-right">
-									<button type="button" class="btn btn-default disabled"  style="margin-right:5px">
-										<i class="fa fa-save"></i> Save 
-									</button>
-								</div>							
-							</div>
-							
-						</div>
-					</section>
 				</div>
 			</section>
 		</div>

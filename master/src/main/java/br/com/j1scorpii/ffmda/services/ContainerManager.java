@@ -48,6 +48,7 @@ public class ContainerManager {
 	}
 	
 	public JSONObject getContainer(String componentName) {
+		updateContainers();
 		for( int x=0; x < this.containers.length(); x++  ) {
 			JSONObject container = this.containers.getJSONObject(x);
 			String name = container.getJSONArray("Names").getString(0).replace("/", "");
@@ -129,7 +130,7 @@ public class ContainerManager {
 	}
 	
 	public String startContainer( String containerId ) {
-		logger.info("Staring component " + containerId );
+		logger.info("Starting component " + containerId );
 		return dockerService.getResponse( Request.Method.POST, "/containers/"+containerId+"/start", null );
 	}
 	

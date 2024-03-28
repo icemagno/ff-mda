@@ -22,7 +22,6 @@
 		<java.version>17</java.version>
 		<maven.test.skip>true</maven.test.skip>
 		<webj3.version>5.0.0</webj3.version>
-		<bc.version>1.70</bc.version>
 		<docker-java.version>3.3.6</docker-java.version>
 	</properties>
 
@@ -158,30 +157,6 @@
 			<artifactId>spring-boot-starter-web</artifactId>
 		</dependency>
 
-		<dependency>
-		    <groupId>org.bouncycastle</groupId>
-		    <artifactId>bcprov-jdk15on</artifactId>
-		    <version>${bc.version}</version>
-		</dependency>
-		
-		<dependency>
-		    <groupId>org.bouncycastle</groupId>
-		    <artifactId>bcpkix-jdk15on</artifactId>
-		    <version>${bc.version}</version>
-		</dependency>	
-		
-		<dependency>
-		    <groupId>org.bouncycastle</groupId>
-		    <artifactId>bcmail-jdk15on</artifactId>
-		    <version>${bc.version}</version>
-		</dependency>
-			
-		<dependency>
-		    <groupId>org.bouncycastle</groupId>
-		    <artifactId>bcpg-jdk15on</artifactId>
-		    <version>${bc.version}</version>
-		</dependency>
-		
         <dependency>
             <groupId>org.json</groupId>
             <artifactId>json</artifactId>
