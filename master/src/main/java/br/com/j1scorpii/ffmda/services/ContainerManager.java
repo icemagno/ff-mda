@@ -77,7 +77,7 @@ public class ContainerManager {
 
 		if( container.has("ports") ) {
 			JSONObject portBindings = new JSONObject();
-			//JSONObject exposedPorts = new JSONObject();
+			JSONObject exposedPorts = new JSONObject();
 
 			JSONObject thePorts = container.getJSONObject("ports");
 			Iterator<String> keys = thePorts.keys();
@@ -90,12 +90,12 @@ public class ContainerManager {
 			    
 				mappedPort.put( new JSONObject().put("HostPort", key ) );
 				portBindings.put( value, mappedPort );
-				//exposedPorts.put( key, new JSONObject() );			
+				exposedPorts.put( value, new JSONObject() );			
 
 			}
 			
 			hostConfig.put("PortBindings", portBindings );			
-			//body.put("ExposedPorts", exposedPorts );
+			body.put("ExposedPorts", exposedPorts );
 		}
 		
 		body.put("Hostname", name);

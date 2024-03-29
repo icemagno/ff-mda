@@ -74,8 +74,8 @@ public class DataExchangeService {
 		}
 		
 		JSONObject portBidings = new JSONObject();
-		portBidings.put("10205", "3000");
-		portBidings.put("10204", "3001");
+		portBidings.put("10205", "3000/tcp");
+		portBidings.put("10204", "3001/udp");
 		
 		JSONArray envs = new JSONArray();
 		
