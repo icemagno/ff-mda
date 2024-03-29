@@ -2,7 +2,7 @@
 let dataExchangeImageName = null;
 let lastPullMessage = "";
 let mainConfig = null;
-let wsDE = null;
+let peerId = null;
 
 $( document ).ready(function() {
 
@@ -186,29 +186,19 @@ function processContainer( container ){
 	});
 
 	if( container.State == 'running' ){
-		listenToDEWebSocket();
+		getPeerId()
 		setButtons('stop-restart');
 	} else {
 		setButtons('play');
 	}
 }
 
-function listenToDEWebSocket(){
-	if( wsDE ) return;
-	
-	console.log( mainConfig );
-	
-	wsDE = new SockJS( "http://" + mainConfig.localAgentConfig.hostName + ":10205" );
-	var stompDEClient = Stomp.over(wsDE);
-	//stompClient.debug = null;
 
-	var thisheaders = {
-        "Origin": "*",
-        "withCredentials": 'false',
-	};
-	 
-	stompDEClient.connect( thisheaders , (frame) => {
-		console.log( frame );	
-	});
-	
+function getPeerId(){
+	if ( peerId ) return;
+	$.get( "http://" + mainConfig.localAgentConfig.ipAddress + ":10205/api/v1/id", function(data, status) {
+		console.log( data );
+		peerId = data;
+	});			
 }
+
