@@ -17,6 +17,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Service;
 import org.web3j.crypto.Bip39Wallet;
 import org.web3j.crypto.Credentials;
@@ -27,6 +28,7 @@ import br.com.j1scorpii.ffmda.model.Wallet;
 import jakarta.annotation.PostConstruct;
 
 @Service
+@Order(value = 0)
 public class LocalService {
 	private Logger logger = LoggerFactory.getLogger( LocalService.class );
 	

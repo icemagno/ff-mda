@@ -13,11 +13,13 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Service;
 
 import jakarta.annotation.PostConstruct;
 
 @Service
+@Order(value = 10)
 public class DataExchangeService {
 	private Logger logger = LoggerFactory.getLogger( DataExchangeService.class );
 
@@ -43,7 +45,7 @@ public class DataExchangeService {
 		this.peersFolder = this.componentDataFolder + "/peer-certs";
 		this.configFile = this.componentDataFolder + "/config.json";
 		new File( this.peersFolder ).mkdirs();
-		loadConfig();
+		loadConfig( localService.getAgentConfig() );
 	}
 
 	public boolean certAndKeysExists() {
@@ -122,10 +124,13 @@ public class DataExchangeService {
 	}
 	
 	public String getConfig( ) {
+		
+		JSONObject localAgentConfig = localService.getAgentConfig();
+		
 		// If we don't have keys yet ...
 		createCertificateAndKeys();
 		// Refresh configuration variable
-		loadConfig();
+		loadConfig( localAgentConfig );
 		// Use a object wrapper to send component configuration 
 		// plus some relevant configuration to the UI.
 		JSONObject generalConfig = new JSONObject();
@@ -133,10 +138,14 @@ public class DataExchangeService {
 		generalConfig.put("certAndKeysExists", certAndKeysExists() );
 		generalConfig.put("image", imagePulled() );
 		generalConfig.put("container", getContainer() );
+		
+		// Plus the local node config ( I need this server's IP and host )
+		generalConfig.put("localAgentConfig", localAgentConfig );
+		
 		return generalConfig.toString(5);
 	}
 	
-	private void loadConfig() {
+	private void loadConfig( JSONObject localAgentConfig ) {
 		try {
 			if( new File( this.configFile ).exists() ) {
 				String content = readConfig( );
@@ -147,8 +156,8 @@ public class DataExchangeService {
 				JSONArray peers = new JSONArray();
 				
 				this.componentConfig
-				.put("api", new JSONObject().put("hostname", "0.0.0.0").put("port", 3000)  )
-				.put("p2p", new JSONObject().put("hostname", "0.0.0.0").put("port", 3001)  )
+				.put("api", new JSONObject().put("hostname", localAgentConfig.getString("ipAddress") ).put("port", 10205)  )
+				.put("p2p", new JSONObject().put("hostname", localAgentConfig.getString("ipAddress") ).put("port", 10204)  )
 				.put("peers", peers);
 				
 				saveConfig();

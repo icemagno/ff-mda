@@ -1,7 +1,8 @@
 
 let dataExchangeImageName = null;
 let lastPullMessage = "";
-let dataExchangeLocalIP = null;
+let mainConfig = null;
+let wsDE = null;
 
 $( document ).ready(function() {
 
@@ -53,6 +54,7 @@ $( document ).ready(function() {
 		
 	$("#restartCont").click( ()=>{
 		if( isDisabled( "#restartCont" ) ) return;
+		log("Wait...")
 		$.get("/v1/dataexchange/container/restart", function(data, status) {
 			console.log( data );
 		});		
@@ -147,6 +149,9 @@ function processConfig( config, prefix ){
 function updateData(){
 
 	$.get("/v1/dataexchange/config/get", function(data, status) {
+		
+		mainConfig = data;
+		
 		processConfig( data.componentConfig, "" );
 		if( data.certAndKeysExists ) $("#peerCertDlCont").show();
 		if( data.image.exists ){
@@ -162,7 +167,10 @@ function updateData(){
 }
 
 function processContainer( container ){
-	dataExchangeLocalIP = container.NetworkSettings.Networks.ffmda.IPAddress
+	let dataExchangeLocalIP = container.NetworkSettings.Networks.ffmda.IPAddress
+	
+	// TODO: Change this with a table. Put the local agent external IP address and host name
+	// We will find this information on mainConfig
 	$("#componentTips").text( container.Labels.tag + " " + container.Status + " " + dataExchangeLocalIP );
 	
 	$.get("/v1/dataexchange/container/log", function(data, status) {
@@ -176,8 +184,27 @@ function processContainer( container ){
 	});
 
 	if( container.State == 'running' ){
+		listenToDEWebSocket();
 		setButtons('stop-restart');
 	} else {
 		setButtons('play');
 	}
+}
+
+function listenToDEWebSocket(){
+	if( wsDE ) return;
+	
+	wsDE = new SockJS( mainConfig.localAgentConfig.ipAddress + ":" + 10205 );
+	var stompDEClient = Stomp.over(wsDE);
+	//stompClient.debug = null;
+
+	var thisheaders = {
+        "Origin": "*",
+        "withCredentials": 'false',
+	};
+	 
+	stompClient.connect( thisheaders , (frame) => {
+		console.log( frame );	
+	});
+	
 }
