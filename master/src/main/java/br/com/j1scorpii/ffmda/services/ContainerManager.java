@@ -88,8 +88,8 @@ public class ContainerManager {
 			    String key = keys.next();
 			    String value = thePorts.getString(key);
 			    
-				mappedPort.put( new JSONObject().put("HostPort", value ) );
-				portBindings.put( key, mappedPort );
+				mappedPort.put( new JSONObject().put("HostPort", key ) );
+				portBindings.put( value, mappedPort );
 				//exposedPorts.put( key, new JSONObject() );			
 
 			}

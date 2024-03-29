@@ -1,6 +1,7 @@
 
 let dataExchangeImageName = null;
 let lastPullMessage = "";
+let dataExchangeLocalIP = null;
 
 $( document ).ready(function() {
 
@@ -161,8 +162,9 @@ function updateData(){
 }
 
 function processContainer( container ){
-	$("#componentTips").text( container.Labels.tag + " " + container.Status + " " + container.NetworkSettings.Networks.ffmda.IPAddress );
-
+	dataExchangeLocalIP = container.NetworkSettings.Networks.ffmda.IPAddress
+	$("#componentTips").text( container.Labels.tag + " " + container.Status + " " + dataExchangeLocalIP );
+	
 	$.get("/v1/dataexchange/container/log", function(data, status) {
 		if( data.result ){
 			$("#containerLog").empty();
