@@ -198,7 +198,7 @@ function listenToDEWebSocket(){
 	
 	console.log( mainConfig );
 	
-	wsDE = new SockJS( "http://" + mainConfig.localAgentConfig.ipAddress + ":10205" );
+	wsDE = new SockJS( "http://" + mainConfig.localAgentConfig.hostName + ":10205" );
 	var stompDEClient = Stomp.over(wsDE);
 	//stompClient.debug = null;
 
