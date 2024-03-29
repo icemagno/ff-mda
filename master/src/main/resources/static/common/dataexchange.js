@@ -62,6 +62,7 @@ $( document ).ready(function() {
 		
 	$("#stopCont").click( ()=>{
 		if( isDisabled( "#stopCont" ) ) return;
+		log("Wait...")
 		$.get("/v1/dataexchange/container/stop", function(data, status) {
 			console.log( data );
 		});
@@ -69,6 +70,7 @@ $( document ).ready(function() {
 	
 	$("#startCont").click( ()=>{
 		if( isDisabled( "#startCont" ) ) return;
+		log("Wait...")
 		$.get("/v1/dataexchange/container/start", function(data, status) {
 			console.log( data );
 		});
@@ -203,7 +205,7 @@ function listenToDEWebSocket(){
         "withCredentials": 'false',
 	};
 	 
-	stompClient.connect( thisheaders , (frame) => {
+	stompDEClient.connect( thisheaders , (frame) => {
 		console.log( frame );	
 	});
 	
