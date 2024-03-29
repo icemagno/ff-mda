@@ -20,7 +20,7 @@ $( document ).ready(function() {
 			if( container && container.State ) processContainer( container );
 		});
 		
-	}, 3000 ); 
+	}, 4000 ); 
 	 
 	stompClient.connect( thisheaders , (frame) => {
 		console.log('WebSocket Conected.');  
@@ -125,13 +125,29 @@ function setButtons( what ){
 	}
 }
 
+
+
+function processConfig( config, prefix ){
+	for (var key in config) {
+		let namespace = prefix + key;
+	    if ( config.hasOwnProperty( key ) ) {
+			let value = config[key];
+	        if( typeof value == 'object' ) {
+				$("#configTable").append("<tr><th style='background:#d2d6de'>"+namespace+"</th><th style='background:#d2d6de'>&nbsp;</th></tr>");
+				processConfig( value, namespace + ".");
+			} else {
+				$("#configTable").append("<tr><td>"+namespace+"</td><td>"+value+"</td></tr>");
+		        // console.log( "   > " + namespace + " = " + value + "  " + typeof value );
+			}
+	    }
+	}	
+}
+
 function updateData(){
 
 	$.get("/v1/dataexchange/config/get", function(data, status) {
-		$("#componentConfig").text( JSON.stringify( data ) );
-
+		processConfig( data.componentConfig, "" );
 		if( data.certAndKeysExists ) $("#peerCertDlCont").show();
-		
 		if( data.image.exists ){
 			$("#componentTips").text( "The image is ready to launch a container. You can pull it again if you want to update to a new version.");
 			setButtons('play');
