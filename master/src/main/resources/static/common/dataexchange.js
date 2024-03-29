@@ -196,7 +196,9 @@ function processContainer( container ){
 function listenToDEWebSocket(){
 	if( wsDE ) return;
 	
-	wsDE = new SockJS( mainConfig.localAgentConfig.ipAddress + ":" + 10205 );
+	console.log( mainConfig );
+	
+	wsDE = new SockJS( mainConfig.localAgentConfig.ipAddress + ":10205" );
 	var stompDEClient = Stomp.over(wsDE);
 	//stompClient.debug = null;
 
