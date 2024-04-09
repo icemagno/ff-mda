@@ -1,0 +1,12 @@
+{
+	"dataexchange":"ghcr.io/hyperledger/firefly-dataexchange-https:latest",
+	"besu":"magnoabreu/besu-base:24.1.2",
+	"ipfs":"ipfs/kubo:latest",
+	"signer":"ghcr.io/hyperledger/firefly-signer:latest",
+	"evmconnect":"ghcr.io/hyperledger/firefly-evmconnect:latest",
+	"tokens":"ghcr.io/hyperledger/firefly-tokens-erc20-erc721:latest",
+	"postgres":"postgres",
+	"core":"ghcr.io/hyperledger/firefly",
+	"sandbox":"ghcr.io/hyperledger/firefly-sandbox:latest",
+	"prometheus":"prom/prometheus"
+}

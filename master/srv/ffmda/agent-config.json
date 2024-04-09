@@ -1,0 +1,1 @@
+{"nodeName":"AcmeNode","hostName":"firefly.s2","orgName":"ACME","ipAddress":"192.168.1.208","stackStatus":{"signerOk":false,"besuOk":false,"evmConnOk":false,"tokensOk":false,"postgresOk":false,"dataExchangeOk":false,"ipfsOk":false,"sandboxOk":false,"coreOk":false,"locked":true}}
