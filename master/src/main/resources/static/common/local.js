@@ -32,12 +32,9 @@ $( document ).ready(function() {
   		
 	});
   
-	$("#dlPeerCert").click( ()=>{
-		window.open("/v1/org/certificate");
-	});
-	
+	// Download CA certificate file
 	$("#dlCACert").click( ()=>{
-		console.log("Download the C.A. certificate");
+		window.open("/v1/org/certificate");
 	});
 
   
