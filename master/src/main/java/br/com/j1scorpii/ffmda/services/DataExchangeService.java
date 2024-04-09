@@ -210,8 +210,8 @@ public class DataExchangeService {
 	}
 
 	public Resource getPeerCertificateFile() throws Exception {
-	    Path path = Paths.get( getClass().getResource( this.pemCer ).toURI());
-	    ByteArrayResource resource = new ByteArrayResource(Files.readAllBytes(path));
+	    Path path = Paths.get( this.pemCer );
+	    ByteArrayResource resource = new ByteArrayResource( Files.readAllBytes( path ) );
 	    return resource;	    
 	    
 	    
