@@ -14,6 +14,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
+import org.springframework.web.client.RestTemplate;
 
 import jakarta.annotation.PostConstruct;
 
@@ -37,8 +38,11 @@ public class DataExchangeService {
 	
 	private JSONObject componentConfig;
 	
+	private RestTemplate rt;
+	
 	@PostConstruct
 	private void init() {
+		this.rt = new RestTemplate();
 		this.componentDataFolder  = localDataFolder + "/" + COMPONENT_NAME;
 		this.peersFolder = this.componentDataFolder + "/peer-certs";
 		this.configFile = this.componentDataFolder + "/config.json";
@@ -189,6 +193,15 @@ public class DataExchangeService {
 
 	public String restartContainer() {
 		return new JSONObject().put("result", this.containerManager.reStartContainer( COMPONENT_NAME) ).toString();
+	}
+
+	public String getPeerId() {
+		String peerId = this.requestData("http://dataexchange:3000/api/v1/id");
+		return peerId;
+	}
+	
+	private String requestData( String endpoint ) {
+		return rt.getForObject( endpoint, String.class);
 	}
 	
 }

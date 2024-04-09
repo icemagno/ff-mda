@@ -32,6 +32,12 @@ public class DataExchangeController {
     	return new ResponseEntity<String>( this.dataExchangeService.getConfig() , HttpStatus.OK);
     }    
     
+    // Get Data Exchange Peer ID
+    @GetMapping( value="/peer/id", produces= MediaType.APPLICATION_JSON_VALUE )
+    public ResponseEntity<String> getPeerId( ) {
+    	return new ResponseEntity<String>( this.dataExchangeService.getPeerId() , HttpStatus.OK);
+    }    
+    
     // Get the container information if we have any. Empty JSON object if not.
     @GetMapping( value="/container/get", produces= MediaType.APPLICATION_JSON_VALUE )
     public ResponseEntity<String> getContainer( ) {

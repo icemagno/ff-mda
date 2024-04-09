@@ -195,12 +195,10 @@ function processContainer( container ){
 
 
 function getPeerId(){
-	/*
 	if ( peerId ) return;
-	$.get( "http://" + mainConfig.localAgentConfig.ipAddress + ":10205/api/v1/id", function(data, status) {
+	$.get( "/v1/dataexchange/peer/id", function(data, status) {
 		console.log( data );
 		peerId = data;
 	});
-	*/			
 }
 
