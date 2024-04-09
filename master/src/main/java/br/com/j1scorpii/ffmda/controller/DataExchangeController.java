@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import br.com.j1scorpii.ffmda.services.DataExchangeService;
+import jakarta.servlet.http.HttpServletResponse;
 
 @RestController
 @RequestMapping(value="/v1/dataexchange")
@@ -42,7 +43,8 @@ public class DataExchangeController {
     
     // Download peer certificate file (public key)
     @GetMapping( value="/peer/certificate", produces= MediaType.APPLICATION_OCTET_STREAM_VALUE )
-    public @ResponseBody Resource getPeerCertificateFile( ) throws Exception {
+    public @ResponseBody Resource getPeerCertificateFile( HttpServletResponse response ) throws Exception {
+    	response.setHeader("Content-Disposition", "attachment; filename=peer.cer");
     	return this.dataExchangeService.getPeerCertificateFile();
     }    
     
