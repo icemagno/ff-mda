@@ -18,6 +18,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.annotation.Order;
+import org.springframework.core.io.Resource;
 import org.springframework.stereotype.Service;
 import org.web3j.crypto.Bip39Wallet;
 import org.web3j.crypto.Credentials;
@@ -248,6 +249,10 @@ public class LocalService {
 		BufferedWriter writer = new BufferedWriter( new FileWriter( myConfigFile) );
 		writer.write( this.agentConfig.toString() );
 		writer.close();			
+	}
+
+	public Resource getOrgCertificateFile() throws Exception {
+	    return this.getPkiManager().getOrgCertificateFile();	
 	}	
 	
 }

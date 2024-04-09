@@ -33,7 +33,7 @@ $( document ).ready(function() {
 	});
   
 	$("#dlPeerCert").click( ()=>{
-		console.log("Download this peer certificate");
+		window.open("/v1/org/certificate");
 	});
 	
 	$("#dlCACert").click( ()=>{

@@ -213,8 +213,6 @@ public class DataExchangeService {
 	    Path path = Paths.get( this.pemCer );
 	    ByteArrayResource resource = new ByteArrayResource( Files.readAllBytes( path ) );
 	    return resource;	    
-	    
-	    
 	}
 	
 }

@@ -1,11 +1,16 @@
 package br.com.j1scorpii.ffmda.services;
 
 import java.io.File;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.core.io.ByteArrayResource;
+import org.springframework.core.io.Resource;
 import org.springframework.stereotype.Service;
 
 import jakarta.annotation.PostConstruct;
@@ -28,10 +33,8 @@ public class PKIManagerService {
 		this.certsFolder = this.pkiFolder + "/certs";
 		new File( this.certsFolder ).mkdirs();	
 		// this.issuerPemPrivKeyFile 	= pkiFolder + "/ca-key.pem";
-	    this.issuerPemCertFile 		= pkiFolder + "/ca-cert.pem";
-	    
+	    this.issuerPemCertFile 	= pkiFolder + "/ca-cert.pem";
 		logger.info("init " + this.pkiFolder );
-
 	}
 
 	public boolean caWasCreated() {
@@ -57,6 +60,12 @@ public class PKIManagerService {
         String[] command = { "./create-ca.sh", acCn , this.pkiFolder };
         this.shellRunnerService.runShell(command, callbackChannel );
 	}
+	
+	public Resource getOrgCertificateFile() throws Exception {
+	    Path path = Paths.get( this.issuerPemCertFile );
+	    ByteArrayResource resource = new ByteArrayResource( Files.readAllBytes( path ) );
+	    return resource;	
+	}		
 
 }
 

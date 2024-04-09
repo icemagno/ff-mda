@@ -3,6 +3,7 @@ package br.com.j1scorpii.ffmda.controller;
 
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.io.Resource;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -10,9 +11,11 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import br.com.j1scorpii.ffmda.services.LocalService;
+import jakarta.servlet.http.HttpServletResponse;
 
 @RestController
 @RequestMapping(value="/v1")
@@ -34,6 +37,13 @@ public class LocalAgentController {
     	return new ResponseEntity<>( this.localService.getAgentConfig().toString() , HttpStatus.OK);
     }
 
+    // Download peer certificate file (public key)
+    @GetMapping( value="/org/certificate", produces= MediaType.APPLICATION_OCTET_STREAM_VALUE )
+    public @ResponseBody Resource getPeerCertificateFile( HttpServletResponse response ) throws Exception {
+    	response.setHeader("Content-Disposition", "attachment; filename=peer.cer");
+    	return this.localService.getOrgCertificateFile();
+    }      
+    
     // Save Organization name and Node name into config file
     @PostMapping( value="/org/save", consumes= MediaType.APPLICATION_JSON_VALUE )
     public ResponseEntity<String> saveOrgData( @RequestBody String data  ) {
