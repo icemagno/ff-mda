@@ -68,6 +68,10 @@ $( document ).ready(function() {
 		});
 	});
 	
+	$("#dlPeerCert").click( ()=>{
+		window.open("/v1/dataexchange/peer/certificate");
+	});
+	
 	$("#startCont").click( ()=>{
 		if( isDisabled( "#startCont" ) ) return;
 		log("Wait...")
@@ -172,7 +176,7 @@ function processContainer( container ){
 	let dataExchangeLocalIP = container.NetworkSettings.Networks.ffmda.IPAddress
 	
 	$("#componentTips").html(
-		'<table>' + 
+		'<table style="width:100%">' + 
 		'<tr><th>Tag</th><th>Status</th><th>Local IP</th>' +
 		'<tr><td>'+container.Labels.tag+'</td><td>'+container.Status+'</td><td>'+dataExchangeLocalIP+'</td>' +
 		'</table>'
