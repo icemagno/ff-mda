@@ -171,9 +171,12 @@ function updateData(){
 function processContainer( container ){
 	let dataExchangeLocalIP = container.NetworkSettings.Networks.ffmda.IPAddress
 	
-	// TODO: Change this with a table. Put the local agent external IP address and host name
-	// We will find this information on mainConfig
-	$("#componentTips").text( container.Labels.tag + " " + container.Status + " " + dataExchangeLocalIP );
+	$("#componentTips").html(
+		'<table>' + 
+		'<tr><th>Tag</th><th>Status</th><th>Local IP</th>' +
+		'<tr><td>'+container.Labels.tag+'</td><td>'+container.Status+'</td><td>'+dataExchangeLocalIP+'</td>' +
+		'</table>'
+	);
 	
 	$.get("/v1/dataexchange/container/log", function(data, status) {
 		if( data.result ){

@@ -5,6 +5,7 @@ import java.io.File;
 import java.io.FileWriter;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
+import java.nio.file.Path;
 import java.nio.file.Paths;
 
 import org.json.JSONArray;
@@ -13,6 +14,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.core.io.ByteArrayResource;
+import org.springframework.core.io.Resource;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
@@ -35,6 +38,8 @@ public class DataExchangeService {
 	private String peersFolder;
 	private String configFile;
 	private String imageName;
+	private String pemCer;
+	private String pemKey;
 	
 	private JSONObject componentConfig;
 	
@@ -46,14 +51,14 @@ public class DataExchangeService {
 		this.componentDataFolder  = localDataFolder + "/" + COMPONENT_NAME;
 		this.peersFolder = this.componentDataFolder + "/peer-certs";
 		this.configFile = this.componentDataFolder + "/config.json";
+		this.pemCer = this.componentDataFolder + "/cert.pem";
+		this.pemKey = this.componentDataFolder + "/key.pem";
 		new File( this.peersFolder ).mkdirs();
 		loadConfig();
 	}
 
 	public boolean certAndKeysExists() {
-		String pemCer = this.componentDataFolder + "/cert.pem";
-		String pemKey = this.componentDataFolder + "/key.pem";
-		boolean result = ( new File( pemCer ).exists() && new File( pemKey ).exists() );
+		boolean result = ( new File( this.pemCer ).exists() && new File( this.pemKey ).exists() );
 		return result;
 	}
 
@@ -202,6 +207,14 @@ public class DataExchangeService {
 	
 	private String requestData( String endpoint ) {
 		return rt.getForObject( endpoint, String.class);
+	}
+
+	public Resource getPeerCertificateFile() throws Exception {
+	    Path path = Paths.get( getClass().getResource( this.pemCer ).toURI());
+	    ByteArrayResource resource = new ByteArrayResource(Files.readAllBytes(path));
+	    return resource;	    
+	    
+	    
 	}
 	
 }

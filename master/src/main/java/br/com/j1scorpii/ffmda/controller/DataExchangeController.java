@@ -1,11 +1,13 @@
 package br.com.j1scorpii.ffmda.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.io.Resource;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import br.com.j1scorpii.ffmda.services.DataExchangeService;
@@ -36,6 +38,12 @@ public class DataExchangeController {
     @GetMapping( value="/peer/id", produces= MediaType.APPLICATION_JSON_VALUE )
     public ResponseEntity<String> getPeerId( ) {
     	return new ResponseEntity<String>( this.dataExchangeService.getPeerId() , HttpStatus.OK);
+    }    
+    
+    // Download peer certificate file (public key)
+    @GetMapping( value="/peer/certificate", produces= MediaType.APPLICATION_OCTET_STREAM_VALUE )
+    public @ResponseBody Resource getPeerCertificateFile( ) throws Exception {
+    	return this.dataExchangeService.getPeerCertificateFile();
     }    
     
     // Get the container information if we have any. Empty JSON object if not.
