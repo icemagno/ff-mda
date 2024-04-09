@@ -40,7 +40,7 @@ public class LocalAgentController {
     // Download peer certificate file (public key)
     @GetMapping( value="/org/certificate", produces= MediaType.APPLICATION_OCTET_STREAM_VALUE )
     public @ResponseBody Resource getPeerCertificateFile( HttpServletResponse response ) throws Exception {
-    	response.setHeader("Content-Disposition", "attachment; filename=peer.cer");
+    	response.setHeader("Content-Disposition", "attachment; filename=org-ca.cer");
     	return this.localService.getOrgCertificateFile();
     }      
     
