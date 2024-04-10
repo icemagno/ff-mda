@@ -29,7 +29,6 @@ $( document ).ready(function() {
   		$("#ipAddress").val( data.ipAddress );
   		$("#hostName").val( data.hostName);  		
 		checkConfig( data );
-  		
 	});
   
 	// Download CA certificate file
@@ -61,6 +60,31 @@ $( document ).ready(function() {
 	 
 });
 
+// This will set the components tag at right side
+// to show the containers state
+function setButtonState( component, button){
+	// set to default / undefined state first
+	$(button).removeClass("label-success");
+	$(button).removeClass("label-danger");
+	$(button).addClass("label-default");
+	$(button).text("ABSENT");
+
+	// Then set to the actual state. I made this way because 
+	// we may ( but shouldn't ) have a not listed state. Just to be safe. ;)
+	if( component != false && component ) {
+		if( component.State == 'running' ) {
+			$(button).removeClass("label-default");
+			$(button).addClass("label-success");
+			$(button).text("RUNNING");
+		}
+		if( component.State == 'exited' ) {
+			$(button).removeClass("label-default");
+			$(button).addClass("label-danger");
+			$(button).text("EXITED");
+		}
+	}
+}
+
 // Check configuration to interface state
 function checkConfig( data ){
 	$("#mainTip").text( "Configure the components" );
@@ -70,7 +94,17 @@ function checkConfig( data ){
 		  $("#mainTip").text( "Set Supernode Configuration" );
 		  $("#mainSubTip").text( "You must set Organization and Node name before proceed." );
 		  $(".btn-manage").addClass("disabled");
-	} 
+	}
+	stackStatus = data.stackStatus;
+	setButtonState( stackStatus.dataExchange, "#dxStatus" );
+	setButtonState( stackStatus.postgres, "#postgreStatus" );
+	setButtonState( stackStatus.ipfs, "#ipfsStatus" );
+	setButtonState( stackStatus.besu, "#besuStatus" );
+	setButtonState( stackStatus.tokens, "#tokensStatus" );
+	setButtonState( stackStatus.signer, "#signerStatus" ); 
+	setButtonState( stackStatus.evmConn, "#connectorStatus" );
+	setButtonState( stackStatus.sandbox, "#sandboxStatus" );
+	setButtonState( stackStatus.core, "#coreStatus" );
 }
 
 // Reload configuration from file. Nothing to do for now.
