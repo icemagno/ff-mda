@@ -179,7 +179,7 @@ function processContainer( container ){
 	let ports = container.Ports;
 	let pmCell = "";
 	let pm = [];
-	ports.forEach( ( port ) => pm[ port.PrivatePort.toString() ] = port.PublicPort );
+	ports.forEach( ( port ) => { if( port.PublicPort ) pm[ port.PrivatePort.toString() ] = port.PublicPort }); 
 	
 	for (var key in pm ) {
 		pmCell = pmCell + key + ':' + pm[key] + '<br/>';
