@@ -173,15 +173,21 @@ function updateData(){
 
 function processContainer( container ){
 	
-	console.log( container );
+	// console.log( container );
 	
 	let dataExchangeLocalIP = container.NetworkSettings.Networks.ffmda.IPAddress
+	let ports = container.Ports;
+	let pmCell = "";
+	ports.forEach( ( port )=>{
+		pmCell = pmCell + '[' + port.Type.toUppercase() + '] ' + port.PrivatePort + ' -> ' + port.PublicPort + '<br/>';
+	});
 	
 	$("#componentTips").html(
 		'<table style="width:100%">' + 
 		'<tr><td>Tag</td><td>'+container.Labels.tag+'</td></tr>' +
 		'<tr><td>Status</td><td>'+container.Status+'</td></tr>' +
 		'<tr><td>Local IP</td><td>'+dataExchangeLocalIP+'</td></tr>' +
+		'<tr><td>Ports</td><td>'+pmCell+'</td></tr>' +
 		'</table>'
 	);
 	
