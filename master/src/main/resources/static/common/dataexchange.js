@@ -179,7 +179,7 @@ function processContainer( container ){
 	let ports = container.Ports;
 	let pmCell = "";
 	ports.forEach( ( port )=>{
-		pmCell = pmCell + '[' + port.Type.toUppercase() + '] ' + port.PrivatePort + ' -> ' + port.PublicPort + '<br/>';
+		pmCell = pmCell + '[' + port.Type + '] ' + port.PrivatePort + ' -> ' + port.PublicPort + '<br/>';
 	});
 	
 	$("#componentTips").html(
