@@ -29,7 +29,6 @@ $( document ).ready(function() {
 
 		stompClient.subscribe('/shell/dataexchange', (message) => {
 			let payload = JSON.parse( message.body );
-			console.log( payload );
 		});
 		
 		stompClient.subscribe('/docker/dataexchange/pull', (message) => {

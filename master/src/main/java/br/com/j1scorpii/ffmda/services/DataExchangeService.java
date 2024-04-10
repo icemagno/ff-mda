@@ -119,12 +119,10 @@ public class DataExchangeService {
 		return result;
 	}
 	
-	
 	public JSONObject getContainer() {
 		JSONObject container = containerManager.getContainer( COMPONENT_NAME ); 
 		return container;
 	}
-
 
 	public String pullImage() {
 		return imageManager.pullImage(COMPONENT_NAME, true );

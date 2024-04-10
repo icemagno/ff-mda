@@ -47,6 +47,7 @@ public class LocalService {
 	private JSONObject agentConfig;
 	
 	@Autowired private PKIManagerService pkiManager;
+	@Autowired private ContainerManager containerManager;
 	
 	@PostConstruct
 	private void init() {
@@ -100,15 +101,15 @@ public class LocalService {
 				
 				stackStatus
 				.put("locked", false)
-				.put("dataExchangeOk", false)
-				.put("postgresOk", false)
-				.put("ipfsOk", false)
-				.put("besuOk", false)
-				.put("tokensOk", false)
-				.put("signerOk", false)
-				.put("evmConnOk", false)
-				.put("sandboxOk", false)
-				.put("coreOk", false);
+				.put("dataExchange", false)
+				.put("postgres", false)
+				.put("ipfs", false)
+				.put("besu", false)
+				.put("tokens", false)
+				.put("signer", false)
+				.put("evmConn", false)
+				.put("sandbox", false)
+				.put("core", false);
 				
 				this.agentConfig.put("orgName", "");
 				this.agentConfig.put("nodeName", "");
@@ -225,8 +226,15 @@ public class LocalService {
 	}
 	
 	private void loadConfig() throws Exception {
+		// REad config file from disk
 		String content = readFile( myConfigFile , StandardCharsets.UTF_8);
 		this.agentConfig = new JSONObject(content);
+		
+		// Get the stack situation
+		JSONObject dataExchange = containerManager.getContainer( "dataexchange" );
+		this.agentConfig.getJSONObject("stackStatus").put("dataExchange", dataExchange);
+		
+		
 	}
 	
 	public String getMyWalletBalance() {
@@ -234,6 +242,7 @@ public class LocalService {
 	}
 	
 	public JSONObject getAgentConfig() {
+		reloadConfig();
 		return this.agentConfig;
 	}
 	
