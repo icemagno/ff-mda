@@ -182,7 +182,7 @@ function processContainer( container ){
 	ports.forEach( ( port ) => { if( port.PublicPort ) pm[ port.PrivatePort.toString() ] = port.PublicPort }); 
 	
 	for (var key in pm ) {
-		pmCell = pmCell + key + ':' + pm[key] + '<br/>';
+		pmCell = pmCell + pm[key] + ':' + key + '<br/>';
 	};
 	
 	$("#componentTips").html(
