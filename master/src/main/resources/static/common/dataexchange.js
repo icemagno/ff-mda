@@ -172,12 +172,16 @@ function updateData(){
 }
 
 function processContainer( container ){
+	
+	console.log( container );
+	
 	let dataExchangeLocalIP = container.NetworkSettings.Networks.ffmda.IPAddress
 	
 	$("#componentTips").html(
 		'<table style="width:100%">' + 
-		'<tr><th>Tag</th><th>Status</th><th>Local IP</th>' +
-		'<tr><td>'+container.Labels.tag+'</td><td>'+container.Status+'</td><td>'+dataExchangeLocalIP+'</td>' +
+		'<tr><td>Tag</td><td>'+container.Labels.tag+'</td></tr>' +
+		'<tr><td>Status</td><td>'+container.Status+'</td></tr>' +
+		'<tr><td>Local IP</td><td>'+dataExchangeLocalIP+'</td></tr>' +
 		'</table>'
 	);
 	

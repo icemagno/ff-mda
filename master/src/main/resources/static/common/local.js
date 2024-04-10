@@ -30,6 +30,12 @@ $( document ).ready(function() {
   		$("#hostName").val( data.hostName);  		
 		checkConfig( data );
 	});
+	
+	setInterval( ()=>{
+		$.get("/v1/config/get", function(data, status) {
+			checkConfig( data );
+		});
+	}, 4000 ); 	
   
 	// Download CA certificate file
 	$("#dlCACert").click( ()=>{
