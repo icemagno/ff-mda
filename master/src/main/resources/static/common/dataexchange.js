@@ -178,9 +178,12 @@ function processContainer( container ){
 	let dataExchangeLocalIP = container.NetworkSettings.Networks.ffmda.IPAddress
 	let ports = container.Ports;
 	let pmCell = "";
-	ports.forEach( ( port )=>{
-		pmCell = pmCell + '[' + port.Type + '] ' + port.PrivatePort + ' -> ' + port.PublicPort + '<br/>';
-	});
+	let pm = [];
+	ports.forEach( ( port ) => pm[ port.PrivatePort.toString() ] = port.PublicPort );
+	
+	for (var key in pm ) {
+		pmCell = pmCell + key + ':' + pm[key] + '<br/>';
+	};
 	
 	$("#componentTips").html(
 		'<table style="width:100%">' + 
