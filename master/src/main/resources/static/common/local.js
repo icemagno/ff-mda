@@ -105,7 +105,7 @@ function checkConfig( data ){
 	}
 	stackStatus = data.stackStatus;
 	setButtonState( stackStatus.dataExchange, "#dxStatus", "#dxLabel" );
-	setButtonState( stackStatus.postgres, "#postgreStatus", "#postgreLabel" );
+	setButtonState( stackStatus.postgresql, "#postgreStatus", "#postgreLabel" );
 	setButtonState( stackStatus.ipfs, "#ipfsStatus", "#ipfsLabel" );
 	setButtonState( stackStatus.besu, "#besuStatus", "#besuLabel" );
 	setButtonState( stackStatus.tokens, "#tokensStatus", "#tokensLabel" );

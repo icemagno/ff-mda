@@ -158,7 +158,7 @@ function processContainer( container ){
 	
 	$("#componentTips").html(
 		'<table style="width:100%">' + 
-		'<tr><td>Tag</td><td>'+container.Labels.tag+'</td></tr>' +
+		'<tr><td>State</td><td>'+container.State+'</td></tr>' +
 		'<tr><td>Status</td><td>'+container.Status+'</td></tr>' +
 		'<tr><td>Local IP</td><td>'+localIP+'</td></tr>' +
 		'<tr><td>Ports</td><td>'+pmCell+'</td></tr>' +

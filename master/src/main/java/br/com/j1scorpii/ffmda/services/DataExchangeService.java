@@ -54,6 +54,7 @@ public class DataExchangeService {
 		this.pemCer = this.componentDataFolder + "/cert.pem";
 		this.pemKey = this.componentDataFolder + "/key.pem";
 		new File( this.peersFolder ).mkdirs();
+		logger.info("init " + this.componentDataFolder );
 		loadConfig();
 	}
 

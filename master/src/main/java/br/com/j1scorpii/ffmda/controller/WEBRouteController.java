@@ -28,7 +28,7 @@ public class WEBRouteController {
     @PostConstruct
     private void init() {
     	componentNames.put("dataexchange", "Data Exchange");
-    	componentNames.put("postgres", "PostgreSQL Database");
+    	componentNames.put("postgresql", "PostgreSQL Database");
     	componentNames.put("ipfs", "IPFS Node");
     	componentNames.put("besu", "HyperLedger Besu Node");
     	componentNames.put("tokens", "FireFly Tokens");

@@ -102,7 +102,7 @@ public class LocalService {
 				stackStatus
 				.put("locked", false)
 				.put("dataExchange", false)
-				.put("postgres", false)
+				.put("postgresql", false)
 				.put("ipfs", false)
 				.put("besu", false)
 				.put("tokens", false)
@@ -231,8 +231,8 @@ public class LocalService {
 		this.agentConfig = new JSONObject(content);
 		
 		// Get the stack situation
-		JSONObject dataExchange = containerManager.getContainer( "dataexchange" );
-		this.agentConfig.getJSONObject("stackStatus").put("dataExchange", dataExchange);
+		this.agentConfig.getJSONObject("stackStatus").put("dataExchange", containerManager.getContainer( "dataexchange" ) );
+		this.agentConfig.getJSONObject("stackStatus").put("postgresql", containerManager.getContainer( "postgresql" ) );
 		
 		
 	}

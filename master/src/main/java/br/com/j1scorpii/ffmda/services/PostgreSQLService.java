@@ -30,7 +30,8 @@ public class PostgreSQLService {
 	
 	@PostConstruct
 	private void init() {
-		this.componentDataFolder  = localDataFolder + "/" + COMPONENT_NAME;
+		this.componentDataFolder = localDataFolder + "/" + COMPONENT_NAME;
+		logger.info("init " + this.componentDataFolder );
 		new File( this.componentDataFolder ).mkdirs();
 	}
 

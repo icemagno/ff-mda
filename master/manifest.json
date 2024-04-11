@@ -5,7 +5,7 @@
 	"signer":"ghcr.io/hyperledger/firefly-signer:latest",
 	"evmconnect":"ghcr.io/hyperledger/firefly-evmconnect:latest",
 	"tokens":"ghcr.io/hyperledger/firefly-tokens-erc20-erc721:latest",
-	"postgresql":"postgres",
+	"postgresql":"postgres:16-bullseye",
 	"core":"ghcr.io/hyperledger/firefly",
 	"sandbox":"ghcr.io/hyperledger/firefly-sandbox:latest",
 	"prometheus":"prom/prometheus"
