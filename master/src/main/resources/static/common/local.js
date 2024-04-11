@@ -68,16 +68,18 @@ $( document ).ready(function() {
 
 // This will set the components tag at right side
 // to show the containers state
-function setButtonState( component, button){
+function setButtonState( component, button, buttonLabel ){
 	// set to default / undefined state first
 	$(button).removeClass("label-success");
 	$(button).removeClass("label-danger");
 	$(button).addClass("label-default");
 	$(button).text("ABSENT");
+	
 
 	// Then set to the actual state. I made this way because 
 	// we may ( but shouldn't ) have a not listed state. Just to be safe. ;)
-	if( component != false && component ) {
+	if( component ) {
+		$(buttonLabel).text( component.Status );
 		if( component.State == 'running' ) {
 			$(button).removeClass("label-default");
 			$(button).addClass("label-success");
@@ -102,15 +104,15 @@ function checkConfig( data ){
 		  $(".btn-manage").addClass("disabled");
 	}
 	stackStatus = data.stackStatus;
-	setButtonState( stackStatus.dataExchange, "#dxStatus" );
-	setButtonState( stackStatus.postgres, "#postgreStatus" );
-	setButtonState( stackStatus.ipfs, "#ipfsStatus" );
-	setButtonState( stackStatus.besu, "#besuStatus" );
-	setButtonState( stackStatus.tokens, "#tokensStatus" );
-	setButtonState( stackStatus.signer, "#signerStatus" ); 
-	setButtonState( stackStatus.evmConn, "#connectorStatus" );
-	setButtonState( stackStatus.sandbox, "#sandboxStatus" );
-	setButtonState( stackStatus.core, "#coreStatus" );
+	setButtonState( stackStatus.dataExchange, "#dxStatus", "#dxLabel" );
+	setButtonState( stackStatus.postgres, "#postgreStatus", "#postgreLabel" );
+	setButtonState( stackStatus.ipfs, "#ipfsStatus", "#ipfsLabel" );
+	setButtonState( stackStatus.besu, "#besuStatus", "#besuLabel" );
+	setButtonState( stackStatus.tokens, "#tokensStatus", "#tokensLabel" );
+	setButtonState( stackStatus.signer, "#signerStatus", "#signerLabel" ); 
+	setButtonState( stackStatus.evmConn, "#connectorStatus", "#connectorLabel" );
+	setButtonState( stackStatus.sandbox, "#sandboxStatus", "#sandboxLabel" );
+	setButtonState( stackStatus.core, "#coreStatus", "#coreLabel" );
 }
 
 // Reload configuration from file. Nothing to do for now.
