@@ -7,6 +7,7 @@ import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.concurrent.TimeUnit;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -16,9 +17,17 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.ByteArrayResource;
 import org.springframework.core.io.Resource;
+import org.springframework.messaging.converter.StringMessageConverter;
+import org.springframework.messaging.simp.stomp.StompSession;
+import org.springframework.scheduling.concurrent.ThreadPoolTaskScheduler;
 import org.springframework.stereotype.Service;
+import org.springframework.util.concurrent.ListenableFuture;
 import org.springframework.web.client.RestTemplate;
+import org.springframework.web.socket.client.WebSocketClient;
+import org.springframework.web.socket.client.standard.StandardWebSocketClient;
+import org.springframework.web.socket.messaging.WebSocketStompClient;
 
+import br.com.j1scorpii.ffmda.util.MyStompSessionHandler;
 import jakarta.annotation.PostConstruct;
 
 @Service
@@ -28,6 +37,7 @@ public class DataExchangeService {
 	@Autowired private ImageManager imageManager;
 	@Autowired private ContainerManager containerManager;
 	@Autowired private LocalService localService;
+	@Autowired private WebSocketStompClient stompClient;
 	
 	private final String COMPONENT_NAME = "dataexchange";
 	
@@ -61,6 +71,24 @@ public class DataExchangeService {
 	public boolean certAndKeysExists() {
 		boolean result = ( new File( this.pemCer ).exists() && new File( this.pemKey ).exists() );
 		return result;
+	}
+	
+	@SuppressWarnings("deprecation")
+	public void connectClientToApi() throws Exception {
+
+		WebSocketClient webSocketClient = new StandardWebSocketClient();
+		WebSocketStompClient stompClient = new WebSocketStompClient(webSocketClient);
+		stompClient.setMessageConverter( new StringMessageConverter() );
+		ThreadPoolTaskScheduler taskScheduler = new ThreadPoolTaskScheduler();
+		taskScheduler.afterPropertiesSet();		
+		stompClient.setTaskScheduler( taskScheduler ); 
+
+
+		ListenableFuture<StompSession> future = stompClient.connect( "ws://dataexchange:3000", new MyStompSessionHandler() );
+
+		StompSession session = future.get( 10, TimeUnit.SECONDS );
+		//new Scanner(System.in).nextLine(); // Don't close immediately.		
+		
 	}
 
 	// We have the CA created, Org name and Node name.

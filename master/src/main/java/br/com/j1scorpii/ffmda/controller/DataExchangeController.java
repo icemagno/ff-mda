@@ -28,6 +28,18 @@ public class DataExchangeController {
     @GetMapping( value="/image/pull", produces= MediaType.APPLICATION_JSON_VALUE )
     public ResponseEntity<String> pullImage( ) {
     	return new ResponseEntity<String>( this.dataExchangeService.pullImage() , HttpStatus.OK);
+    }
+    
+    @GetMapping( value="/connect", produces= MediaType.APPLICATION_JSON_VALUE )
+    public ResponseEntity<String> connectToApi( ) {
+    	
+    	try {
+    		this.dataExchangeService.connectClientToApi();
+    	} catch (Exception e) {
+			e.printStackTrace();
+		}
+    	
+    	return new ResponseEntity<String>( "Ok" , HttpStatus.OK);
     }    
     
     @GetMapping( value="/config/get", produces= MediaType.APPLICATION_JSON_VALUE )
