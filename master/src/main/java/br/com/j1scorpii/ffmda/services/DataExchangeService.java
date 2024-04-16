@@ -37,7 +37,7 @@ public class DataExchangeService {
 	@Autowired private ImageManager imageManager;
 	@Autowired private ContainerManager containerManager;
 	@Autowired private LocalService localService;
-	@Autowired private WebSocketStompClient stompClient;
+
 	
 	private final String COMPONENT_NAME = "dataexchange";
 	
