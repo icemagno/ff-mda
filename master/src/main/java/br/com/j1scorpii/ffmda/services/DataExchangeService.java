@@ -84,9 +84,9 @@ public class DataExchangeService {
 		stompClient.setTaskScheduler( taskScheduler ); 
 
 
-		ListenableFuture<StompSession> future = stompClient.connect( "ws://dataexchange:3000", new MyStompSessionHandler() );
+		ListenableFuture<StompSession> future = stompClient.connect( "dataexchange:3000", new MyStompSessionHandler() );
 
-		StompSession session = future.get( 10, TimeUnit.SECONDS );
+		StompSession session = future.get( 5, TimeUnit.SECONDS );
 		//new Scanner(System.in).nextLine(); // Don't close immediately.		
 		
 	}
