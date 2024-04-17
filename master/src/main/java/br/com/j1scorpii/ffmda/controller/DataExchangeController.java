@@ -31,11 +31,12 @@ public class DataExchangeController {
     	return new ResponseEntity<String>( this.dataExchangeService.pullImage() , HttpStatus.OK);
     }
     
-	@GetMapping(value = "/container/stats", produces=MediaType.APPLICATION_JSON_VALUE )
-    public @ResponseBody String containerStats( @RequestParam (value="message",required=true) String message ) {
+	@GetMapping(value = "/send", produces=MediaType.APPLICATION_JSON_VALUE )
+    public @ResponseBody String sendMessage( @RequestParam (value="message",required=true) String message ) {
 		return this.dataExchangeService.sendMessage(message);
     }	    
     
+	// http://firefly.s2:36780/v1/dataexchange/connect
     @GetMapping( value="/connect", produces= MediaType.APPLICATION_JSON_VALUE )
     public ResponseEntity<String> connectToApi( ) {
     	
