@@ -230,13 +230,10 @@ public class DataExchangeService {
 
 	public void processMessageFromDX( JSONObject payload ) {
 		System.out.println( payload.toString(5) );
-		/*
 		JSONObject ack = new JSONObject();
 		ack.put("action","ack").put("id", payload.getString("id") );
 		dispatchToDX( ack );
-		*/
 	}
-	
 	
 	private String dispatchToDX( JSONObject payload ) {
 		System.out.println("Saindo " + payload.toString() );

@@ -7,6 +7,7 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -29,6 +30,11 @@ public class DataExchangeController {
     public ResponseEntity<String> pullImage( ) {
     	return new ResponseEntity<String>( this.dataExchangeService.pullImage() , HttpStatus.OK);
     }
+    
+	@GetMapping(value = "/container/stats", produces=MediaType.APPLICATION_JSON_VALUE )
+    public @ResponseBody String containerStats( @RequestParam (value="message",required=true) String message ) {
+		return this.dataExchangeService.sendMessage(message);
+    }	    
     
     @GetMapping( value="/connect", produces= MediaType.APPLICATION_JSON_VALUE )
     public ResponseEntity<String> connectToApi( ) {
