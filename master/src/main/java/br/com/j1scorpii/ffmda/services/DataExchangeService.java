@@ -165,6 +165,12 @@ public class DataExchangeService {
 		
 		return generalConfig.toString(5);
 	}
+
+	public String addPeer( JSONObject peer ){
+		this.loadConfig();
+		this.componentConfig.getJSONArray("peers").put( peer );
+		this.saveConfig();
+	}
 	
 	private void loadConfig() {
 		try {
