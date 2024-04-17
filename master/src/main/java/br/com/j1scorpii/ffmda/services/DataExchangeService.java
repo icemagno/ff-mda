@@ -103,7 +103,9 @@ public class DataExchangeService {
 		portBidings.put("10204", "3001/udp");
 		
 		JSONArray envs = new JSONArray();
-		
+		// envs.put("NODE_TLS_REJECT_UNAUTHORIZED='0'");
+		envs.put("LOG_LEVEL='debug'");
+			
 		
 		JSONArray volumes = new JSONArray();
 		volumes.put("/etc/localtime:/etc/localtime:ro");
