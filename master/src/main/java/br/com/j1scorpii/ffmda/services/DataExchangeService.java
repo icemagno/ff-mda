@@ -234,24 +234,16 @@ public class DataExchangeService {
 		return rt.getForObject( endpoint, String.class);
 	}
 
-	public void processMessageFromDX( JSONObject payload ) {
+	public void processMessageFromDX( WebSocketSession session, JSONObject payload ) {
+		System.out.println( "Received: " );
 		System.out.println( payload.toString(5) );
 		JSONObject ack = new JSONObject();
-		//ack.put("action","ack").put("id", payload.getString("id") );
-		//dispatchToDX( ack );
-	}
-	
-	private String dispatchToDX( JSONObject payload ) throws Exception {
-		System.out.println("Saindo " + payload.toString() );
-		HttpHeaders headers = new HttpHeaders();
-		headers.setContentType(MediaType.APPLICATION_JSON);
+		ack.put("action","ack").put("id", payload.getString("id") );
+
+		System.out.println( "Responding: " );
+		System.out.println( ack.toString(5) );
 		
-		RequestEntity<String> requestEntity = RequestEntity 
-				.post( new URL("http://dataexchange:3000/api/v1/messages").toURI() ) 
-				.contentType( MediaType.APPLICATION_JSON ) 
-				.body( payload.toString() ); 
-		return rt.exchange(requestEntity, String.class ).getBody();
-		
+		session.sendMEssage( new TextMessage( ack.toString().toByteArray() );
 	}
 	
 	public String sendMessage( String message ) throws Exception {
@@ -259,7 +251,17 @@ public class DataExchangeService {
 		payload.put("message", message);
 		payload.put("recipient", "FireFly");
 		payload.put("requestId", UUID.randomUUID().toString() );
-		return dispatchToDX(payload);
+
+		System.out.println("Saindo " + payload.toString() );
+		HttpHeaders headers = new HttpHeaders();
+		headers.setContentType(MediaType.APPLICATION_JSON);
+		
+		RequestEntity<String> requestEntity = RequestEntity 
+				.post( new URL("http://"+COMPONENT_NAME+":3000/api/v1/messages").toURI() ) 
+				.contentType( MediaType.APPLICATION_JSON ) 
+				.body( payload.toString() ); 
+		
+		return rt.exchange(requestEntity, String.class ).getBody();
 	}
 	
 	public Resource getPeerCertificateFile() throws Exception {
