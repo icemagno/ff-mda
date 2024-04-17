@@ -76,17 +76,6 @@ public class DataExchangeService {
 		return result;
 	}
 	
-	public void connectClientToApi() throws Exception {
-		WebSocketHttpHeaders headers = new WebSocketHttpHeaders();
-		headers.add("Sec-WebSocket-Key", "SGVsbG8sIHdvcmxkIQ==");
-		headers.add("Sec-WebSocket-Version", "13");
-		headers.add("Sec-WebSocket-Extensions", "permessage-deflate; client_max_window_bits");
-		URI uri = new URI("ws://dataexchange:3000");
-		WebSocketClient client = new StandardWebSocketClient();
-		CompletableFuture<WebSocketSession> future =  client.execute( new DXWebSocketHandler( this ), headers, uri);
-		future.get();	
-	}
-
 	// We have the CA created, Org name and Node name.
 	// I think we can create the DataExchange key pair and sign the certificate with the CA.
 	private void createCertificateAndKeys() {
@@ -233,6 +222,17 @@ public class DataExchangeService {
 	private String requestData( String endpoint ) {
 		return rt.getForObject( endpoint, String.class);
 	}
+
+	public void connectClientToApi() throws Exception {
+		WebSocketHttpHeaders headers = new WebSocketHttpHeaders();
+		headers.add("Sec-WebSocket-Key", "SGVsbG8sIHdvcmxkIQ==");
+		headers.add("Sec-WebSocket-Version", "13");
+		headers.add("Sec-WebSocket-Extensions", "permessage-deflate; client_max_window_bits");
+		URI uri = new URI("ws://"+COMPONENT_NAME+":3000");
+		WebSocketClient client = new StandardWebSocketClient();
+		CompletableFuture<WebSocketSession> future =  client.execute( new DXWebSocketHandler( this ), headers, uri);
+		future.get();	
+	}	
 
 	public void processMessageFromDX( WebSocketSession session, JSONObject payload ) {
 		System.out.println( "Received: " );
