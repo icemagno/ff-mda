@@ -3,11 +3,13 @@ package br.com.j1scorpii.ffmda.services;
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileWriter;
+import java.net.URI;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.concurrent.TimeUnit;
+import java.util.UUID;
+import java.util.concurrent.CompletableFuture;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -17,17 +19,14 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.ByteArrayResource;
 import org.springframework.core.io.Resource;
-import org.springframework.messaging.converter.StringMessageConverter;
-import org.springframework.messaging.simp.stomp.StompSession;
-import org.springframework.scheduling.concurrent.ThreadPoolTaskScheduler;
 import org.springframework.stereotype.Service;
-import org.springframework.util.concurrent.ListenableFuture;
 import org.springframework.web.client.RestTemplate;
+import org.springframework.web.socket.WebSocketHttpHeaders;
+import org.springframework.web.socket.WebSocketSession;
 import org.springframework.web.socket.client.WebSocketClient;
 import org.springframework.web.socket.client.standard.StandardWebSocketClient;
-import org.springframework.web.socket.messaging.WebSocketStompClient;
 
-import br.com.j1scorpii.ffmda.util.MyStompSessionHandler;
+import br.com.j1scorpii.ffmda.util.DXWebSocketHandler;
 import jakarta.annotation.PostConstruct;
 
 @Service
@@ -73,22 +72,15 @@ public class DataExchangeService {
 		return result;
 	}
 	
-	@SuppressWarnings("deprecation")
 	public void connectClientToApi() throws Exception {
-
-		WebSocketClient webSocketClient = new StandardWebSocketClient();
-		WebSocketStompClient stompClient = new WebSocketStompClient(webSocketClient);
-		stompClient.setMessageConverter( new StringMessageConverter() );
-		ThreadPoolTaskScheduler taskScheduler = new ThreadPoolTaskScheduler();
-		taskScheduler.afterPropertiesSet();		
-		stompClient.setTaskScheduler( taskScheduler ); 
-
-
-		ListenableFuture<StompSession> future = stompClient.connect( "dataexchange:3000", new MyStompSessionHandler() );
-
-		StompSession session = future.get( 5, TimeUnit.SECONDS );
-		//new Scanner(System.in).nextLine(); // Don't close immediately.		
-		
+		WebSocketHttpHeaders headers = new WebSocketHttpHeaders();
+		headers.add("Sec-WebSocket-Key", "SGVsbG8sIHdvcmxkIQ==");
+		headers.add("Sec-WebSocket-Version", "13");
+		headers.add("Sec-WebSocket-Extensions", "permessage-deflate; client_max_window_bits");
+		URI uri = new URI("ws://dataexchange:3000");
+		WebSocketClient client = new StandardWebSocketClient();
+		CompletableFuture<WebSocketSession> future =  client.execute( new DXWebSocketHandler( this ), headers, uri);
+		future.get();	
 	}
 
 	// We have the CA created, Org name and Node name.
@@ -236,6 +228,28 @@ public class DataExchangeService {
 		return rt.getForObject( endpoint, String.class);
 	}
 
+	public void processMessageFromDX( JSONObject payload ) {
+		System.out.println( payload.toString(5) );
+		JSONObject ack = new JSONObject();
+		ack.put("action","ack").put("id", payload.getString("id") );
+		// dispatchToDX( ack );
+	}
+	
+	/*
+	private String dispatchToDX( JSONObject payload ) {
+		System.out.println("Saindo " + payload.toString() );
+		return rt.postForObject( "http://dataexchange:3000/api/v1/messages", payload.toString(), String.class );
+	}
+	*/
+	
+	public String sendMessage( String message ) {
+		JSONObject payload = new JSONObject();
+		payload.put("message", message);
+		payload.put("recipient", "FireFly");
+		payload.put("requestId", UUID.randomUUID().toString() );
+		return dispatchToDX(payload);
+	}
+	
 	public Resource getPeerCertificateFile() throws Exception {
 	    Path path = Paths.get( this.pemCer );
 	    ByteArrayResource resource = new ByteArrayResource( Files.readAllBytes( path ) );
