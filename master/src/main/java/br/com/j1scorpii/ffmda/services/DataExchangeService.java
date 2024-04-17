@@ -92,9 +92,11 @@ public class DataExchangeService {
 	private void createCertificateAndKeys() {
 		boolean stackIsLocked = localService.getAgentConfig().getJSONObject("stackStatus").getBoolean("locked");
 		String hostName = this.localService.getAgentConfig().getString("hostName");
+		String nodeName = this.localService.getAgentConfig().getString("nodeName");
 		boolean stackCertsWasCreated = this.localService.getPkiManager().caWasCreated();
 		if( stackIsLocked && stackCertsWasCreated && !certAndKeysExists() ) {
-			this.localService.getPkiManager().createAndSignKeysAndCert( COMPONENT_NAME, hostName , this.componentDataFolder );
+		    String hostCn = "/CN="+hostName+"/O="+nodeName+"/OU=FireFly/OU=Multiparty Deployer Agent";
+			this.localService.getPkiManager().createAndSignKeysAndCert( COMPONENT_NAME, hostCn , this.componentDataFolder );
 		}
 	}
 	

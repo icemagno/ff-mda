@@ -42,10 +42,9 @@ public class PKIManagerService {
 	}
 
 	// ./create-sign.sh '/CN=Node-01' /home/suporte/ff-mda/master/node-test /home/suporte/ff-mda/master/pki-test
-	public void createAndSignKeysAndCert(String componentName, String commonName, String toFolder) {
+	public void createAndSignKeysAndCert(String componentName, String cn, String toFolder) {
 		String callbackChannel = "/shell/"+componentName;
-	    String hostCn = "/CN="+commonName+"/OU=FireFly/OU=Multiparty Deployer Agent";
-	    String[] command = { "./create-sign.sh", hostCn , toFolder, this.pkiFolder };
+	    String[] command = { "./create-sign.sh", cn , toFolder, this.pkiFolder };
 	    this.shellRunnerService.runShell(command, callbackChannel);
 	}
 
