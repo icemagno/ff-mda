@@ -4,6 +4,7 @@ import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileWriter;
 import java.net.URI;
+import java.net.URL;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -19,6 +20,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.ByteArrayResource;
 import org.springframework.core.io.Resource;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.MediaType;
+import org.springframework.http.RequestEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.socket.WebSocketHttpHeaders;
@@ -235,12 +239,20 @@ public class DataExchangeService {
 		//dispatchToDX( ack );
 	}
 	
-	private String dispatchToDX( JSONObject payload ) {
+	private String dispatchToDX( JSONObject payload ) throws Exception {
 		System.out.println("Saindo " + payload.toString() );
-		return rt.postForObject( "http://dataexchange:3000/api/v1/messages", payload.toString(), String.class );
+		HttpHeaders headers = new HttpHeaders();
+		headers.setContentType(MediaType.APPLICATION_JSON);
+		
+		RequestEntity<String> requestEntity = RequestEntity 
+				.post( new URL("http://dataexchange:3000/api/v1/messages").toURI() ) 
+				.contentType( MediaType.APPLICATION_JSON ) 
+				.body( payload.toString() ); 
+		return rt.exchange(requestEntity, String.class ).getBody();
+		
 	}
 	
-	public String sendMessage( String message ) {
+	public String sendMessage( String message ) throws Exception {
 		JSONObject payload = new JSONObject();
 		payload.put("message", message);
 		payload.put("recipient", "FireFly");

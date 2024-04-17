@@ -32,7 +32,7 @@ public class DataExchangeController {
     }
     
 	@GetMapping(value = "/send", produces=MediaType.APPLICATION_JSON_VALUE )
-    public @ResponseBody String sendMessage( @RequestParam (value="message",required=true) String message ) {
+    public @ResponseBody String sendMessage( @RequestParam (value="message",required=true) String message ) throws Exception {
 		return this.dataExchangeService.sendMessage(message);
     }	    
     
