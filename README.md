@@ -9,3 +9,6 @@ docker run --name ffmda-master --network=ffmda --hostname=ffmda-master \
 -v /srv:/srv \
 magnoabreu/ffmda-master:0.1
 ```
+optional:
+
+```-v /srv/ffmda/manifest.json:/srv/manifest.json```
