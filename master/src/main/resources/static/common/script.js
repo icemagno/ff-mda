@@ -111,10 +111,12 @@ $( document ).ready(function() {
 	insere( "IPFS", "SPLIT_MAP", "PostgreSQL" )
 	
 	
-	console.log( cy.elements('*').jsons() );
+	console.log( cy );
+	
+	cy.load( cy.elements('*').jsons() );
 	cy.pan({ x: 0, y: 0 });
 	
-	
+		
 	
 });
 
