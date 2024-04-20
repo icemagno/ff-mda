@@ -147,6 +147,9 @@ function insere( tag, type, linkTo = "" ) {
 		} 
 	}]);
 	
+	
+	console.log( sourceNode );
+	
 	if( sourceNode ){
 		var sourceId = sourceNode.data('id');
 		cy.add([{ 
