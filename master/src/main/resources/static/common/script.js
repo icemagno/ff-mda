@@ -9,7 +9,7 @@ $( document ).ready(function() {
 	  zoom: 1,
 	  style: cytoscape.stylesheet()
 	    .selector('node')
-	      .css({
+	      .style({
 	    	'border-color': '#0266C8',
 	    	'border-width' : '1px',
 	        'shape': 'data(faveShape)',
@@ -22,45 +22,23 @@ $( document ).ready(function() {
 	        'color': 'data(textColor)'
 	      })
 	    .selector(':selected')
-	      .css({
+	      .style({
 	        'border-width': '1px',
 	        'border-color': 'black',
 	        'background-color' : '#4D7A93',
 	        'color': 'white'
 	      })
-	    .selector('.table')
-	      .css({
-	     	'border-width' : '1px',
-	     	'color': 'black',
-	     	'width': '75px',
-	     	'font-size' : '7px',
-	     	'background-color': 'white',
-	     	'border-color': 'data(faveColor)',
-	     	'content': 'data(description)',
-	     	'background-image': 'img/gray_strips.png',
-	     	'background-fit' : 'contain',
-	     	'background-clip' : 'node',
-	     	'background-repeat' : 'repeat',
-	     	'background-image-opacity' : '0.5'
-	      })
 	    .selector('edge')
-	      .css({
+	      .style({
 	        'opacity': 0.666,
-	        'width': 1,
+	        'width': 6,
+	        'curve-style': 'bezier',
 	        'target-arrow-shape': 'triangle',
 	        'source-arrow-shape': 'circle',
 	        'line-color': 'data(faveColor)',
 	        'source-arrow-color': '#00933B',
 	        'target-arrow-color': '#F90101'
-	      })
-	    .selector('edge.table')
-	      .css({
-	        'line-style': 'dashed',
-	        'target-arrow-shape': 'triangle',
-	        'source-arrow-shape': 'none',
-	        'target-arrow-color': 'data(faveColor)'
-	     }),
-
+	      }),
 	     ready: function(){
 		   //
 		 }
