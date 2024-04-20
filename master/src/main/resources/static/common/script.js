@@ -2,14 +2,15 @@
 var theCy = null;
 
 $( document ).ready(function() {
-	 
+	
+	// https://blog.js.cytoscape.org/2020/05/11/layouts/#classes-of-layouts 
 	theCy = cytoscape({
 	  container: $('#cy')[0],
 	  zoom: 1,
 
 	  
 	  layout: {
-		    name: 'klay',
+		    name: 'breadthfirst',
 		    fit: true,
 		    directed: true,
 		    padding: 20  
@@ -118,7 +119,7 @@ function populate(){
 	
 	console.log( theCy );
 	theCy.center();
-	theCy.layout( {name:'klay', animate: true, fit: true } ).run();
+	theCy.layout( {name:'breadthfirst', animate: true, fit: true } ).run();
 }
 
 function insere( tag, type, linkTo = "" ) {
