@@ -131,6 +131,7 @@ function populate(){
 	amarra( "Core", "PostgreSQL" )
 	amarra( "EVM Conn", "Signer" )
 	amarra( "Signer", "Besu Node" )
+	amarra( "Tokens", "EVM Conn" )
 	
 	theCy.center();
 	theCy.layout( {name:'breadthfirst', animate: true, fit: true } ).run();
