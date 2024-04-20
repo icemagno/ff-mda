@@ -9,6 +9,8 @@ I'm not finished yet. Be patient!
 
 ![postgresql](https://github.com/icemagno/ff-mda/assets/4127512/5516c72a-4975-422e-b115-7eea94932d08)
 
+![graph](https://github.com/icemagno/ff-mda/assets/4127512/15d94996-5b9a-4e15-b49b-14bdc4aca924)
+
 ```
 docker run --name ffmda-master --network=ffmda --hostname=ffmda-master \
 --restart=always \
