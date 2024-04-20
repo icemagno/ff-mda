@@ -130,7 +130,7 @@ function insere( tag, type, linkTo = "" ) {
 	
 	var sourceNode = cy.filter('node[id = "'+linkTo+'"]');
 	
-	var eles = cy.add([ { 
+	cy.add([ { 
 		group: "nodes", 
 		data: { 
 			description: "This is a description of " + tag, 
@@ -149,9 +149,8 @@ function insere( tag, type, linkTo = "" ) {
 	
 	
 	if( sourceNode.length > 0 ){
-		console.log( sourceNode );
-
 		var sourceId = sourceNode.data('id');
+		console.log("Vou ligar " + sourceId + " com " + tag);
 		cy.add([{ 
 			group: "edges", 
 			data: { 
@@ -163,6 +162,8 @@ function insere( tag, type, linkTo = "" ) {
 		}]);
 	}
 	
-	
+	cy.load( cy.elements('*').jsons() );
+	cy.pan({ x: 0, y: 0 });
+		
 }
 
