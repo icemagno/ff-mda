@@ -75,11 +75,11 @@ $( document ).ready(function() {
 	  
 	});	 
 	
-	cy.on('tap', function(){
+	theCy.on('tap', function(){
 		console.log("OnTap !");
 	});
 	
-	cy.on('tap', 'edge', function(){
+	theCy.on('tap', 'edge', function(){
 		var sourceTag = this.data('source');
 		var targetTag = this.data('target');
 		var sourceNode = cy.elements("node[id='"+sourceTag+"']");
@@ -89,7 +89,7 @@ $( document ).ready(function() {
 		console.log( " > " + targetNode.data('id') );
 	});	
 	
-	cy.on('tap', 'node', function(){
+	theCy.on('tap', 'node', function(){
 		console.log("OnTap + OnNode: ");
 		console.log( this.data.id );
 		$.each( cy.filter('node'), function(){
@@ -97,26 +97,26 @@ $( document ).ready(function() {
 		});
 	});	
 	
-	if ( cy.elements('*').size() == 0 ) {
+	if ( theCy.elements('*').size() == 0 ) {
 		console.log("Nenhum elemento ainda");
 	}
 		
-	cy.panningEnabled( true );	
-	cy.boxSelectionEnabled(false);
-	cy.zoomingEnabled( true );
-	cy.userZoomingEnabled( false );
+	theCy.panningEnabled( true );	
+	theCy.boxSelectionEnabled(false);
+	theCy.zoomingEnabled( true );
+	theCy.userZoomingEnabled( false );
 
 });
 
-function populate( cy ){
+function populate(  ){
 	insere( "Core", "SPLIT_MAP" )
 	insere( "DataExchange", "SELECT", "Core" )
 	insere( "PostgreSQL", "REDUCE", "Core" )
 	insere( "IPFS", "SPLIT_MAP", "Core" )
 	
-	console.log( cy );
-	cy.load( cy.elements('*').jsons() );
-	cy.pan({ x: 0, y: 0 });	
+	console.log( theCy );
+	theCy.load( theCy.elements('*').jsons() );
+	theCy.pan({ x: 0, y: 0 });	
 }
 
 function insere( tag, type, linkTo = "" ) {
@@ -134,9 +134,9 @@ function insere( tag, type, linkTo = "" ) {
 		textColorBlock = '#F2B50F';
 	}	
 	
-	var sourceNode = cy.filter('node[id = "'+linkTo+'"]');
+	var sourceNode = theCy.filter('node[id = "'+linkTo+'"]');
 	
-	cy.add([ { 
+	theCy.add([ { 
 		group: "nodes", 
 		data: { 
 			description: "This is a description of " + tag, 
@@ -157,7 +157,7 @@ function insere( tag, type, linkTo = "" ) {
 	if( sourceNode.length > 0 ){
 		var sourceId = sourceNode.data('id');
 		console.log("Vou ligar " + sourceId + " com " + tag);
-		cy.add([{ 
+		theCy.add([{ 
 			group: "edges", 
 			data: { 
 				source: sourceId, 
