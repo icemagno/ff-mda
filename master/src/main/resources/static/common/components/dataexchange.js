@@ -5,6 +5,9 @@ let mainConfig = null;
 let peerId = null;
 
 $( document ).ready(function() {
+	
+	// Lets make room in the log panel to keep it 'pretty' in same height always
+	for( let x=0; x < 100; x++ ) log( "" );
 
 	updateData();
 	const ws = new SockJS( "/ws" );
@@ -185,7 +188,7 @@ function processContainer( container ){
 		pmCell = pmCell + pm[key] + ':' + key + '<br/>';
 	};
 	
-	let nodeId = "";
+	let nodeId = "Wait...";
 	if( peerId ) nodeId = peerId.id;
 	
 	$("#componentTips").html(
