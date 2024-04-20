@@ -6,16 +6,17 @@ $( document ).ready(function() {
 	// https://blog.js.cytoscape.org/2020/05/11/layouts/#classes-of-layouts 
 	theCy = cytoscape({
 	  container: $('#cy')[0],
-	  zoom: 3,
+	  zoom: 1,
 	  style: cytoscape.stylesheet()
 	    .selector('node')
 	      .style({
 	    	'border-color': '#0266C8',
 	    	'border-width' : '1px',
 	        'shape': 'data(faveShape)',
-	        'width': '120px',
+	        'width': '220px',
+	        'height': '100px',
 	        'font-family' : 'Consolas',
-	        'font-size' : '10px',
+	        'font-size' : '12px',
 	        'content': 'data(id)',
 	        'text-valign': 'center',
 	        'background-color': 'data(faveColor)',
@@ -67,10 +68,6 @@ $( document ).ready(function() {
 		});
 	});	
 	
-	if ( theCy.elements('*').size() == 0 ) {
-		console.log("Nenhum elemento ainda");
-	}
-		
 	theCy.panningEnabled( true );	
 	theCy.boxSelectionEnabled(false);
 	theCy.zoomingEnabled( true );
@@ -111,7 +108,6 @@ function amarra( from, to ){
 	var fromNode = theCy.filter('node[id = "'+from+'"]');
 	var toNode = theCy.filter('node[id = "'+to+'"]');
 	if( (fromNode.length > 0) && ( toNode.length > 0) ){
-		console.log("Vou ligar " + from + " com " + to);
 		theCy.add([{ 
 			group: "edges", 
 			data: { 
