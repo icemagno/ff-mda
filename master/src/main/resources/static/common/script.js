@@ -70,7 +70,7 @@ $( document ).ready(function() {
 	     }),
 
 	     ready: function(){
-		   populate( this );
+		   //
 		 }
 	  
 	});	 
@@ -106,9 +106,11 @@ $( document ).ready(function() {
 	theCy.zoomingEnabled( true );
 	theCy.userZoomingEnabled( false );
 
+	populate();
+
 });
 
-function populate(  ){
+function populate(){
 	insere( "Core", "SPLIT_MAP" )
 	insere( "DataExchange", "SELECT", "Core" )
 	insere( "PostgreSQL", "REDUCE", "Core" )
