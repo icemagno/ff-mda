@@ -105,7 +105,7 @@ public class DataExchangeService {
 		
 		JSONArray envs = new JSONArray();
 		// envs.put("NODE_TLS_REJECT_UNAUTHORIZED='0'");
-		envs.put("LOG_LEVEL='DEBUG'");
+		// envs.put("LOG_LEVEL='DEBUG'");
 			
 		
 		JSONArray volumes = new JSONArray();
