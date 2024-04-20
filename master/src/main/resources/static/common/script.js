@@ -75,8 +75,92 @@ $( document ).ready(function() {
 	  
 	});	 
 	
+	cy.on('tap', function(){
+		console.log("OnTap !");
+	});
 	
-	console.log( cy );
-	 
+	cy.on('tap', 'edge', function(){
+		var sourceTag = this.data('source');
+		var targetTag = this.data('target');
+		var sourceNode = cy.elements("node[id='"+sourceTag+"']");
+		var targetNode = cy.elements("node[id='"+targetTag+"']");
+		console.log("OnTap + OnEdge: ");
+		console.log( " > " + sourceNode.data('id') );
+		console.log( " > " + targetNode.data('id') );
+	});	
+	
+	cy.on('tap', 'node', function(){
+		console.log("OnTap + OnNode: ");
+		console.log( this.data );
+		$.each( cy.filter('node'), function(){
+			console.log( "  > " + this.data('id') );
+		});
+	});	
+	
+	if ( cy.elements('*').size() == 0 ) {
+		console.log("Nenhum elemento ainda");
+	}
+		
+	cy.panningEnabled( true );	
+	cy.boxSelectionEnabled(false);
+	cy.zoomingEnabled( true );
+	cy.userZoomingEnabled( false );
+
+	insere( "DataExchange", "SELECT" )
+	insere( "PostgreSQL", "REDUCE" )
+	insere( "IPFS", "SPLIT_MAP", "PostgreSQL" )
+				 
 });
+
+
+function insere( tag, type, linkTo = "" ) {
+		
+	var textColorBlock = '#4D7A93';
+	var inputTableColor = '#4D7A93';
+	var outputTableColor = '#4D7A93';
+	
+	if( type == 'SELECT') {
+		textColorBlock = '#F90101';
+	}
+	if( type == 'REDUCE') {
+		textColorBlock = '#00933B';
+	}
+	if( type == 'SPLIT_MAP') {
+		textColorBlock = '#F2B50F';
+	}	
+	
+	var sourceNode = cy.filter('node[id = "'+linkTo+'"]');
+	
+	var eles = cy.add([ { 
+		group: "nodes", 
+		data: { 
+			description: "This is a description of " + tag, 
+			id: tag, 
+			name: type, 
+			weight: 450, 
+			textColor : textColorBlock, 
+			faveColor: nodeColor, 
+			faveShape: 'rectangle'
+		}, 
+		position: { 
+			x: 10, 
+			y: 10 
+		} 
+	}]);
+	
+	if( sourceNode ){
+		var sourceId = sourceNode.data('id');
+		cy.add([{ 
+			group: "edges", 
+			data: { 
+				source: sourceId, 
+				target: tag, 
+				faveColor: '#666666', 
+				strength: 1 
+			} 
+		}]);
+	}
+	
+	
+}
 
