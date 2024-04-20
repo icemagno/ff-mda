@@ -1,5 +1,7 @@
-# ff-mda
+# FF-MDA
 Multiparty Deployer Agent for FireFly
+
+I'm not finished yet. Be batient!
 
 ![local-node](https://github.com/icemagno/ff-mda/assets/4127512/b543234e-7fe4-4bd3-ab3a-8c4f10b1aa29)
 
