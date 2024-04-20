@@ -215,11 +215,6 @@ public class DataExchangeService {
 		return new String(encoded, StandardCharsets.UTF_8 );
 	}
 
-	public String getContainerLog() {
-		String log = this.containerManager.getLog( COMPONENT_NAME, "true" );
-		return new JSONObject().put("result", log).toString();
-	}
-
 	public String stopContainer() {
 		return new JSONObject().put("result", this.containerManager.stopContainer(COMPONENT_NAME) ).toString();
 	}

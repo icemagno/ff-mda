@@ -33,9 +33,8 @@ public class DockerController {
     }	
 
 	@GetMapping(value = "/container/log", produces=MediaType.APPLICATION_JSON_VALUE )
-    public ResponseEntity<String> containerLogs( @RequestParam (value="container",required=true) String containerName, 
-    		@RequestParam (value="tail",required=true) String tail ) {
-		return new ResponseEntity<String>( containerManager.getLog(containerName, tail), HttpStatus.OK );
+    public ResponseEntity<String> containerLogs( @RequestParam (value="container",required=true) String containerName ) {
+		return new ResponseEntity<String>( containerManager.getLog(containerName ), HttpStatus.OK );
     }	
 
 	

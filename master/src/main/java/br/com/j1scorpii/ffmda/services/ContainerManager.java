@@ -134,8 +134,8 @@ public class ContainerManager {
 		return dockerService.getResponse( Request.Method.POST, "/containers/"+containerId+"/start", null );
 	}
 	
-	public String getLog( String containerId, String tail ) {
-		String log = dockerService.getResponse( Request.Method.GET, "/containers/"+containerId+"/logs?stdout=true&stderr=true&tail=" + tail, null );
+	public String getLog( String containerId ) {
+		String log = dockerService.getResponse( Request.Method.GET, "/containers/"+containerId+"/logs?stdout=true&stderr=true&tail=true", null );
 		return new JSONObject().put("result", log).toString();		
 	}
 
