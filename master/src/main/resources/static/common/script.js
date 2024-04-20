@@ -6,10 +6,10 @@ $( document ).ready(function() {
 	theCy = cytoscape({
 	  container: $('#cy')[0],
 	  zoom: 1,
-	  pan: { x: 0, y: 0 },
+
 	  
 	  layout: {
-		    name: 'breadthfirst',
+		    name: 'klay',
 		    fit: true,
 		    directed: true,
 		    padding: 20  
@@ -117,8 +117,8 @@ function populate(){
 	insere( "IPFS", "SPLIT_MAP", "Core" )
 	
 	console.log( theCy );
-	theCy.load( theCy.elements('*').jsons() );
-	theCy.pan({ x: 0, y: 0 });	
+	theCy.center();
+	theCy.layout( {name:'klay', animate: true, fit: true } ).run();
 }
 
 function insere( tag, type, linkTo = "" ) {
