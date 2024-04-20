@@ -16,7 +16,7 @@ $( document ).ready(function() {
 	        'width': '220px',
 	        'height': '100px',
 	        'font-family' : 'Consolas',
-	        'font-size' : '12px',
+	        'font-size' : '22px',
 	        'content': 'data(id)',
 	        'text-valign': 'center',
 	        'background-color': 'data(faveColor)',
