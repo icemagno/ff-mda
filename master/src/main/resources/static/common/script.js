@@ -115,9 +115,8 @@ $( document ).ready(function() {
 
 function insere( tag, type, linkTo = "" ) {
 		
-	var textColorBlock = '#4D7A93';
-	var inputTableColor = '#4D7A93';
-	var outputTableColor = '#4D7A93';
+	var textColorBlock 		= '#4D7A93';
+	var nodeColor 			= "#F6F6F6";
 	
 	if( type == 'SELECT') {
 		textColorBlock = '#F90101';
