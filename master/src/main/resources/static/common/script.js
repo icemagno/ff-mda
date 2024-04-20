@@ -6,7 +6,7 @@ $( document ).ready(function() {
 	// https://blog.js.cytoscape.org/2020/05/11/layouts/#classes-of-layouts 
 	theCy = cytoscape({
 	  container: $('#cy')[0],
-	  zoom: 1,
+	  zoom: 3,
 	  style: cytoscape.stylesheet()
 	    .selector('node')
 	      .style({
@@ -102,8 +102,8 @@ function populate(){
 	amarra( "Signer", "Besu Node" )
 	amarra( "Tokens", "EVM Conn" )
 	
-	// theCy.layout( {name:'breadthfirst', animate: true, fit: true, directed: true, padding: 20 } ).run();
-	theCy.layout({name: 'circle'}).run();
+	theCy.layout( {name:'breadthfirst', animate: true, fit: true, directed: true, padding: 20 } ).run();
+	// theCy.layout({name: 'circle'}).run();
 	theCy.center();
 }
 
