@@ -148,9 +148,9 @@ function insere( tag, type, linkTo = "" ) {
 	}]);
 	
 	
-	console.log( sourceNode );
-	
-	if( sourceNode ){
+	if( sourceNode.length > 0 ){
+		console.log( sourceNode );
+
 		var sourceId = sourceNode.data('id');
 		cy.add([{ 
 			group: "edges", 
