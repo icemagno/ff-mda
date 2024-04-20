@@ -56,7 +56,7 @@ $( document ).ready(function() {
 	$("#stopCont").click( ()=>{
 		if( isDisabled( "#stopCont" ) ) return;
 		log("Wait...")
-		$.get("/v1/container/stop?container=postgresql", function(data, status) {
+		$.get("/v1/postgresql/container/stop", function(data, status) {
 			console.log( data );
 		});
 	});
