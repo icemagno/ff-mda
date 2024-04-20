@@ -7,15 +7,6 @@ $( document ).ready(function() {
 	theCy = cytoscape({
 	  container: $('#cy')[0],
 	  zoom: 1,
-
-	  
-	  layout: {
-		    name: 'breadthfirst',
-		    fit: true,
-		    directed: true,
-		    padding: 20  
-	  },
-	  
 	  style: cytoscape.stylesheet()
 	    .selector('node')
 	      .css({
@@ -133,8 +124,9 @@ function populate(){
 	amarra( "Signer", "Besu Node" )
 	amarra( "Tokens", "EVM Conn" )
 	
+	// theCy.layout( {name:'breadthfirst', animate: true, fit: true, directed: true, padding: 20 } ).run();
+	theCy.layout({name: 'circle'}).run();
 	theCy.center();
-	theCy.layout( {name:'breadthfirst', animate: true, fit: true } ).run();
 }
 
 function amarra( from, to ){
