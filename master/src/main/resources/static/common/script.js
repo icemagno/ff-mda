@@ -99,8 +99,9 @@ function populate(){
 	amarra( "Signer", "Besu Node" )
 	amarra( "Tokens", "EVM Conn" )
 	
-	theCy.layout( {name:'breadthfirst', animate: true, fit: true, directed: true, padding: 20 } ).run();
+	// theCy.layout( {name:'breadthfirst', animate: true, fit: true, directed: true, padding: 20 } ).run();
 	// theCy.layout({name: 'circle'}).run();
+	theCy.layout({name: 'grid'}).run();
 	theCy.center();
 }
 
