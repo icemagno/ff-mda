@@ -5,12 +5,6 @@ let mainConfig = null;
 let peerId = null;
 
 $( document ).ready(function() {
-	
-	// Lets make room in the log panel to keep it 'pretty' in same height always
-	for( let x=0; x < 25; x++ ) {
-		if( $("#containerLog p").length > 25 ) $("#containerLog p").first().remove();
-		$("#containerLog").append( '<p style="margin:0px;padding:0px">&nbsp;</p>' );
-	}
 
 	updateData();
 	const ws = new SockJS( "/ws" );
@@ -87,6 +81,7 @@ $( document ).ready(function() {
 	
 	$("#pullImage").click( ()=>{
 		if( isDisabled( "#pullImage" ) ) return;
+		$("#containerLog").empty();
 		updateFixedLog("");
 		log('Wait ...');
 		$.get("/v1/dataexchange/image/pull", function(data, status) {
@@ -206,6 +201,7 @@ function processContainer( container ){
 	
 	$.get("/v1/container/log?container=dataexchange", function(data, status) {
 		if( data.result ){
+			$("#containerLog").empty();
 			var split = data.result.split(/\r\n/);
 			split.forEach( (line)=>{
 				log( line );

@@ -5,4 +5,4 @@
 |  |     |  |            |  |  |  | |  '--'  | /  _____  \  
 |__|     |__|            |__|  |__| |_______/ /__/     \__\ 
 Multiparty Agent Deployer           for Hiperledger Firefly                               
-                               
+Carlos Magno Abreu                   magno.mabreu@gmail.com                                 
