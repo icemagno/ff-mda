@@ -109,7 +109,13 @@ $( document ).ready(function() {
 	insere( "DataExchange", "SELECT" )
 	insere( "PostgreSQL", "REDUCE" )
 	insere( "IPFS", "SPLIT_MAP", "PostgreSQL" )
-				 
+	
+	
+	console.log( cy.elements('*').jsons() );
+	cy.pan({ x: 0, y: 0 });
+	
+	
+	
 });
 
 
@@ -162,8 +168,5 @@ function insere( tag, type, linkTo = "" ) {
 		}]);
 	}
 	
-	cy.load( cy.elements('*').jsons() );
-	cy.pan({ x: 0, y: 0 });
-		
 }
 
