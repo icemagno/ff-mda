@@ -113,16 +113,46 @@ $( document ).ready(function() {
 
 function populate(){
 	insere( "Core", "SPLIT_MAP" )
-	insere( "DataExchange", "SELECT", "Core" )
-	insere( "PostgreSQL", "REDUCE", "Core" )
-	insere( "IPFS", "SPLIT_MAP", "Core" )
+	insere( "SandBox", "SPLIT_MAP" )
+	insere( "EVM Conn", "SPLIT_MAP" )
+	insere( "DataExchange", "SELECT" )
+	insere( "PostgreSQL", "REDUCE" )
+	insere( "IPFS", "SPLIT_MAP" )
+	insere( "Tokens", "SPLIT_MAP" )
+	insere( "Signer", "SPLIT_MAP" )
+	insere( "Besu Node", "SPLIT_MAP" )
+
+	amarra( "SandBox", "Core" )
+	amarra( "EVM Conn", "Core" )
+	amarra( "Core", "EVM Conn" )
+	amarra( "Core", "DataExchange" )
+	amarra( "Core", "IPFS" )
+	amarra( "Core", "Tokens" )
+	amarra( "EVM Conn", "Signer" )
+	amarra( "Signer", "Besu" )
 	
-	console.log( theCy );
 	theCy.center();
 	theCy.layout( {name:'breadthfirst', animate: true, fit: true } ).run();
 }
 
-function insere( tag, type, linkTo = "" ) {
+function amarra( from, to ){
+	var fromNode = theCy.filter('node[id = "'+from+'"]');
+	var toNode = theCy.filter('node[id = "'+to+'"]');
+	if( (fromNode.length > 0) && ( toNode.length > 0) ){
+		console.log("Vou ligar " + from + " com " + to);
+		theCy.add([{ 
+			group: "edges", 
+			data: { 
+				source: from, 
+				target: to, 
+				faveColor: '#666666', 
+				strength: 1 
+			} 
+		}]);
+	}
+}
+
+function insere( tag, type ) {
 		
 	var textColorBlock 		= '#4D7A93';
 	var nodeColor 			= "#F6F6F6";
@@ -136,8 +166,6 @@ function insere( tag, type, linkTo = "" ) {
 	if( type == 'SPLIT_MAP') {
 		textColorBlock = '#F2B50F';
 	}	
-	
-	var sourceNode = theCy.filter('node[id = "'+linkTo+'"]');
 	
 	theCy.add([ { 
 		group: "nodes", 
@@ -155,21 +183,6 @@ function insere( tag, type, linkTo = "" ) {
 			y: 10 
 		} 
 	}]);
-	
-	
-	if( sourceNode.length > 0 ){
-		var sourceId = sourceNode.data('id');
-		console.log("Vou ligar " + sourceId + " com " + tag);
-		theCy.add([{ 
-			group: "edges", 
-			data: { 
-				source: sourceId, 
-				target: tag, 
-				faveColor: '#666666', 
-				strength: 1 
-			} 
-		}]);
-	}
 	
 }
 
