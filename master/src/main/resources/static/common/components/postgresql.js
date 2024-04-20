@@ -56,7 +56,7 @@ $( document ).ready(function() {
 	$("#stopCont").click( ()=>{
 		if( isDisabled( "#stopCont" ) ) return;
 		log("Wait...")
-		$.get("/v1/postgresql/container/stop", function(data, status) {
+		$.get("/v1/container/stop?container=postgresql", function(data, status) {
 			console.log( data );
 		});
 	});
@@ -165,7 +165,7 @@ function processContainer( container ){
 		'</table>'
 	);
 	
-	$.get("/v1/postgresql/container/log", function(data, status) {
+	$.get("/v1/container/log?container=postgresql", function(data, status) {
 		if( data.result ){
 			$("#containerLog").empty();
 			var split = data.result.split(/\r\n/);

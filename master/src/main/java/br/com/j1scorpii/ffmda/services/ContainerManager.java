@@ -135,7 +135,8 @@ public class ContainerManager {
 	}
 	
 	public String getLog( String containerId, String tail ) {
-		return dockerService.getResponse( Request.Method.GET, "/containers/"+containerId+"/logs?stdout=true&stderr=true&tail=" + tail, null );
+		String log = dockerService.getResponse( Request.Method.GET, "/containers/"+containerId+"/logs?stdout=true&stderr=true&tail=" + tail, null );
+		return new JSONObject().put("result", log).toString();		
 	}
 
 	public String deleteContainer( String containerId, boolean force, boolean removeVolumes ) {

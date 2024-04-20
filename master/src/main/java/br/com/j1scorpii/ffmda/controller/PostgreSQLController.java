@@ -38,11 +38,6 @@ public class PostgreSQLController {
     	return new ResponseEntity<String>( this.postgreSQLService.getContainer().toString() , HttpStatus.OK);
     }	
 
-    @GetMapping( value="/container/log", produces= MediaType.APPLICATION_JSON_VALUE )
-    public ResponseEntity<String> getContainerLog( ) {
-    	return new ResponseEntity<String>( this.postgreSQLService.getContainerLog() , HttpStatus.OK);
-    }	
-    
     @GetMapping( value="/container/start", produces= MediaType.APPLICATION_JSON_VALUE )
     public ResponseEntity<String> startContainer( ) {
     	return new ResponseEntity<String>( this.postgreSQLService.startContainer(), HttpStatus.OK);

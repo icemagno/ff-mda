@@ -1,7 +1,9 @@
 package br.com.j1scorpii.ffmda.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -15,11 +17,8 @@ import br.com.j1scorpii.ffmda.services.ImageManager;
 @RequestMapping(value="/v1")
 public class DockerController {
 	
-	@Autowired
-	private ContainerManager containerManager; 
-	
-	@Autowired
-	private ImageManager imageManager;	
+	@Autowired private ContainerManager containerManager; 
+	@Autowired private ImageManager imageManager;	
 
 	// ****************************  CONTEINERES  ***************************************
 	
@@ -33,10 +32,10 @@ public class DockerController {
 		return containerManager.getContainers();
     }	
 
-	@GetMapping(value = "/container/logs", produces=MediaType.APPLICATION_JSON_VALUE )
-    public @ResponseBody String containerLogs( @RequestParam (value="container",required=true) String containerName, 
+	@GetMapping(value = "/container/log", produces=MediaType.APPLICATION_JSON_VALUE )
+    public ResponseEntity<String> containerLogs( @RequestParam (value="container",required=true) String containerName, 
     		@RequestParam (value="tail",required=true) String tail ) {
-		return containerManager.getLog(containerName, tail);
+		return new ResponseEntity<String>( containerManager.getLog(containerName, tail), HttpStatus.OK );
     }	
 
 	

@@ -25,6 +25,7 @@ import org.springframework.http.MediaType;
 import org.springframework.http.RequestEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
+import org.springframework.web.socket.TextMessage;
 import org.springframework.web.socket.WebSocketHttpHeaders;
 import org.springframework.web.socket.WebSocketSession;
 import org.springframework.web.socket.client.WebSocketClient;
@@ -171,7 +172,12 @@ public class DataExchangeService {
 	public String addPeer( JSONObject peer ){
 		this.loadConfig();
 		this.componentConfig.getJSONArray("peers").put( peer );
-		this.saveConfig();
+		try {
+			this.saveConfig();
+		} catch ( Exception e ) {
+			e.printStackTrace();
+		}
+		return this.componentConfig.toString();
 	}
 	
 	private void loadConfig() {
@@ -250,8 +256,11 @@ public class DataExchangeService {
 
 		System.out.println( "Responding: " );
 		System.out.println( ack.toString(5) );
-		
-		session.sendMEssage( new TextMessage( ack.toString().toByteArray() );
+		try {
+			session.sendMessage( new TextMessage( ack.toString() ) );
+		} catch ( Exception e ) {
+			e.printStackTrace();
+		}
 	}
 	
 	public String sendMessage( String message ) throws Exception {

@@ -15,8 +15,7 @@ import org.springframework.stereotype.Service;
 public class ShellRunnerService {
 	private Logger logger = LoggerFactory.getLogger( ShellRunnerService.class );
 	
-	@Autowired
-	private SimpMessagingTemplate messagingTemplate;	
+	@Autowired private SimpMessagingTemplate messagingTemplate;	
 	
 	// String[] command = { "./copyfiles.sh", this.w, this.s, this.e, this.n, sourceSSHIPAddress, sourceSSHPassword, sourceSSHUserName, from, to };
 	

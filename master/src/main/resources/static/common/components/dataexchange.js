@@ -62,7 +62,7 @@ $( document ).ready(function() {
 	$("#stopCont").click( ()=>{
 		if( isDisabled( "#stopCont" ) ) return;
 		log("Wait...")
-		$.get("/v1/dataexchange/container/stop", function(data, status) {
+		$.get("/v1/container/stop?container=dataexchange", function(data, status) {
 			console.log( data );
 		});
 	});
@@ -195,7 +195,7 @@ function processContainer( container ){
 		'</table>'
 	);
 	
-	$.get("/v1/dataexchange/container/log", function(data, status) {
+	$.get("/v1/container/log?container=dataexchange", function(data, status) {
 		if( data.result ){
 			$("#containerLog").empty();
 			var split = data.result.split(/\r\n/);

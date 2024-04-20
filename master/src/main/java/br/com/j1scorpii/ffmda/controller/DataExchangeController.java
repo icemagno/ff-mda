@@ -73,11 +73,6 @@ public class DataExchangeController {
     	return new ResponseEntity<String>( this.dataExchangeService.getContainer().toString() , HttpStatus.OK);
     }	
 
-    @GetMapping( value="/container/log", produces= MediaType.APPLICATION_JSON_VALUE )
-    public ResponseEntity<String> getContainerLog( ) {
-    	return new ResponseEntity<String>( this.dataExchangeService.getContainerLog() , HttpStatus.OK);
-    }	
-    
     @GetMapping( value="/container/start", produces= MediaType.APPLICATION_JSON_VALUE )
     public ResponseEntity<String> startContainer( ) {
     	return new ResponseEntity<String>( this.dataExchangeService.startContainer(), HttpStatus.OK);

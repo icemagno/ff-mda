@@ -102,11 +102,6 @@ public class PostgreSQLService {
 		return generalConfig.toString(5);
 	}
 	
-	public String getContainerLog() {
-		String log = this.containerManager.getLog( COMPONENT_NAME, "true" );
-		return new JSONObject().put("result", log).toString();
-	}
-
 	public String stopContainer() {
 		return new JSONObject().put("result", this.containerManager.stopContainer(COMPONENT_NAME) ).toString();
 	}
