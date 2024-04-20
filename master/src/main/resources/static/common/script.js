@@ -83,8 +83,8 @@ $( document ).ready(function() {
 	theCy.on('tap', 'edge', function(){
 		var sourceTag = this.data('source');
 		var targetTag = this.data('target');
-		var sourceNode = cy.elements("node[id='"+sourceTag+"']");
-		var targetNode = cy.elements("node[id='"+targetTag+"']");
+		var sourceNode = theCy.elements("node[id='"+sourceTag+"']");
+		var targetNode = theCy.elements("node[id='"+targetTag+"']");
 		console.log("OnTap + OnEdge: ");
 		console.log( " > " + sourceNode.data('id') );
 		console.log( " > " + targetNode.data('id') );
@@ -93,7 +93,7 @@ $( document ).ready(function() {
 	theCy.on('tap', 'node', function(){
 		console.log("OnTap + OnNode: ");
 		console.log( this.data.id );
-		$.each( cy.filter('node'), function(){
+		$.each( theCy.filter('node'), function(){
 			console.log( "  > " + this.data('id') );
 		});
 	});	
@@ -128,8 +128,9 @@ function populate(){
 	amarra( "Core", "DataExchange" )
 	amarra( "Core", "IPFS" )
 	amarra( "Core", "Tokens" )
+	amarra( "Core", "PostgreSQL" )
 	amarra( "EVM Conn", "Signer" )
-	amarra( "Signer", "Besu" )
+	amarra( "Signer", "Besu Node" )
 	
 	theCy.center();
 	theCy.layout( {name:'breadthfirst', animate: true, fit: true } ).run();
