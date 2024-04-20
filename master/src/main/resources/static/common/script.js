@@ -1,9 +1,9 @@
 
-var cy = null;
+var theCy = null;
 
 $( document ).ready(function() {
 	 
-	cy = cytoscape({
+	theCy = cytoscape({
 	  container: $('#cy')[0],
 	  zoom: 1,
 	  pan: { x: 0, y: 0 },
@@ -70,7 +70,7 @@ $( document ).ready(function() {
 	     }),
 
 	     ready: function(){
-		   window.cy = this;
+		   populate( this );
 		 }
 	  
 	});	 
@@ -91,7 +91,7 @@ $( document ).ready(function() {
 	
 	cy.on('tap', 'node', function(){
 		console.log("OnTap + OnNode: ");
-		console.log( this.data );
+		console.log( this.data.id );
 		$.each( cy.filter('node'), function(){
 			console.log( "  > " + this.data('id') );
 		});
@@ -106,20 +106,18 @@ $( document ).ready(function() {
 	cy.zoomingEnabled( true );
 	cy.userZoomingEnabled( false );
 
-	insere( "DataExchange", "SELECT" )
-	insere( "PostgreSQL", "REDUCE" )
-	insere( "IPFS", "SPLIT_MAP", "PostgreSQL" )
-	
-	
-	console.log( cy );
-	
-	cy.load( cy.elements('*').jsons() );
-	cy.pan({ x: 0, y: 0 });
-	
-		
-	
 });
 
+function populate( cy ){
+	insere( "Core", "SPLIT_MAP" )
+	insere( "DataExchange", "SELECT", "Core" )
+	insere( "PostgreSQL", "REDUCE", "Core" )
+	insere( "IPFS", "SPLIT_MAP", "Core" )
+	
+	console.log( cy );
+	cy.load( cy.elements('*').jsons() );
+	cy.pan({ x: 0, y: 0 });	
+}
 
 function insere( tag, type, linkTo = "" ) {
 		
