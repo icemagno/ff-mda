@@ -185,6 +185,9 @@ function processContainer( container ){
 		pmCell = pmCell + pm[key] + ':' + key + '<br/>';
 	};
 	
+	let nodeId = "";
+	if( peerId ) nodeId = peerId.id;
+	
 	$("#componentTips").html(
 		'<table style="width:100%">' + 
 		'<tr><td>Tag</td><td>'+container.Labels.tag+'</td></tr>' +
@@ -192,6 +195,7 @@ function processContainer( container ){
 		'<tr><td>Status</td><td>'+container.Status+'</td></tr>' +
 		'<tr><td>Local IP</td><td>'+dataExchangeLocalIP+'</td></tr>' +
 		'<tr><td>Ports</td><td>'+pmCell+'</td></tr>' +
+		'<tr><td>Node ID</td><td>'+nodeId+'</td></tr>' +
 		'</table>'
 	);
 	

@@ -93,20 +93,25 @@ public class DataExchangeService {
 	public String startContainer() {
 		
 		JSONObject container = getContainer();
+		// If we have a container already, just start it and get out
 		if( container.has("State") ) {
 			String state = container.getString("State");
 			if( state.equals("running") ) return new JSONObject().put("result", "Already Running").toString();
 			return new JSONObject().put("result", containerManager.startContainer( COMPONENT_NAME ) ).toString();
 		}
 		
+		// Well.. there is no container yet. Lets create and start one.
 		JSONObject portBidings = new JSONObject();
 		portBidings.put("10205", "3000/tcp");
 		portBidings.put("10204", "3001/udp");
 		
 		JSONArray envs = new JSONArray();
+		// Don't know what is the effect of this
 		// envs.put("NODE_TLS_REJECT_UNAUTHORIZED='0'");
+		
+		// Change the log level this way makes the log to have no output.
+		// Don't know why and will not care for now.
 		// envs.put("LOG_LEVEL='DEBUG'");
-			
 		
 		JSONArray volumes = new JSONArray();
 		volumes.put("/etc/localtime:/etc/localtime:ro");
@@ -148,7 +153,6 @@ public class DataExchangeService {
 	}
 	
 	public String getConfig( ) {
-		
 		JSONObject localAgentConfig = localService.getAgentConfig();
 		
 		// If we don't have keys yet ...
