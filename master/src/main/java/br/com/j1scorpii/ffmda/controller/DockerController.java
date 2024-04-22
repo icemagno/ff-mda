@@ -51,8 +51,7 @@ public class DockerController {
     // Get the container information if we have any. Empty JSON object if not.
     @GetMapping( value="/container/get", produces= MediaType.APPLICATION_JSON_VALUE )
     public ResponseEntity<String> getContainer( @RequestParam (value="container",required=true) String containerName ) {
-    	String result = new JSONObject().put("result", containerManager.getContainer( containerName ) ).toString();
-    	return new ResponseEntity<String>( result , HttpStatus.OK);
+    	return new ResponseEntity<String>( containerManager.getContainer( containerName ).toString() , HttpStatus.OK);
     }    
 	
 	// ****************************  IMAGENS ***************************************
