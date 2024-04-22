@@ -38,8 +38,7 @@ public class DockerService {
 	private DockerClientConfig config;
 	private DockerClient dockerClient;
 
-	@Autowired
-	private SimpMessagingTemplate messagingTemplate;
+	@Autowired private SimpMessagingTemplate messagingTemplate;
 	
 	@Value("${spring.profiles.active}")
 	private String activeProfile;

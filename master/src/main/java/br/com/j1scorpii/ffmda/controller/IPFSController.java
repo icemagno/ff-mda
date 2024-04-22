@@ -8,34 +8,34 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import br.com.j1scorpii.ffmda.services.PostgreSQLService;
+import br.com.j1scorpii.ffmda.services.IPFSService;
 
 @RestController
-@RequestMapping(value="/v1/postgresql")
-public class PostgreSQLController {
+@RequestMapping(value="/v1/ipfs")
+public class IPFSController {
 	
-	@Autowired private PostgreSQLService postgreSQLService;
-
+	@Autowired private IPFSService ipfsService;
+	
 	// Check if we have the image already
     @GetMapping( value="/image/pulled", produces= MediaType.APPLICATION_JSON_VALUE )
     public ResponseEntity<String> imagePulled( ) {
-    	return new ResponseEntity<String>( this.postgreSQLService.imagePulled().toString() , HttpStatus.OK);
+    	return new ResponseEntity<String>( this.ipfsService.imagePulled().toString() , HttpStatus.OK);
     }	
 
     @GetMapping( value="/image/pull", produces= MediaType.APPLICATION_JSON_VALUE )
     public ResponseEntity<String> pullImage( ) {
-    	return new ResponseEntity<String>( this.postgreSQLService.pullImage() , HttpStatus.OK);
-    }    
+    	return new ResponseEntity<String>( this.ipfsService.pullImage() , HttpStatus.OK);
+    }
     
     @GetMapping( value="/config/get", produces= MediaType.APPLICATION_JSON_VALUE )
     public ResponseEntity<String> getConfig( ) {
-    	return new ResponseEntity<String>( this.postgreSQLService.getConfig() , HttpStatus.OK);
-    }    
-    
-    @GetMapping( value="/container/start", produces= MediaType.APPLICATION_JSON_VALUE )
-    public ResponseEntity<String> startContainer( ) {
-    	return new ResponseEntity<String>( this.postgreSQLService.startContainer(), HttpStatus.OK);
+    	return new ResponseEntity<String>( this.ipfsService.getConfig() , HttpStatus.OK);
     }    
 
-    
+    @GetMapping( value="/container/start", produces= MediaType.APPLICATION_JSON_VALUE )
+    public ResponseEntity<String> startContainer( ) {
+    	return new ResponseEntity<String>( this.ipfsService.startContainer(), HttpStatus.OK);
+    }    
+
+      
 }

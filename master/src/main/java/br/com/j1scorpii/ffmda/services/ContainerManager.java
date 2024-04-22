@@ -149,12 +149,14 @@ public class ContainerManager {
 
 	public String reStartContainer( String containerId ) {
 		logger.info("Reiniciando container " + containerId );
-		return dockerService.getResponse( Request.Method.POST, "/containers/"+containerId+"/restart", null );
+		String result = dockerService.getResponse( Request.Method.POST, "/containers/"+containerId+"/restart", null );
+		return new JSONObject().put("result", result ).toString();
 	}
 
 	public String stopContainer( String containerId ) {
 		logger.info("Stopping component " + containerId );
-		return dockerService.getResponse( Request.Method.POST, "/containers/"+containerId+"/stop", null );
+		String result =  dockerService.getResponse( Request.Method.POST, "/containers/"+containerId+"/stop", null );
+		return new JSONObject().put("result", result ).toString();
 	}
 	
 	public String getContainerStats( String containerId ) {

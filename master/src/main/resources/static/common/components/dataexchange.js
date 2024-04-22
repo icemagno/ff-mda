@@ -30,6 +30,10 @@ $( document ).ready(function() {
 		stompClient.subscribe('/shell/dataexchange', (message) => {
 			let payload = JSON.parse( message.body );
 		});
+
+		stompClient.subscribe('/data/dataexchange', (message) => {
+			let payload = JSON.parse( message.body );
+		});
 		
 		stompClient.subscribe('/docker/dataexchange/pull', (message) => {
 			let payload = JSON.parse( message.body );
@@ -54,7 +58,7 @@ $( document ).ready(function() {
 	$("#restartCont").click( ()=>{
 		if( isDisabled( "#restartCont" ) ) return;
 		log("Wait...")
-		$.get("/v1/dataexchange/container/restart", function(data, status) {
+		$.get("/v1/container/restart?container=dataexchange", function(data, status) {
 			console.log( data );
 		});		
 	});
@@ -62,7 +66,7 @@ $( document ).ready(function() {
 	$("#stopCont").click( ()=>{
 		if( isDisabled( "#stopCont" ) ) return;
 		log("Wait...")
-		$.get("/v1/dataexchange/container/stop", function(data, status) {
+		$.get("/v1/container/stop?container=dataexchange", function(data, status) {
 			console.log( data );
 		});
 	});

@@ -23,6 +23,7 @@ import org.springframework.core.io.Resource;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.http.RequestEntity;
+import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.socket.TextMessage;
@@ -41,6 +42,7 @@ public class DataExchangeService {
 	@Autowired private ImageManager imageManager;
 	@Autowired private ContainerManager containerManager;
 	@Autowired private LocalService localService;
+	@Autowired private SimpMessagingTemplate messagingTemplate;
 
 	
 	private final String COMPONENT_NAME = "dataexchange";
@@ -143,7 +145,7 @@ public class DataExchangeService {
 		return result;
 	}
 	
-	public JSONObject getContainer() {
+	private JSONObject getContainer() {
 		JSONObject container = containerManager.getContainer( COMPONENT_NAME ); 
 		return container;
 	}
@@ -250,6 +252,10 @@ public class DataExchangeService {
 	public void processMessageFromDX( WebSocketSession session, JSONObject payload ) {
 		System.out.println( "Received: " );
 		System.out.println( payload.toString(5) );
+		
+		messagingTemplate.convertAndSend( "/data/dataexchange", new JSONObject(  ).put("payload", payload).toString() );
+		
+		
 		JSONObject ack = new JSONObject();
 		ack.put("action","ack").put("id", payload.getString("id") );
 

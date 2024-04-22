@@ -13,14 +13,14 @@ import org.springframework.stereotype.Service;
 import jakarta.annotation.PostConstruct;
 
 @Service
-public class PostgreSQLService {
-	private Logger logger = LoggerFactory.getLogger( PostgreSQLService.class );
+public class IPFSService {
+	private Logger logger = LoggerFactory.getLogger( IPFSService.class );
 
 	@Autowired private ImageManager imageManager;
 	@Autowired private ContainerManager containerManager;
 	@Autowired private LocalService localService;
 	
-	private final String COMPONENT_NAME = "postgresql";
+	private final String COMPONENT_NAME = "ipfs";
 	
 	@Value("${ffmda.local.data.folder}")
 	private String localDataFolder;	
@@ -102,9 +102,5 @@ public class PostgreSQLService {
 		return generalConfig.toString(5);
 	}
 	
-
-	public String restartContainer() {
-		return new JSONObject().put("result", this.containerManager.reStartContainer( COMPONENT_NAME) ).toString();
-	}
 
 }

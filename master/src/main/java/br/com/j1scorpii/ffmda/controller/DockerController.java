@@ -1,5 +1,6 @@
 package br.com.j1scorpii.ffmda.controller;
 
+import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -35,15 +36,31 @@ public class DockerController {
 	@GetMapping(value = "/container/log", produces=MediaType.APPLICATION_JSON_VALUE )
     public ResponseEntity<String> containerLogs( @RequestParam (value="container",required=true) String containerName ) {
 		return new ResponseEntity<String>( containerManager.getLog(containerName ), HttpStatus.OK );
-    }	
+    }
+	
+	@GetMapping(value = "/container/stop", produces=MediaType.APPLICATION_JSON_VALUE )
+    public ResponseEntity<String> containerStop( @RequestParam (value="container",required=true) String containerName ) {
+		return new ResponseEntity<String>( containerManager.stopContainer(containerName ), HttpStatus.OK );
+    }
 
+    @GetMapping( value="/container/restart", produces= MediaType.APPLICATION_JSON_VALUE )
+    public ResponseEntity<String> restartContainer( @RequestParam (value="container",required=true) String containerName ) {
+    	return new ResponseEntity<String>( containerManager.reStartContainer(containerName ), HttpStatus.OK);
+    }  
+    
+    // Get the container information if we have any. Empty JSON object if not.
+    @GetMapping( value="/container/get", produces= MediaType.APPLICATION_JSON_VALUE )
+    public ResponseEntity<String> getContainer( @RequestParam (value="container",required=true) String containerName ) {
+    	String result = new JSONObject().put("result", containerManager.getContainer( containerName ) ).toString();
+    	return new ResponseEntity<String>( result , HttpStatus.OK);
+    }    
 	
 	// ****************************  IMAGENS ***************************************
 	
 	@GetMapping(value = "/image/list", produces=MediaType.APPLICATION_JSON_VALUE )
     public @ResponseBody String imageList( ) {
 		return imageManager.getImages();
-    }	
+    }
 	
 	
 }
