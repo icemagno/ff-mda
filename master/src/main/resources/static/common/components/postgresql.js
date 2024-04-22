@@ -16,7 +16,7 @@ $( document ).ready(function() {
 	
 	setInterval( ()=>{
 		
-		$.get("/v1/postgresql/container/get", function( container, status) {
+		$.get("/v1/container/get?container=postgresql", function( container, status) {
 			if( container && container.State ) processContainer( container );
 		});
 		

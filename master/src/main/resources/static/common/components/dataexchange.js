@@ -18,7 +18,7 @@ $( document ).ready(function() {
 	
 	setInterval( ()=>{
 		
-		$.get("/v1/dataexchange/container/get", function( container, status) {
+		$.get("/v1/container/get?container=dataexchange", function( container, status) {
 			if( container && container.State ) processContainer( container );
 		});
 		
