@@ -1,6 +1,11 @@
 package br.com.j1scorpii.ffmda.services;
 
+import java.io.BufferedWriter;
 import java.io.File;
+import java.io.FileWriter;
+import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -26,17 +31,46 @@ public class IPFSService {
 	private String localDataFolder;	
 	
 	private String componentDataFolder;
+	private String swarmKeyFile;
+	private String stagingFolder;
+	private String dataFolder;
 	private String imageName;
+	private String configFile;
 	
 	@PostConstruct
 	private void init() {
 		this.componentDataFolder = localDataFolder + "/" + COMPONENT_NAME;
+		this.swarmKeyFile = this.componentDataFolder + "/swarm.key";
+		this.stagingFolder = this.componentDataFolder + "/staging";
+		this.dataFolder = this.componentDataFolder + "/data";
+		this.configFile = this.dataFolder + "/config";
 		logger.info("init " + this.componentDataFolder );
 		new File( this.componentDataFolder ).mkdirs();
+		if( ! new File( this.swarmKeyFile ).exists() ) this.createSwarmKey();
 	}
-
-	public String startContainer() {
+	
+	private String getSwarmKey() throws Exception {
+		byte[] encoded = Files.readAllBytes( Paths.get( this.swarmKeyFile ) );
+		return new String(encoded, StandardCharsets.UTF_8 );
+	}
+	
+	private void createSwarmKey() {
+		try {
+			BufferedWriter writer = new BufferedWriter( new FileWriter( this.swarmKeyFile ) );
+			writer.write( "/key/swarm/psk/1.0.0/" );
+			writer.newLine();
+			writer.write( "/base16/" );
+			writer.newLine();
+			writer.write( "9894e894901eb5ff61fcc9fb219700ee08d6bb4804b6277256f003ed6366a3e0" );
+			writer.newLine();
+			writer.close();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 		
+	}
+	
+	public String startContainer() {
 		JSONObject container = getContainer();
 		if( container.has("State") ) {
 			String state = container.getString("State");
@@ -45,15 +79,21 @@ public class IPFSService {
 		}
 		
 		JSONObject portBidings = new JSONObject();
-		portBidings.put("5104", "5432/tcp");
+		portBidings.put("36209", "4001/udp");
+		portBidings.put("36209", "4001/tcp");
+		portBidings.put("36206", "5001/tcp");
+		portBidings.put("36207", "8080/tcp");
 		
 		JSONArray envs = new JSONArray();
-		envs.put("POSTGRES_PASSWORD=f1refly");
-		envs.put("PGDATA=/var/lib/postgresql/data/pgdata");
-		
+		envs.put("IPFS_PROFILE=server");
+		envs.put("LIBP2P_FORCE_PNET='1'");
+		envs.put("IPFS_SWARM_KEY_FILE=/ipfs/swarm.key");
+
 		JSONArray volumes = new JSONArray();
 		volumes.put("/etc/localtime:/etc/localtime:ro");
-		volumes.put(  this.componentDataFolder + ":/var/lib/postgresql/data");
+		volumes.put(  this.stagingFolder + ":/export");
+		volumes.put(  this.dataFolder + ":/data/ipfs");
+		volumes.put(  this.swarmKeyFile + ":/ipfs/swarm.key");
 		
 		JSONObject containerDef = new JSONObject();
 		containerDef.put("name", COMPONENT_NAME);
