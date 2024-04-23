@@ -71,7 +71,6 @@ public class DataExchangeService {
 		this.pemKey = this.componentDataFolder + "/key.pem";
 		new File( this.peersFolder ).mkdirs();
 		logger.info("init " + this.componentDataFolder );
-		loadConfig();
 	}
 
 	public boolean certAndKeysExists() {
@@ -101,6 +100,11 @@ public class DataExchangeService {
 			if( state.equals("running") ) return new JSONObject().put("result", "Already Running").toString();
 			return new JSONObject().put("result", containerManager.startContainer( COMPONENT_NAME ) ).toString();
 		}
+
+		System.out.println("-------------> " + this.imageName );
+		// pullImage()
+		// getConfig()
+		// System.out.println("-------------> " + this.imageName );
 		
 		// Well.. there is no container yet. Lets create and start one.
 		JSONObject portBidings = new JSONObject();

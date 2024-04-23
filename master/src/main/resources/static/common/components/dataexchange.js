@@ -176,9 +176,6 @@ function updateData(){
 }
 
 function processContainer( container ){
-	
-	// console.log( container );
-	
 	let dataExchangeLocalIP = container.NetworkSettings.Networks.ffmda.IPAddress
 	let ports = container.Ports;
 	let pmCell = "";
