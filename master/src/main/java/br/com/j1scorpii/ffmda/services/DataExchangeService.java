@@ -101,10 +101,13 @@ public class DataExchangeService {
 			return new JSONObject().put("result", containerManager.startContainer( COMPONENT_NAME ) ).toString();
 		}
 
+		// We don't have any image yet. Pull it now
+		if( this.imageName == null ) {
+			this.pullImage();
+			this.getConfig();
+		}
+		 
 		System.out.println("-------------> " + this.imageName );
-		// pullImage()
-		// getConfig()
-		// System.out.println("-------------> " + this.imageName );
 		
 		// Well.. there is no container yet. Lets create and start one.
 		JSONObject portBidings = new JSONObject();
