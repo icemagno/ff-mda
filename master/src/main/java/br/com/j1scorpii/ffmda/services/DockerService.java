@@ -55,7 +55,7 @@ public class DockerService {
         ExecCreateCmdResponse cmd = dockerClient.execCreateCmd("ipfs")
         	      .withAttachStdout(true)
         	      .withAttachStderr(true)
-        	      .withCmd("ipfs cat QmT78zSuBmuS4z925WZfrqQ1qHaJ56DQaTfyMUF7F8ff5o")
+        	      .withCmd("ipfs","cat","QmT78zSuBmuS4z925WZfrqQ1qHaJ56DQaTfyMUF7F8ff5o")
         	      .exec();
 		
         String cmdStdout = null;
