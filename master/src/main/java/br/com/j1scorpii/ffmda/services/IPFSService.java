@@ -3,6 +3,8 @@ package br.com.j1scorpii.ffmda.services;
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileWriter;
+import java.io.IOException;
+import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Paths;
@@ -36,6 +38,8 @@ public class IPFSService {
 	private String dataFolder;
 	private String imageName;
 	private String configFile;
+	private JSONObject identity;
+	private JSONObject config;
 	
 	@PostConstruct
 	private void init() {
@@ -70,6 +74,44 @@ public class IPFSService {
 		
 	}
 	
+	private JSONObject getApiConfig() {
+		return new JSONObject()
+			.put("HTTPHeaders", new JSONObject()
+				.put("Access-Control-Allow-Methods", new JSONArray()
+						.put("GET")
+						.put("PUT")
+						.put("POST") )
+				.put("Access-Control-Allow-Origin", new JSONArray()
+						.put("*") )
+		);
+	}
+
+	private void updateConfig() throws Exception {
+		String content = readFile( this.configFile , StandardCharsets.UTF_8);
+		this.config = new JSONObject(content);
+		this.config.put("API", getApiConfig() );
+		this.config.getJSONObject("Addresses").put("NoAnnounce", new JSONArray() );
+		this.config.put("Bootstrap", JSONObject.NULL );
+		this.identity = config.getJSONObject("Identity");
+		
+		System.out.println( this.identity.toString(5) );
+		
+		this.config.getJSONObject("Swarm").put("AddrFilters", JSONObject.NULL );
+		this.config.getJSONObject("Routing").put("AcceleratedDHTClient", false);
+		saveConfig();
+	}
+	
+	private void saveConfig() throws Exception {
+		BufferedWriter writer = new BufferedWriter( new FileWriter( this.configFile ) );
+		writer.write( this.config.toString() );
+		writer.close();			
+	}
+
+	private String readFile(String path, Charset encoding)  throws IOException {
+		byte[] encoded = Files.readAllBytes(Paths.get(path));
+		return new String(encoded, encoding);
+	}
+	
 	public String startContainer() {
 		JSONObject container = getContainer();
 		if( container.has("State") ) {
@@ -85,8 +127,8 @@ public class IPFSService {
 		portBidings.put("36207", "8080/tcp");
 		
 		JSONArray envs = new JSONArray();
-		envs.put("IPFS_PROFILE=server");
-		envs.put("LIBP2P_FORCE_PNET='1'");
+		//envs.put("IPFS_PROFILE=server");
+		//envs.put("LIBP2P_FORCE_PNET='1'");
 		envs.put("IPFS_SWARM_KEY_FILE=/ipfs/swarm.key");
 
 		JSONArray volumes = new JSONArray();
@@ -106,6 +148,18 @@ public class IPFSService {
 		
 		String result = this.containerManager.create( containerDef );
 		containerDef.put("result", new JSONObject( result ) );
+		
+		try { 
+			Thread.sleep( 5 * 1000 );
+			containerManager.stopContainer(COMPONENT_NAME);			
+			this.updateConfig(); 
+			Thread.sleep( 5 * 1000 );
+			containerManager.startContainer(COMPONENT_NAME);			
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		
+		
 		
 		return containerDef.toString();
 	}

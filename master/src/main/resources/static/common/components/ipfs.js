@@ -3,7 +3,7 @@ let mainConfig = null;
 let peerId = null;
 
 $( document ).ready(function() {
-
+	setButtons('play');
 	updateData();
 	const ws = new SockJS( "/ws" );
 	var stompClient = Stomp.over(ws);
@@ -59,10 +59,6 @@ $( document ).ready(function() {
 		$.get("/v1/container/stop?container=ipfs", function(data, status) {
 			console.log( data );
 		});
-	});
-	
-	$("#dlPeerCert").click( ()=>{
-		window.open("/v1/ipfs/peer/certificate");
 	});
 	
 	$("#startCont").click( ()=>{

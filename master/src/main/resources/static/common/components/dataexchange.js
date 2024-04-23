@@ -5,7 +5,7 @@ let mainConfig = null;
 let peerId = null;
 
 $( document ).ready(function() {
-
+	setButtons('play');
 	updateData();
 	const ws = new SockJS( "/ws" );
 	var stompClient = Stomp.over(ws);
