@@ -45,12 +45,12 @@ public class IPFSService {
 	@PostConstruct
 	private void init() {
 		this.componentDataFolder = localDataFolder + "/" + COMPONENT_NAME;
-		this.swarmKeyFile = this.componentDataFolder + "/swarm.key";
 		this.stagingFolder = this.componentDataFolder + "/staging";
 		this.dataFolder = this.componentDataFolder + "/data";
 		this.configFile = this.dataFolder + "/config";
+		this.swarmKeyFile = this.dataFolder + "/swarm.key";
 		logger.info("init " + this.componentDataFolder );
-		new File( this.componentDataFolder ).mkdirs();
+		new File( this.dataFolder ).mkdirs();
 		if( ! new File( this.swarmKeyFile ).exists() ) this.createSwarmKey();
 	}
 	
@@ -144,15 +144,14 @@ public class IPFSService {
 		portBidings.put("36207", "8080/tcp");
 		
 		JSONArray envs = new JSONArray();
-		//envs.put("IPFS_PROFILE=server");
-		//envs.put("LIBP2P_FORCE_PNET='1'");
-		envs.put("IPFS_SWARM_KEY_FILE=/ipfs/swarm.key");
+		// envs.put("IPFS_PROFILE=server");
+		// envs.put("LIBP2P_FORCE_PNET='1'");
+		// envs.put("IPFS_SWARM_KEY_FILE=/ipfs/swarm.key");
 
 		JSONArray volumes = new JSONArray();
 		volumes.put("/etc/localtime:/etc/localtime:ro");
 		volumes.put(  this.stagingFolder + ":/export");
 		volumes.put(  this.dataFolder + ":/data/ipfs");
-		volumes.put(  this.swarmKeyFile + ":/ipfs/swarm.key");
 		
 		JSONObject containerDef = new JSONObject();
 		containerDef.put("name", COMPONENT_NAME);
