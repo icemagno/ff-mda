@@ -48,19 +48,19 @@ public class DockerService {
 	private String activeProfile;
 	
 	
-	public String execTest() {
+	public String execute( String containerId, String[] command ) {
 		// echo "hello world" > /srv/ffmda/ipfs/staging/hello.txt
 		// docker exec ipfs ipfs add /export/hello.txt
 		// QmT78zSuBmuS4z925WZfrqQ1qHaJ56DQaTfyMUF7F8ff5o
-        ExecCreateCmdResponse cmd = dockerClient.execCreateCmd("ipfs")
+		
+        ExecCreateCmdResponse cmd = dockerClient.execCreateCmd( containerId )
         	      .withAttachStdout(true)
         	      .withAttachStderr(true)
-        	      .withCmd("ipfs","cat","QmT78zSuBmuS4z925WZfrqQ1qHaJ56DQaTfyMUF7F8ff5o")
+        	      .withCmd( command )
         	      .exec();
 		
         String cmdStdout = null;
         String cmdStderr = null ;
-        
         
         try (
         		ByteArrayOutputStream stdout = new ByteArrayOutputStream();

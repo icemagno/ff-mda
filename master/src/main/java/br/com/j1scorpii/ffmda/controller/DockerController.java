@@ -22,14 +22,6 @@ public class DockerController {
 
 	// ****************************  CONTEINERES  ***************************************
 
-	@GetMapping(value = "/container/exec", produces=MediaType.APPLICATION_JSON_VALUE )
-    public @ResponseBody String containerExec( @RequestParam (value="container",required=true) String containerName ) {
-		return containerManager.exec(containerName);
-    }	
-	
-	
-	
-	
 	@GetMapping(value = "/container/stats", produces=MediaType.APPLICATION_JSON_VALUE )
     public @ResponseBody String containerStats( @RequestParam (value="container",required=true) String containerName ) {
 		return containerManager.getContainerStats(containerName);

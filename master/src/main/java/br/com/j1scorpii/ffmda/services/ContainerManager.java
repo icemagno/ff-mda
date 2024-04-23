@@ -195,8 +195,8 @@ public class ContainerManager {
 		}
 	}
 
-	public String exec(String containerName) {
-		return this.dockerService.execTest();
+	public String exec(String containerName, String[] command) {
+		return this.dockerService.execute(containerName, command );
 	}
 
 }

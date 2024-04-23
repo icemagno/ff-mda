@@ -54,17 +54,10 @@ public class IPFSService {
 		if( ! new File( this.swarmKeyFile ).exists() ) this.createSwarmKey();
 	}
 	
-	private String getSwarmKey() throws Exception {
+	public String getSwarmKey() throws Exception {
 		byte[] encoded = Files.readAllBytes( Paths.get( this.swarmKeyFile ) );
 		return new String(encoded, StandardCharsets.UTF_8 );
 	}
-	
-	
-	/*
-		docker exec ipfs0 ipfs swarm connect /ip4/172.22.1.49/tcp/10209/ipfs/12D3KooWN9Ksf9jmDuww7HKutNAknyVYnrvowPqYFZnEY8Mc5Gtp
-		docker exec ipfs0 ipfs bootstrap add /ip4/172.22.1.49/tcp/10209/ipfs/12D3KooWN9Ksf9jmDuww7HKutNAknyVYnrvowPqYFZnEY8Mc5Gtp
-		docker exec ipfs0 ipfs ping 12D3KooWN9Ksf9jmDuww7HKutNAknyVYnrvowPqYFZnEY8Mc5Gtp	
-	*/
 	
 	private void createSwarmKey() {
 		String swarmKey = UUID.randomUUID().toString() + UUID.randomUUID().toString();
@@ -75,7 +68,7 @@ public class IPFSService {
 			writer.newLine();
 			writer.write( "/base16/" );
 			writer.newLine();
-			writer.write( swarmKey /* "9894e894901eb5ff61fcc9fb219700ee08d6bb4804b6277256f003ed6366a3e0" */ );
+			writer.write( swarmKey );
 			writer.newLine();
 			writer.close();
 		} catch (Exception e) {
@@ -96,6 +89,9 @@ public class IPFSService {
 		);
 	}
 
+	// We need to change some stuff from config file
+	// to make the this IPFS network private.
+	// I don't want to execute commands so I will create, start, stop, update config and start again.
 	private void updateConfig() throws Exception {
 		String content = readFile( this.configFile , StandardCharsets.UTF_8);
 		this.config = new JSONObject(content);
@@ -209,7 +205,23 @@ public class IPFSService {
 		generalConfig.put("container", getContainer() );
 		// Plus the local node config ( I need this server's IP and host )
 		generalConfig.put("localAgentConfig", localAgentConfig );
+		this.identity.put("PrivKey", "****");
+		generalConfig.put("identity", this.identity );
+		generalConfig.put("nodeConfig", this.config );
 		return generalConfig.toString(5);
+	}
+	
+	public String addPeer( String peerIp, String peerPort, String peerId ) {
+		// docker exec ipfs ipfs cat QmT78zSuBmuS4z925WZfrqQ1qHaJ56DQaTfyMUF7F8ff5o
+		// docker exec ipfs ipfs swarm connect /ip4/192.168.0.206/tcp/36209/ipfs/12D3KooWPmZUYKmhek1WnqyMWuWFMMncxLAirt6gTyf5DABfcFsn
+		// docker exec ipfs ipfs swarm connect /ip4/172.22.1.49/tcp/10209/ipfs/12D3KooWN9Ksf9jmDuww7HKutNAknyVYnrvowPqYFZnEY8Mc5Gtp
+		// docker exec ipfs ipfs ping 12D3KooWN9Ksf9jmDuww7HKutNAknyVYnrvowPqYFZnEY8Mc5Gtp	
+		String[] command = {
+				"ipfs", 
+				"swarm", 
+				"connect", 
+				"/ip4/"+peerIp+"/tcp/"+peerPort+"/ipfs/" + peerId };
+		return this.containerManager.exec("ipfs", command);
 	}
 	
 
