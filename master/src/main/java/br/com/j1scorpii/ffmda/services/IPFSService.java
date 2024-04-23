@@ -100,7 +100,8 @@ public class IPFSService {
 		System.out.println( this.identity.toString(5) );
 		
 		this.config.getJSONObject("Swarm").put("AddrFilters", JSONObject.NULL );
-		this.config.getJSONObject("Routing").put("AcceleratedDHTClient", false);
+		this.config.getJSONObject("Routing").put("AcceleratedDHTClient", true);
+		this.config.getJSONObject("Routing").put("Type", "dht");
 		saveConfig();
 	}
 	
