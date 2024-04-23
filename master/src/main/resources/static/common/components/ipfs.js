@@ -123,29 +123,28 @@ function setButtons( what ){
 }
 
 function updateData(){
-	console.log("UD");
 	if( working ) return;
 	working = true;
 	$.get("/v1/ipfs/config/get", function(data, status) {
 		mainConfig = data;
-		
-		console.log( data );
-		
 		if( data.image.exists ){
 			$("#componentTips").text( "The image is ready to launch a container. You can pull it again if you want to update to a new version.");
 			setButtons('play');
 			$("#imageName").text( data.image.imageName );
-			if( data.container && data.container.State ) processContainer( data.container )
+			if( data.container && data.container.State ) processContainer( data )
 		} else $("#componentTips").text("I will pull the image before start. This may take a few minutes depending on network speed and image size. ")
 		working = false;
 	});
 	
 }
 
-function processContainer( container ){
+function processContainer( data ){
+	let container = data.container;
 	let localIP = container.NetworkSettings.Networks.ffmda.IPAddress
 	let ports = container.Ports;
 	let pmCell = "";
+	let peerId = "&nbsp;";
+	if( data.nodeConfig ) peerId = data.nodeConfig.Identity.PeerID;
 	let pm = [];
 	ports.forEach( ( port ) => { if( port.PublicPort ) pm[ port.PrivatePort.toString() ] = port.PublicPort }); 
 	
@@ -158,6 +157,7 @@ function processContainer( container ){
 		'<tr><td>State</td><td>'+container.State+'</td></tr>' +
 		'<tr><td>Status</td><td>'+container.Status+'</td></tr>' +
 		'<tr><td>Local IP</td><td>'+localIP+'</td></tr>' +
+		'<tr><td>Peer ID</td><td>'+peerId+'</td></tr>' +
 		'<tr><td>Ports</td><td>'+pmCell+'</td></tr>' +
 		'</table>'
 	);
