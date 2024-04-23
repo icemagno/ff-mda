@@ -20,7 +20,6 @@ $( document ).ready(function() {
 		$.get("/v1/container/get?container=dataexchange", function( container, status) {
 			if( container && container.State ) processContainer( container );
 		});
-		updateData();
 	}, 4000 ); 
 	 
 	stompClient.connect( thisheaders , (frame) => {
@@ -40,11 +39,13 @@ $( document ).ready(function() {
 			if( payload.progress ) updateFixedLog(payload.progress);
 			if( status ) log( status );
 			if( payload.errorIndicated == true ) log('Finish with ERROR.' );
-			if( payload.pullSuccessIndicated == true ) {
+			if( payload.pullSuccessIndicated == true && status.contains("Digest")  ) {
 				log( 'Finish with SUCCESS.' );
 				updateFixedLog("");
+				this.updateData();
 				lastPullMessage = "";
 			}
+
 		});
 	});	
 
