@@ -123,10 +123,14 @@ function setButtons( what ){
 }
 
 function updateData(){
+	console.log("UD");
 	if( working ) return;
 	working = true;
 	$.get("/v1/ipfs/config/get", function(data, status) {
 		mainConfig = data;
+		
+		console.log( data );
+		
 		if( data.image.exists ){
 			$("#componentTips").text( "The image is ready to launch a container. You can pull it again if you want to update to a new version.");
 			setButtons('play');
