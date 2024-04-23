@@ -3,6 +3,7 @@ let dataExchangeImageName = null;
 let lastPullMessage = "";
 let mainConfig = null;
 let peerId = null;
+let working = false;
 
 $( document ).ready(function() {
 	setButtons('play');
@@ -39,7 +40,7 @@ $( document ).ready(function() {
 			if( payload.progress ) updateFixedLog(payload.progress);
 			if( status ) log( status );
 			if( payload.errorIndicated == true ) log('Finish with ERROR.' );
-			if( status.contains("Digest:") ) {
+			if( payload.pullSuccessIndicated == true ) {
 				log( 'Finish with SUCCESS.' );
 				updateFixedLog("");
 				this.updateData();
@@ -148,13 +149,15 @@ function processConfig( config, prefix ){
 				processConfig( value, namespace + ".");
 			} else {
 				$("#configTable").append("<tr><td>"+namespace+"</td><td>"+value+"</td></tr>");
-		        // console.log( "   > " + namespace + " = " + value + "  " + typeof value );
 			}
 	    }
 	}	
 }
 
 function updateData(){
+	if( working ) return;
+	working = true;
+	$("#configTable").empty();
 	$.get("/v1/dataexchange/config/get", function(data, status) {
 		mainConfig = data;
 		processConfig( data.componentConfig, "" );
@@ -166,6 +169,7 @@ function updateData(){
 			$("#imageName").text( dataExchangeImageName );
 			if( data.container && data.container.State ) processContainer( data.container )
 		} else $("#componentTips").text("I will pull the image before start. This may take a few minutes depending on network speed and image size. ")
+		working = false;
 	});
 }
 

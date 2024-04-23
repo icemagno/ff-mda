@@ -1,6 +1,7 @@
 let lastPullMessage = "";
 let mainConfig = null;
 let peerId = null;
+let working = false;
 
 $( document ).ready(function() {
 	setButtons('play');
@@ -29,7 +30,7 @@ $( document ).ready(function() {
 			if( payload.progress ) updateFixedLog(payload.progress);
 			if( status ) log( status );
 			if( payload.errorIndicated == true ) log('Finish with ERROR.' );
-			if( status.contains("Digest:") ) {
+			if( payload.pullSuccessIndicated == true ) {
 				log( 'Finish with SUCCESS.' );
 				updateFixedLog("");
 				this.updateData();
@@ -126,6 +127,8 @@ function setButtons( what ){
 }
 
 function updateData(){
+	if( working ) return;
+	working = true;
 	$.get("/v1/postgresql/config/get", function(data, status) {
 		mainConfig = data;
 		if( data.image.exists ){
@@ -134,6 +137,7 @@ function updateData(){
 			$("#imageName").text( data.image.imageName );
 			if( data.container && data.container.State ) processContainer( data.container )
 		} else $("#componentTips").text("I will pull the image before start. This may take a few minutes depending on network speed and image size. ")
+		working = false;
 	});
 }
 
