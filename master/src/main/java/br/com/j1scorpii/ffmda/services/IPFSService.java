@@ -39,7 +39,7 @@ public class IPFSService {
 	private String dataFolder;
 	private String imageName;
 	private String configFile;
-	private JSONObject identity;
+	private JSONObject identity = new JSONObject();
 	private JSONObject config;
 	
 	@PostConstruct
@@ -93,8 +93,7 @@ public class IPFSService {
 	// to make the this IPFS network private.
 	// I don't want to execute commands so I will create, start, stop, update config and start again.
 	private void updateConfig() throws Exception {
-		String content = readFile( this.configFile , StandardCharsets.UTF_8);
-		this.config = new JSONObject(content);
+		loadConfig();
 		this.config.put("API", getApiConfig() );
 		this.config.getJSONObject("Addresses").put("NoAnnounce", new JSONArray() );
 		this.config.put("Bootstrap", JSONObject.NULL );
@@ -106,6 +105,11 @@ public class IPFSService {
 		this.config.getJSONObject("Routing").put("AcceleratedDHTClient", true);
 		this.config.getJSONObject("Routing").put("Type", "dht");
 		saveConfig();
+	}
+	
+	private void loadConfig() throws Exception {
+		String content = readFile( this.configFile , StandardCharsets.UTF_8);
+		this.config = new JSONObject(content);
 	}
 	
 	private void saveConfig() throws Exception {
@@ -197,6 +201,7 @@ public class IPFSService {
 	}
 	
 	public String getConfig( ) {
+		try { loadConfig(); } catch (Exception e) {	}
 		JSONObject localAgentConfig = localService.getAgentConfig();
 		// Use a object wrapper to send component configuration 
 		// plus some relevant configuration to the UI.
@@ -205,8 +210,6 @@ public class IPFSService {
 		generalConfig.put("container", getContainer() );
 		// Plus the local node config ( I need this server's IP and host )
 		generalConfig.put("localAgentConfig", localAgentConfig );
-		this.identity.put("PrivKey", "****");
-		generalConfig.put("identity", this.identity );
 		generalConfig.put("nodeConfig", this.config );
 		return generalConfig.toString(5);
 	}
