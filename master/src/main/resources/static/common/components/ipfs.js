@@ -157,7 +157,6 @@ function processContainer( data ){
 		'<tr><td>State</td><td>'+container.State+'</td></tr>' +
 		'<tr><td>Status</td><td>'+container.Status+'</td></tr>' +
 		'<tr><td>Local IP</td><td>'+localIP+'</td></tr>' +
-		'<tr><td>Peer ID</td><td>'+peerId+'</td></tr>' +
 		'<tr><td>Ports</td><td>'+pmCell+'</td></tr>' +
 		'</table>'
 	);
