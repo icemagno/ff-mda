@@ -69,7 +69,6 @@ public class DockerService {
         	
         	    dockerClient.execStartCmd(cmd.getId()).exec( cmdCallback ).awaitCompletion();
         	    
-        	    
         	    cmdStdout = stdout.toString(StandardCharsets.UTF_8.name());
         	    cmdStderr = stderr.toString(StandardCharsets.UTF_8.name());
         } catch (Exception e) {

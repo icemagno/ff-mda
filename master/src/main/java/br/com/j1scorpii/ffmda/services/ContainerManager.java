@@ -65,7 +65,6 @@ public class ContainerManager {
 		
 		System.out.println( container.toString(5) );
 		
-		
 		String name = container.getString("name");
 		String fromImage = container.getString("image");
 		logger.info("Creating container " + name + " based on " + fromImage + " image.");

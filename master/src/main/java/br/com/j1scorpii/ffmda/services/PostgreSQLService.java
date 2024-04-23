@@ -44,6 +44,12 @@ public class PostgreSQLService {
 			return new JSONObject().put("result", containerManager.startContainer( COMPONENT_NAME ) ).toString();
 		}
 		
+		// We don't have any image yet. Pull it now
+		if( this.imageName == null ) {
+			this.pullImage();
+			this.getConfig();
+		}
+		 
 		JSONObject portBidings = new JSONObject();
 		portBidings.put("5104", "5432/tcp");
 		

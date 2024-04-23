@@ -107,8 +107,6 @@ public class DataExchangeService {
 			this.getConfig();
 		}
 		 
-		System.out.println("-------------> " + this.imageName );
-		
 		// Well.. there is no container yet. Lets create and start one.
 		JSONObject portBidings = new JSONObject();
 		portBidings.put("10205", "3000/tcp");
@@ -237,7 +235,8 @@ public class DataExchangeService {
 	}
 
 	public String getPeerId() {
-		String peerId = this.requestData("http://dataexchange:3000/api/v1/id");
+		String peerId = "Wait...";
+		try { peerId = this.requestData("http://dataexchange:3000/api/v1/id");	} catch ( Exception e ) {	}
 		return peerId;
 	}
 	

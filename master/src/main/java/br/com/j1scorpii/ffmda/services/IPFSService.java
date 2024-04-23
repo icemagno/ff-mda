@@ -131,6 +131,12 @@ public class IPFSService {
 			return new JSONObject().put("result", containerManager.startContainer( COMPONENT_NAME ) ).toString();
 		}
 		
+		// We don't have any image yet. Pull it now
+		if( this.imageName == null ) {
+			this.pullImage();
+			this.getConfig();
+		}
+		 
 		JSONObject portBidings = new JSONObject();
 		portBidings.put("36209", "4001/udp");
 		portBidings.put("36209", "4001/tcp");
