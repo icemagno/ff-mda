@@ -48,7 +48,7 @@ public class DockerService {
 	private String activeProfile;
 	
 	
-	public void execTest() {
+	public String execTest() {
 		// echo "hello world" > /srv/ffmda/ipfs/staging/hello.txt
 		// docker exec ipfs ipfs add /export/hello.txt
 		// QmT78zSuBmuS4z925WZfrqQ1qHaJ56DQaTfyMUF7F8ff5o
@@ -79,6 +79,7 @@ public class DockerService {
         int exitCode = dockerClient.inspectExecCmd(cmd.getId()).exec().getExitCode();
         String output = cmdStdout == null ? cmdStderr : cmdStdout;        
 		
+        return output;
 	}
 	
 	
