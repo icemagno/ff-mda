@@ -192,4 +192,9 @@ public class ContainerManager {
 		}
 	}
 
+	public String exec(String containerName) {
+		this.dockerService.execTest();
+		return null;
+	}
+
 }

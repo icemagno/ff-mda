@@ -59,6 +59,13 @@ public class IPFSService {
 		return new String(encoded, StandardCharsets.UTF_8 );
 	}
 	
+	
+	/*
+		docker exec ipfs0 ipfs swarm connect /ip4/172.22.1.49/tcp/10209/ipfs/12D3KooWN9Ksf9jmDuww7HKutNAknyVYnrvowPqYFZnEY8Mc5Gtp
+		docker exec ipfs0 ipfs bootstrap add /ip4/172.22.1.49/tcp/10209/ipfs/12D3KooWN9Ksf9jmDuww7HKutNAknyVYnrvowPqYFZnEY8Mc5Gtp
+		docker exec ipfs0 ipfs ping 12D3KooWN9Ksf9jmDuww7HKutNAknyVYnrvowPqYFZnEY8Mc5Gtp	
+	*/
+	
 	private void createSwarmKey() {
 		String swarmKey = UUID.randomUUID().toString() + UUID.randomUUID().toString();
 		swarmKey = swarmKey.replaceAll("-", "").toLowerCase();

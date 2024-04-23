@@ -1,8 +1,10 @@
 package br.com.j1scorpii.ffmda.services;
 
 import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
 import java.io.Closeable;
 import java.io.InputStream;
+import java.nio.charset.StandardCharsets;
 import java.time.Duration;
 import java.util.HashMap;
 import java.util.Map;
@@ -17,11 +19,13 @@ import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.stereotype.Service;
 
 import com.github.dockerjava.api.DockerClient;
+import com.github.dockerjava.api.command.ExecCreateCmdResponse;
 import com.github.dockerjava.api.command.PullImageResultCallback;
 import com.github.dockerjava.api.model.PullResponseItem;
 import com.github.dockerjava.core.DefaultDockerClientConfig;
 import com.github.dockerjava.core.DockerClientConfig;
 import com.github.dockerjava.core.DockerClientImpl;
+import com.github.dockerjava.core.command.ExecStartResultCallback;
 import com.github.dockerjava.httpclient5.ApacheDockerHttpClient;
 import com.github.dockerjava.transport.DockerHttpClient;
 import com.github.dockerjava.transport.DockerHttpClient.Request;
@@ -42,6 +46,48 @@ public class DockerService {
 	
 	@Value("${spring.profiles.active}")
 	private String activeProfile;
+	
+	
+	public void execTest() {
+		// echo "hello world" > /srv/ffmda/ipfs/staging/hello.txt
+		// docker exec ipfs ipfs add /export/hello.txt
+		// QmT78zSuBmuS4z925WZfrqQ1qHaJ56DQaTfyMUF7F8ff5o
+        ExecCreateCmdResponse cmd = dockerClient.execCreateCmd("ipfs")
+        	      .withAttachStdout(true)
+        	      .withAttachStderr(true)
+        	      .withCmd("ipfs cat QmT78zSuBmuS4z925WZfrqQ1qHaJ56DQaTfyMUF7F8ff5o")
+        	      .exec();
+		
+        String cmdStdout = null;
+        String cmdStderr = null ;
+        
+        
+        try (
+        		ByteArrayOutputStream stdout = new ByteArrayOutputStream();
+        		ByteArrayOutputStream stderr = new ByteArrayOutputStream();
+        		ExecStartResultCallback cmdCallback = new ExecStartResultCallback(stdout, stderr)  ) {
+        	
+        	    dockerClient.execStartCmd(cmd.getId()).exec( cmdCallback ).awaitCompletion();
+        	    
+        	    
+        	    cmdStdout = stdout.toString(StandardCharsets.UTF_8.name());
+        	    cmdStderr = stderr.toString(StandardCharsets.UTF_8.name());
+        } catch (Exception e) {
+        	e.printStackTrace();
+        }
+        	  
+        int exitCode = dockerClient.inspectExecCmd(cmd.getId()).exec().getExitCode();
+        String output = cmdStdout == null ? cmdStderr : cmdStdout;        
+		
+	}
+	
+	
+	
+	
+	
+	
+	
+	
 
 	@PostConstruct
 	private void init() {
