@@ -8,6 +8,7 @@ import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Paths;
+import java.util.UUID;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -59,13 +60,15 @@ public class IPFSService {
 	}
 	
 	private void createSwarmKey() {
+		String swarmKey = UUID.randomUUID().toString() + UUID.randomUUID().toString();
+		swarmKey = swarmKey.replaceAll("-", "").toLowerCase();
 		try {
 			BufferedWriter writer = new BufferedWriter( new FileWriter( this.swarmKeyFile ) );
 			writer.write( "/key/swarm/psk/1.0.0/" );
 			writer.newLine();
 			writer.write( "/base16/" );
 			writer.newLine();
-			writer.write( "9894e894901eb5ff61fcc9fb219700ee08d6bb4804b6277256f003ed6366a3e0" );
+			writer.write( swarmKey /* "9894e894901eb5ff61fcc9fb219700ee08d6bb4804b6277256f003ed6366a3e0" */ );
 			writer.newLine();
 			writer.close();
 		} catch (Exception e) {
