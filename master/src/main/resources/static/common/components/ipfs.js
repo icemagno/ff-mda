@@ -145,6 +145,7 @@ function processContainer( data ){
 	let pmCell = "";
 	let peerId = "&nbsp;";
 	if( data.nodeConfig ) peerId = data.nodeConfig.Identity.PeerID;
+	$("#peerId").text( peerId );
 	let pm = [];
 	ports.forEach( ( port ) => { if( port.PublicPort ) pm[ port.PrivatePort.toString() ] = port.PublicPort }); 
 	
