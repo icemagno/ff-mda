@@ -140,6 +140,7 @@ function setButtons( what ){
 
 
 function processConfig( config, prefix ){
+	console.log( prefix );
 	for (var key in config) {
 		let namespace = prefix + key;
 	    if ( config.hasOwnProperty( key ) ) {
@@ -156,12 +157,16 @@ function processConfig( config, prefix ){
 }
 
 function updateData(){
+	
+	console.log("UD");
 
 	$.get("/v1/dataexchange/config/get", function(data, status) {
 		
 		mainConfig = data;
 		
 		processConfig( data.componentConfig, "" );
+		
+		
 		if( data.certAndKeysExists ) $("#peerCertDlCont").show();
 		if( data.image.exists ){
 			$("#componentTips").text( "The image is ready to launch a container. You can pull it again if you want to update to a new version.");
