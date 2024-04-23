@@ -131,21 +131,18 @@ function updateData(){
 			$("#componentTips").text( "The image is ready to launch a container. You can pull it again if you want to update to a new version.");
 			setButtons('play');
 			$("#imageName").text( data.image.imageName );
-			if( data.container && data.container.State ) processContainer( data )
+			if( data.container && data.container.State ) processContainer( data.container )
+			if( data.nodeConfig ) $("#peerId").text( data.nodeConfig.Identity.PeerID );
 		} else $("#componentTips").text("I will pull the image before start. This may take a few minutes depending on network speed and image size. ")
 		working = false;
 	});
 	
 }
 
-function processContainer( data ){
-	let container = data.container;
+function processContainer( container ){
 	let localIP = container.NetworkSettings.Networks.ffmda.IPAddress
 	let ports = container.Ports;
 	let pmCell = "";
-	let peerId = "&nbsp;";
-	if( data.nodeConfig ) peerId = data.nodeConfig.Identity.PeerID;
-	$("#peerId").text( peerId );
 	let pm = [];
 	ports.forEach( ( port ) => { if( port.PublicPort ) pm[ port.PrivatePort.toString() ] = port.PublicPort }); 
 	
