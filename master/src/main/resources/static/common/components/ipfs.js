@@ -15,11 +15,10 @@ $( document ).ready(function() {
 	};
 	
 	setInterval( ()=>{
-		
 		$.get("/v1/container/get?container=ipfs", function( container, status) {
 			if( container && container.State ) processContainer( container );
 		});
-		
+		updateData();
 	}, 4000 ); 
 	 
 	stompClient.connect( thisheaders , (frame) => {
@@ -34,7 +33,6 @@ $( document ).ready(function() {
 			if( payload.pullSuccessIndicated == true ) {
 				log( 'Finish with SUCCESS.' );
 				updateFixedLog("");
-				updateData();
 				lastPullMessage = "";
 			}
 		});
@@ -139,9 +137,6 @@ function updateData(){
 }
 
 function processContainer( container ){
-	
-	console.log( container );
-	
 	let localIP = container.NetworkSettings.Networks.ffmda.IPAddress
 	let ports = container.Ports;
 	let pmCell = "";

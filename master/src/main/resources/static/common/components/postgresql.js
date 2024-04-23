@@ -15,11 +15,10 @@ $( document ).ready(function() {
 	};
 	
 	setInterval( ()=>{
-		
 		$.get("/v1/container/get?container=postgresql", function( container, status) {
 			if( container && container.State ) processContainer( container );
 		});
-		
+		updateData();
 	}, 4000 ); 
 	 
 	stompClient.connect( thisheaders , (frame) => {
@@ -34,7 +33,6 @@ $( document ).ready(function() {
 			if( payload.pullSuccessIndicated == true ) {
 				log( 'Finish with SUCCESS.' );
 				updateFixedLog("");
-				updateData();
 				lastPullMessage = "";
 			}
 		});
@@ -128,7 +126,6 @@ function setButtons( what ){
 }
 
 function updateData(){
-
 	$.get("/v1/postgresql/config/get", function(data, status) {
 		mainConfig = data;
 		if( data.image.exists ){
@@ -137,15 +134,10 @@ function updateData(){
 			$("#imageName").text( data.image.imageName );
 			if( data.container && data.container.State ) processContainer( data.container )
 		} else $("#componentTips").text("I will pull the image before start. This may take a few minutes depending on network speed and image size. ")
-		
 	});
-	
 }
 
 function processContainer( container ){
-	
-	console.log( container );
-	
 	let localIP = container.NetworkSettings.Networks.ffmda.IPAddress
 	let ports = container.Ports;
 	let pmCell = "";
