@@ -23,6 +23,7 @@ $( document ).ready(function() {
 	});		
 	
 	$.get("/v1/config/get", function(data, status) {
+		console.log( data );
   		$("#orgName").val( data.orgName );
   		$("#nodeName").val( data.nodeName);
   		$("#ipAddress").val( data.ipAddress );
