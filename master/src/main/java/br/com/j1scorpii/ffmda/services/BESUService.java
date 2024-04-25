@@ -9,6 +9,7 @@ import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 
+import org.apache.commons.io.FileUtils;
 import org.json.JSONArray;
 import org.json.JSONObject;
 import org.slf4j.Logger;
@@ -33,21 +34,43 @@ public class BESUService {
 	private String localDataFolder;	
 	
 	private String componentDataFolder;
-	private String stagingFolder;
+	private String pluginsFolder;
 	private String dataFolder;
 	private String imageName;
 	private String configFile;
 	private JSONObject config;
+
+	private String genesisFile;
+	private String keyFile;
+	private String keyPubFile;
+	private String staticNodesFile;
+	private String permissionsFile;
 	
 	@PostConstruct
 	private void init() {
 		// Configure folders
 		this.componentDataFolder = localDataFolder + "/" + COMPONENT_NAME;
-		this.stagingFolder = this.componentDataFolder + "/staging";
+		this.pluginsFolder = this.componentDataFolder + "/plugins";
 		this.dataFolder = this.componentDataFolder + "/data";
-		this.configFile = this.dataFolder + "/config";
+		
+		this.configFile = this.dataFolder + "/config.toml";
+		this.genesisFile = this.dataFolder + "/genesis.json";
+		this.keyFile = this.dataFolder + "/key";
+		this.keyPubFile = this.dataFolder + "/key.pub";
+		this.staticNodesFile = this.dataFolder + "/static-nodes.json";
+		this.permissionsFile = this.dataFolder + "/permissions_config.toml";
+		
 		logger.info("init " + this.componentDataFolder );
 		new File( this.dataFolder ).mkdirs();
+		copyDefaultData();
+	}
+	
+	private void copyDefaultData() {
+		try {
+			FileUtils.copyDirectory( new File("/besu-data"), new File( this.dataFolder ) );
+		} catch ( Exception e ) {
+			e.printStackTrace();
+		}
 	}
 	
 	private void loadConfig() throws Exception {
@@ -81,21 +104,17 @@ public class BESUService {
 		}
 		 
 		JSONObject portBidings = new JSONObject();
-		portBidings.put("36209", "4001/udp");
-		portBidings.put("36209", "4001/tcp");
-		portBidings.put("36206", "5001/tcp");
-		portBidings.put("36207", "8080/tcp");
-		
+		portBidings.put("30303", "30303/udp");
+		portBidings.put("30303", "30303/tcp");
+		portBidings.put("8545", "8545/tcp");
+
 		JSONArray envs = new JSONArray();
-		// envs.put("IPFS_LOGGING=DEBUG");
-		// envs.put("IPFS_PROFILE=server");
-		// envs.put("LIBP2P_FORCE_PNET='1'");
-		// envs.put("IPFS_SWARM_KEY_FILE=/ipfs/swarm.key");
+		envs.put("BESU_OPTS=-Xmx4g");
 
 		JSONArray volumes = new JSONArray();
 		volumes.put("/etc/localtime:/etc/localtime:ro");
-		volumes.put(  this.stagingFolder + ":/export");
-		volumes.put(  this.dataFolder + ":/data/ipfs");
+		volumes.put(  this.pluginsFolder + ":/besu/plugins");
+		volumes.put(  this.dataFolder + ":/data");
 		
 		JSONObject containerDef = new JSONObject();
 		containerDef.put("name", COMPONENT_NAME);
@@ -109,6 +128,8 @@ public class BESUService {
 		
 		String result = this.containerManager.create( containerDef );
 		containerDef.put("result", new JSONObject( result ) );
+		
+		containerManager.startContainer(COMPONENT_NAME);
 		
 		return containerDef.toString();
 	}
