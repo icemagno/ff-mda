@@ -235,7 +235,11 @@ public class LocalService {
 		this.agentConfig.getJSONObject("stackStatus").put("postgresql", containerManager.getContainer( "postgresql" ) );
 		this.agentConfig.getJSONObject("stackStatus").put("ipfs", containerManager.getContainer( "ipfs" ) );
 		this.agentConfig.getJSONObject("stackStatus").put("besu", containerManager.getContainer( "besu" ) );
-		
+		this.agentConfig.getJSONObject("stackStatus").put("core", containerManager.getContainer( "core" ) );
+		this.agentConfig.getJSONObject("stackStatus").put("sandbox", containerManager.getContainer( "sandbox" ) );
+		this.agentConfig.getJSONObject("stackStatus").put("signer", containerManager.getContainer( "signer" ) );
+		this.agentConfig.getJSONObject("stackStatus").put("tokens", containerManager.getContainer( "tokens" ) );
+		this.agentConfig.getJSONObject("stackStatus").put("evmConn", containerManager.getContainer( "evmconnect" ) );
 		
 	}
 	

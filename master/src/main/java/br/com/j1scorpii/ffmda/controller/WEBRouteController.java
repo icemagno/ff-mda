@@ -30,7 +30,7 @@ public class WEBRouteController {
     	componentNames.put("dataexchange", "Data Exchange");
     	componentNames.put("postgresql", "PostgreSQL Database");
     	componentNames.put("ipfs", "IPFS Node");
-    	componentNames.put("besu", "HyperLedger Besu Node");
+    	componentNames.put("besu", "HyperLedger Besu");
     	componentNames.put("tokens", "FireFly Tokens");
     	componentNames.put("signer", "FireFly Signer");
     	componentNames.put("evmconnect", "FireFly EVM Connector");

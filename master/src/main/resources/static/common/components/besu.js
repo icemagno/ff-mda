@@ -16,7 +16,7 @@ $( document ).ready(function() {
 	};
 	
 	setInterval( ()=>{
-		$.get("/v1/container/get?container=ipfs", function( container, status) {
+		$.get("/v1/container/get?container=besu", function( container, status) {
 			if( container && container.State ) processContainer( container );
 		});
 	}, 4000 ); 
@@ -24,7 +24,7 @@ $( document ).ready(function() {
 	stompClient.connect( thisheaders , (frame) => {
 		console.log('WebSocket Conected.');  
 
-		stompClient.subscribe('/docker/ipfs/pull', (message) => {
+		stompClient.subscribe('/docker/besu/pull', (message) => {
 			let payload = JSON.parse( message.body );
 			let status = payload.status;
 			if( payload.progress ) updateFixedLog(payload.progress);
@@ -47,7 +47,7 @@ $( document ).ready(function() {
 	$("#restartCont").click( ()=>{
 		if( isDisabled( "#restartCont" ) ) return;
 		log("Wait...")
-		$.get("/v1/container/restart?container=ipfs", function(data, status) {
+		$.get("/v1/container/restart?container=besu", function(data, status) {
 			console.log( data );
 		});		
 	});
@@ -55,7 +55,7 @@ $( document ).ready(function() {
 	$("#stopCont").click( ()=>{
 		if( isDisabled( "#stopCont" ) ) return;
 		log("Wait...")
-		$.get("/v1/container/stop?container=ipfs", function(data, status) {
+		$.get("/v1/container/stop?container=besu", function(data, status) {
 			//console.log( data );
 		});
 	});
@@ -63,7 +63,7 @@ $( document ).ready(function() {
 	$("#startCont").click( ()=>{
 		if( isDisabled( "#startCont" ) ) return;
 		log("Wait...")
-		$.get("/v1/ipfs/container/start", function(data, status) {
+		$.get("/v1/besu/container/start", function(data, status) {
 			//console.log( data );
 		});
 	});
@@ -73,7 +73,7 @@ $( document ).ready(function() {
 		$("#containerLog").empty();
 		updateFixedLog("");
 		log('Wait ...');
-		$.get("/v1/ipfs/image/pull", function(data, status) {
+		$.get("/v1/besu/image/pull", function(data, status) {
 			//console.log( data );
 		});
 	});	
@@ -125,14 +125,14 @@ function setButtons( what ){
 function updateData(){
 	if( working ) return;
 	working = true;
-	$.get("/v1/ipfs/config/get", function(data, status) {
+	$.get("/v1/besu/config/get", function(data, status) {
 		mainConfig = data;
 		if( data.image.exists ){
 			$("#componentTips").text( "The image is ready to launch a container. You can pull it again if you want to update to a new version.");
 			setButtons('play');
 			$("#imageName").text( data.image.imageName );
 			if( data.container && data.container.State ) processContainer( data.container )
-			if( data.nodeConfig ) $("#peerId").text( data.nodeConfig.Identity.PeerID );
+			
 		} else $("#componentTips").text("I will pull the image before start. This may take a few minutes depending on network speed and image size. ")
 		working = false;
 	});
@@ -159,7 +159,7 @@ function processContainer( container ){
 		'</table>'
 	);
 	
-	$.get("/v1/container/log?container=ipfs", function(data, status) {
+	$.get("/v1/container/log?container=besu", function(data, status) {
 		if( data.result ){
 			$("#containerLog").empty();
 			var split = data.result.split(/\r\n/);
