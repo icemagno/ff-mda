@@ -77,7 +77,10 @@ public class ContainerManager {
 		if( container.has("hosts") )  	hostConfig.put("ExtraHosts", container.getJSONArray("hosts") );
 
 		JSONObject body = new JSONObject();
-		if( container.has("args") )		body.put("Args", container.getJSONArray("args") );
+		if( container.has("args") )		{
+			body.put("Args", container.getJSONArray("args") );
+			body.put("Cmd", container.getJSONArray("args") );
+		}
 		
 		if( container.has("ports") ) {
 			JSONObject portBindings = new JSONObject();
