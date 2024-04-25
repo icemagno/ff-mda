@@ -41,9 +41,16 @@ public class IPFSService {
 	private String configFile;
 	private JSONObject identity = new JSONObject();
 	private JSONObject config;
+	private String swarmKey;
 	
 	@PostConstruct
 	private void init() {
+		// Create a swarm key to use here.
+		// If this is a slave node, the swarm key will be replaced by the master 
+		// swarm key using  createSwarmKeyFile( String swarmKey ) 
+		this.swarmKey = UUID.randomUUID().toString() + UUID.randomUUID().toString();
+		this.swarmKey = swarmKey.replaceAll("-", "").toLowerCase();	
+		// Configure folders
 		this.componentDataFolder = localDataFolder + "/" + COMPONENT_NAME;
 		this.stagingFolder = this.componentDataFolder + "/staging";
 		this.dataFolder = this.componentDataFolder + "/data";
@@ -51,17 +58,23 @@ public class IPFSService {
 		this.swarmKeyFile = this.dataFolder + "/swarm.key";
 		logger.info("init " + this.componentDataFolder );
 		new File( this.dataFolder ).mkdirs();
-		if( ! new File( this.swarmKeyFile ).exists() ) this.createSwarmKey();
+		new File( this.stagingFolder ).mkdirs();
+		if( ! new File( this.swarmKeyFile ).exists() ) this.createSwarmKeyFile();
 	}
 	
-	public String getSwarmKey() throws Exception {
+	public String getSwarmKeyFile() throws Exception {
 		byte[] encoded = Files.readAllBytes( Paths.get( this.swarmKeyFile ) );
 		return new String(encoded, StandardCharsets.UTF_8 );
 	}
-	
-	private void createSwarmKey() {
-		String swarmKey = UUID.randomUUID().toString() + UUID.randomUUID().toString();
-		swarmKey = swarmKey.replaceAll("-", "").toLowerCase();
+
+	public void createSwarmKeyFile( String swarmKey ) {
+		// This will be called by the master node to create same swarm key it owns
+		this.swarmKey = swarmKey;
+		this.createSwarmKeyFile();
+	}
+		
+	private void createSwarmKeyFile() {
+		// Create or replace the swarm key file
 		try {
 			BufferedWriter writer = new BufferedWriter( new FileWriter( this.swarmKeyFile ) );
 			writer.write( "/key/swarm/psk/1.0.0/" );
@@ -89,7 +102,7 @@ public class IPFSService {
 		);
 	}
 
-	// We need to change some stuff from config file
+	// We need to change some stuff inside the config file
 	// to make the this IPFS network private.
 	// I don't want to execute commands so I will create, start, stop, update config and start again.
 	private void updateConfig() throws Exception {
@@ -144,6 +157,7 @@ public class IPFSService {
 		portBidings.put("36207", "8080/tcp");
 		
 		JSONArray envs = new JSONArray();
+		envs.put("IPFS_LOGGING=DEBUG");
 		// envs.put("IPFS_PROFILE=server");
 		// envs.put("LIBP2P_FORCE_PNET='1'");
 		// envs.put("IPFS_SWARM_KEY_FILE=/ipfs/swarm.key");
@@ -155,6 +169,8 @@ public class IPFSService {
 		
 		JSONObject containerDef = new JSONObject();
 		containerDef.put("name", COMPONENT_NAME);
+		containerDef.put("hostName", COMPONENT_NAME);
+		containerDef.put("security-opt", "seccomp=unconfined");
 		containerDef.put("ports", portBidings );
 		containerDef.put("image", this.imageName );
 		containerDef.put("connectToNetwork", "ffmda");

@@ -233,6 +233,7 @@ public class LocalService {
 		// Get the stack situation
 		this.agentConfig.getJSONObject("stackStatus").put("dataExchange", containerManager.getContainer( "dataexchange" ) );
 		this.agentConfig.getJSONObject("stackStatus").put("postgresql", containerManager.getContainer( "postgresql" ) );
+		this.agentConfig.getJSONObject("stackStatus").put("ipfs", containerManager.getContainer( "ipfs" ) );
 		
 		
 	}

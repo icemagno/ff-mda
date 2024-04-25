@@ -53,9 +53,24 @@ public class WEBRouteController {
     @GetMapping("/component")
     public String component( @RequestParam(value = "name", required = true) String name, Model model) {
     	this.setGenericModel( model );
+    	
+    	System.out.println("WEBRouterController");
+    	System.out.println( localService.getAgentConfig().toString(5) );
+    	
     	model.addAttribute("componentName", this.componentNames.get(name) );
     	model.addAttribute("componentShortName", name );
-        return "components/" + name ;
+
+    	// Try to take the main config
+    	try {
+    		// In case of succes ( already have configured ) go to component page
+    		String configured = localService.getAgentConfig().getString("nodeName");
+    		if( configured.length() > 1 ) return "components/" + name ;
+    	} catch ( Exception e ) {	}
+    	
+    	// Failure. Go back to main page
+    	return "local";
+    	
+        
     }
     
     @GetMapping("/remote")
