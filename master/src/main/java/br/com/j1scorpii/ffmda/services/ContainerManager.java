@@ -78,7 +78,6 @@ public class ContainerManager {
 
 		JSONObject body = new JSONObject();
 		if( container.has("args") )		{
-			body.put("Args", container.getJSONArray("args") );
 			body.put("Cmd", container.getJSONArray("args") );
 		}
 		
