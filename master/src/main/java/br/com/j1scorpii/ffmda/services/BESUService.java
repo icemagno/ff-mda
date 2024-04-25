@@ -1,12 +1,8 @@
 package br.com.j1scorpii.ffmda.services;
 
-import java.io.BufferedWriter;
 import java.io.File;
-import java.io.FileWriter;
-import java.io.IOException;
-import java.nio.charset.Charset;
-import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
+import java.nio.file.Path;
 import java.nio.file.Paths;
 
 import org.apache.commons.io.FileUtils;
@@ -16,9 +12,12 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.core.io.ByteArrayResource;
+import org.springframework.core.io.Resource;
 import org.springframework.stereotype.Service;
 
 import jakarta.annotation.PostConstruct;
+import jakarta.servlet.http.HttpServletResponse;
 
 @Service
 public class BESUService {
@@ -37,9 +36,8 @@ public class BESUService {
 	private String pluginsFolder;
 	private String dataFolder;
 	private String imageName;
-	private String configFile;
-	private JSONObject config;
 
+	private String configFile;
 	private String genesisFile;
 	private String keyFile;
 	private String keyPubFile;
@@ -71,22 +69,6 @@ public class BESUService {
 		} catch ( Exception e ) {
 			e.printStackTrace();
 		}
-	}
-	
-	private void loadConfig() throws Exception {
-		String content = readFile( this.configFile , StandardCharsets.UTF_8);
-		this.config = new JSONObject(content);
-	}
-	
-	private void saveConfig() throws Exception {
-		BufferedWriter writer = new BufferedWriter( new FileWriter( this.configFile ) );
-		writer.write( this.config.toString() );
-		writer.close();			
-	}
-
-	private String readFile(String path, Charset encoding)  throws IOException {
-		byte[] encoded = Files.readAllBytes(Paths.get(path));
-		return new String(encoded, encoding);
 	}
 	
 	public String startContainer() {
@@ -125,6 +107,7 @@ public class BESUService {
 		containerDef.put("restart", "always");
 		containerDef.put("environments", envs);
 		containerDef.put("volumes", volumes);
+		containerDef.put("args", new JSONArray().put("/besu/bin/besu").put("--config-file=/data/config.toml") );
 		
 		String result = this.containerManager.create( containerDef );
 		containerDef.put("result", new JSONObject( result ) );
@@ -155,7 +138,6 @@ public class BESUService {
 	}
 	
 	public String getConfig( ) {
-		try { loadConfig(); } catch (Exception e) {	}
 		JSONObject localAgentConfig = localService.getAgentConfig();
 		// Use a object wrapper to send component configuration 
 		// plus some relevant configuration to the UI.
@@ -164,8 +146,46 @@ public class BESUService {
 		generalConfig.put("container", getContainer() );
 		// Plus the local node config ( I need this server's IP and host )
 		generalConfig.put("localAgentConfig", localAgentConfig );
-		generalConfig.put("nodeConfig", this.config );
 		return generalConfig.toString(5);
+	}
+
+	public Resource downloadFile( String fileName, HttpServletResponse response ) {
+    	Path path = null;
+    	String actualFileName = null;
+    	try {
+	    	switch ( fileName ) {
+	    		case "config":
+	    			path = Paths.get( this.configFile );
+	    			actualFileName = "config.toml";
+	    			break;
+	    		case "genesis":
+	    			path = Paths.get( this.genesisFile );
+	    			actualFileName = "genesis.json";
+	    			break;
+	    		case "key":
+	    			path = Paths.get( this.keyFile );
+	    			actualFileName = "key";
+	    			break;
+	    		case "keypub":
+	    			path = Paths.get( this.keyPubFile );
+	    			actualFileName = "key.pub";
+	    			break;
+	    		case "staticnodes":
+	    			path = Paths.get( this.staticNodesFile );
+	    			actualFileName = "static-nodes.json";
+	    			break;
+	    		case "permissions":
+	    			path = Paths.get( this.permissionsFile );
+	    			actualFileName = "permissions_config.toml";
+	    			break;
+	    	}
+	    	response.setHeader("Content-Disposition", "attachment; filename=" + actualFileName );
+	    	ByteArrayResource resource = new ByteArrayResource( Files.readAllBytes( path ) );
+		    return resource;
+    	} catch ( Exception e ) {
+    		e.printStackTrace();
+    	}
+    	return null;
 	}
 	
 }
