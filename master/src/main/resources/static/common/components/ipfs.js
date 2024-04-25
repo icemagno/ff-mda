@@ -56,7 +56,7 @@ $( document ).ready(function() {
 		if( isDisabled( "#stopCont" ) ) return;
 		log("Wait...")
 		$.get("/v1/container/stop?container=ipfs", function(data, status) {
-			console.log( data );
+			//console.log( data );
 		});
 	});
 	
@@ -64,7 +64,7 @@ $( document ).ready(function() {
 		if( isDisabled( "#startCont" ) ) return;
 		log("Wait...")
 		$.get("/v1/ipfs/container/start", function(data, status) {
-			console.log( data );
+			//console.log( data );
 		});
 	});
 	
@@ -74,7 +74,7 @@ $( document ).ready(function() {
 		updateFixedLog("");
 		log('Wait ...');
 		$.get("/v1/ipfs/image/pull", function(data, status) {
-			console.log( data );
+			//console.log( data );
 		});
 	});	
 	 

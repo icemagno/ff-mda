@@ -157,7 +157,7 @@ public class IPFSService {
 		portBidings.put("36207", "8080/tcp");
 		
 		JSONArray envs = new JSONArray();
-		envs.put("IPFS_LOGGING=DEBUG");
+		// envs.put("IPFS_LOGGING=DEBUG");
 		// envs.put("IPFS_PROFILE=server");
 		// envs.put("LIBP2P_FORCE_PNET='1'");
 		// envs.put("IPFS_SWARM_KEY_FILE=/ipfs/swarm.key");
