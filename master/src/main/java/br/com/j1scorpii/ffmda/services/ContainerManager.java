@@ -76,6 +76,8 @@ public class ContainerManager {
 		if( container.has("restart") ) 	hostConfig.put("RestartPolicy", new JSONObject().put("Name", container.getString("restart") )  );
 		if( container.has("hosts") )  	hostConfig.put("ExtraHosts", container.getJSONArray("hosts") );
 
+		if( container.has("args") )		hostConfig.put("Args", container.getJSONArray("args") );
+			
 		JSONObject body = new JSONObject();
 
 		if( container.has("ports") ) {

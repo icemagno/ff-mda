@@ -43,7 +43,7 @@ $( document ).ready(function() {
 			if( payload.pullSuccessIndicated == true ) {
 				log( 'Finish with SUCCESS.' );
 				updateFixedLog("");
-				this.updateData();
+				updateData();
 				lastPullMessage = "";
 			}
 
