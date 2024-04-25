@@ -170,7 +170,6 @@ public class IPFSService {
 		JSONObject containerDef = new JSONObject();
 		containerDef.put("name", COMPONENT_NAME);
 		containerDef.put("hostName", COMPONENT_NAME);
-		containerDef.put("security-opt", "seccomp=unconfined");
 		containerDef.put("ports", portBidings );
 		containerDef.put("image", this.imageName );
 		containerDef.put("connectToNetwork", "ffmda");
