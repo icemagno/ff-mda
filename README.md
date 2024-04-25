@@ -1,6 +1,8 @@
 # FF-MDA
 Multiparty Deployer Agent for FireFly
 
+Tested with Docker v25.0.3
+
 I'm still working on this... 
 
 ![local-node](https://github.com/icemagno/ff-mda/assets/4127512/b543234e-7fe4-4bd3-ab3a-8c4f10b1aa29)
