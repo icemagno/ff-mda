@@ -13,6 +13,10 @@
     background: rgba(0, 0, 0, 0.2);
 }
 
+.borderless td {
+	border: 0px
+}
+
 .info-box {
     display: block;
     min-height: 50px;
