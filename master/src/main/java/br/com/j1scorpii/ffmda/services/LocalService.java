@@ -234,6 +234,7 @@ public class LocalService {
 		this.agentConfig.getJSONObject("stackStatus").put("dataExchange", containerManager.getContainer( "dataexchange" ) );
 		this.agentConfig.getJSONObject("stackStatus").put("postgresql", containerManager.getContainer( "postgresql" ) );
 		this.agentConfig.getJSONObject("stackStatus").put("ipfs", containerManager.getContainer( "ipfs" ) );
+		this.agentConfig.getJSONObject("stackStatus").put("besu", containerManager.getContainer( "besu" ) );
 		
 		
 	}
