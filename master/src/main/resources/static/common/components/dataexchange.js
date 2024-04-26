@@ -140,8 +140,6 @@ function processContainer( container ){
 	let nodeId = "Wait...";
 	if( peerId ) nodeId = peerId.id;
 	
-	console.log( peerStatus )
-	
 	$("#componentTips").html(
 		'<table style="width:100%">' + 
 		'<tr><td>Tag</td><td>'+container.Labels.tag+'</td></tr>' +
@@ -152,7 +150,7 @@ function processContainer( container ){
 		'<tr><td>Peer ID</td><td>'+nodeId+'</td></tr>' +
 		'<tr><td>MSG Query Size</td><td>'+peerStatus.messageQueueSize+'</td></tr>' +
 		'<tr><td>In Flight Count</td><td>'+peerStatus.inFlightCount+'</td></tr>' +
-		'<tr><td>Peers</td><td>'+peerStatus.peers.length+'</td></tr>' +
+		'<tr><td>Peers Count</td><td>'+peerStatus.peers.length+'</td></tr>' +
 		'</table>'
 	);
 	
