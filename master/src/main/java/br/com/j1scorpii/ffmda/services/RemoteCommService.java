@@ -29,7 +29,7 @@ public class RemoteCommService {
 			WebSocketClient client = new StandardWebSocketClient();
 			WebSocketStompClient stompClient = new WebSocketStompClient(client);
 			stompClient.setMessageConverter( new MappingJackson2MessageConverter() );
-			CompletableFuture<StompSession> future = stompClient.connectAsync("", new AgentWebSocketHandler(this) , uri);
+			CompletableFuture<StompSession> future = stompClient.connectAsync("ws://192.168.0.205:36780/ws", new AgentWebSocketHandler(this) , uri);
 			this.session = future.get();
 		} catch ( Exception e ) {
 			e.printStackTrace();
