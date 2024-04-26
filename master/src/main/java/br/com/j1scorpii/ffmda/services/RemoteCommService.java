@@ -4,11 +4,10 @@ import java.net.URI;
 import java.util.concurrent.CompletableFuture;
 
 import org.json.JSONObject;
-import org.springframework.messaging.converter.MappingJackson2MessageConverter;
+import org.springframework.messaging.converter.StringMessageConverter;
 import org.springframework.messaging.simp.stomp.StompSession;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
-import org.springframework.web.socket.WebSocketHttpHeaders;
 import org.springframework.web.socket.client.WebSocketClient;
 import org.springframework.web.socket.client.standard.StandardWebSocketClient;
 import org.springframework.web.socket.messaging.WebSocketStompClient;
@@ -28,7 +27,7 @@ public class RemoteCommService {
 			URI uri = new URI("ws://192.168.0.205:36780/ws");
 			WebSocketClient client = new StandardWebSocketClient();
 			WebSocketStompClient stompClient = new WebSocketStompClient(client);
-			stompClient.setMessageConverter( new MappingJackson2MessageConverter() );
+			stompClient.setMessageConverter( new StringMessageConverter() );
 			CompletableFuture<StompSession> future = stompClient.connectAsync("ws://192.168.0.205:36780/ws", new AgentWebSocketHandler(this) , uri);
 			this.session = future.get();
 		} catch ( Exception e ) {
