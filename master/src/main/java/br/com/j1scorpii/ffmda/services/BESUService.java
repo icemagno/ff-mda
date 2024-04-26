@@ -114,7 +114,7 @@ public class BESUService {
 			// Get connected peers
 			requestData.put("method", "admin_peers");
 			res = new JSONObject ( this.requestData("http://besu:8545", requestData) );
-			blockchainData.put("peers", res );
+			blockchainData.put("peers", res.getJSONArray("result") );
 			
 		} catch ( Exception e ) { e.printStackTrace(); }
 		
