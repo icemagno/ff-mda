@@ -190,8 +190,6 @@ public class IPFSService {
 			e.printStackTrace();
 		}
 		
-		
-		
 		return containerDef.toString();
 	}
 	

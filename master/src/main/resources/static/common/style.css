@@ -13,8 +13,9 @@
     background: rgba(0, 0, 0, 0.2);
 }
 
-.borderless td {
-	border: 0px
+.borderless tbody tr td {
+	border: 0px !important;
+	padding: 2px;
 }
 
 .info-box {

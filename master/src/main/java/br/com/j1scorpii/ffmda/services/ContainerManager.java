@@ -142,7 +142,8 @@ public class ContainerManager {
 	
 	public String getLog( String containerId ) {
 		String log = dockerService.getResponse( Request.Method.GET, "/containers/"+containerId+"/logs?stdout=true&stderr=true&tail=true", null );
-		return new JSONObject().put("result", log).toString();		
+		// Remove color codes from log to not mess with my interface!
+		return new JSONObject().put("result", log.replaceAll("\u001B\\[[;\\d]*m", "") ).toString();		
 	}
 
 	public String deleteContainer( String containerId, boolean force, boolean removeVolumes ) {

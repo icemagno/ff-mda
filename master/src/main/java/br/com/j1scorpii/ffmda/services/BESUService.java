@@ -1,9 +1,12 @@
 package br.com.j1scorpii.ffmda.services;
 
 import java.io.File;
+import java.math.BigInteger;
+import java.net.URL;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.nio.file.StandardCopyOption;
 
 import org.apache.commons.io.FileUtils;
 import org.json.JSONArray;
@@ -14,7 +17,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.ByteArrayResource;
 import org.springframework.core.io.Resource;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.MediaType;
+import org.springframework.http.RequestEntity;
 import org.springframework.stereotype.Service;
+import org.springframework.web.client.RestTemplate;
+import org.springframework.web.multipart.MultipartFile;
 
 import jakarta.annotation.PostConstruct;
 import jakarta.servlet.http.HttpServletResponse;
@@ -44,8 +52,17 @@ public class BESUService {
 	private String staticNodesFile;
 	private String permissionsFile;
 	
+	private RestTemplate rt;
+
+	private JSONObject blockchainData = new JSONObject(); 
+	
 	@PostConstruct
 	private void init() {
+		// Set initial blockchain data
+		blockchainData.put("blockNumber", -1);
+		blockchainData.put("peers", new JSONArray() );
+		
+		this.rt = new RestTemplate();
 		// Configure folders
 		this.componentDataFolder = localDataFolder + "/" + COMPONENT_NAME;
 		this.pluginsFolder = this.componentDataFolder + "/plugins";
@@ -62,6 +79,48 @@ public class BESUService {
 		new File( this.dataFolder ).mkdirs();
 		copyDefaultData();
 	}
+	
+	private String requestData( String endpoint, JSONObject payload ) throws Exception {
+		HttpHeaders headers = new HttpHeaders();
+		headers.setContentType(MediaType.APPLICATION_JSON);
+		RequestEntity<String> requestEntity = RequestEntity 
+				.post( new URL( endpoint ).toURI() ) 
+				.contentType( MediaType.APPLICATION_JSON ) 
+				.body( payload.toString() ); 
+		return rt.exchange(requestEntity, String.class ).getBody();		
+	}
+
+	public String getBlockchainData() {
+		// blockchainData is global becaus this is a kind of asynchronous call.
+		// The frontend will request the data and will not wait for all calls to the BESU node to finish.
+		// So I'll respond ASAP with the global variable and fill it as I finish each call to the node.
+		// I'll assume the node is an EVM implementation ( like BESU ) and use Ethereum RPC API.
+		// To serve other flavors it will be much more complex
+		int id = 0;
+		JSONObject requestData = new JSONObject()
+				.put("jsonrpc", "2.0")
+				.put("id", id)
+				.put("params", new JSONArray() );
+		JSONObject res = null;
+		BigInteger value = null;
+		
+		try {
+			// Get block number
+			requestData.put("method", "eth_blockNumber");
+			res = new JSONObject ( this.requestData("http://besu:8545", requestData) );
+			value = new BigInteger( res.getString("result").substring(2) , 16);
+			blockchainData.put("blockNumber", value.toString() );
+			
+			// Get connected peers
+			requestData.put("method", "admin_peers");
+			res = new JSONObject ( this.requestData("http://besu:8545", requestData) );
+			blockchainData.put("peers", res );
+			
+		} catch ( Exception e ) { e.printStackTrace(); }
+		
+		
+		return blockchainData.toString();
+	}	
 	
 	private void copyDefaultData() {
 		try {
@@ -186,6 +245,18 @@ public class BESUService {
     		e.printStackTrace();
     	}
     	return null;
+	}
+
+	public String receiveFile(MultipartFile file) {
+		try {
+			Path targetPath = Paths.get( this.dataFolder );
+			Path targetFile = targetPath.resolve( file.getOriginalFilename()  );
+			Files.copy( file.getInputStream(), targetFile, StandardCopyOption.REPLACE_EXISTING);
+			return "Ok";
+		} catch (Exception e) {
+			e.printStackTrace();
+			return e.getMessage();
+		}
 	}
 	
 }

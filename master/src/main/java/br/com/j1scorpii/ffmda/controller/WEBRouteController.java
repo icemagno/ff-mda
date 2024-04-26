@@ -53,10 +53,6 @@ public class WEBRouteController {
     @GetMapping("/component")
     public String component( @RequestParam(value = "name", required = true) String name, Model model) {
     	this.setGenericModel( model );
-    	
-    	System.out.println("WEBRouterController");
-    	System.out.println( localService.getAgentConfig().toString(5) );
-    	
     	model.addAttribute("componentName", this.componentNames.get(name) );
     	model.addAttribute("componentShortName", name );
 

@@ -6,10 +6,12 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
 
 import br.com.j1scorpii.ffmda.services.BESUService;
 import jakarta.servlet.http.HttpServletResponse;
@@ -25,7 +27,14 @@ public class BESUController {
     public @ResponseBody Resource downloadFile( @RequestParam (value="name",required=true) String fileName, HttpServletResponse response ) throws Exception {
     	return this.besuService.downloadFile( fileName, response );
     }  	
-	
+
+    @PostMapping( value="/config/file" )
+    public ResponseEntity<String> receiveFile( @RequestParam("file") MultipartFile file ) throws Exception {
+    	System.out.println("Chegou arquivo: " + file.getOriginalFilename() + " " + file.getContentType() );
+    	this.besuService.receiveFile( file );
+    	return new ResponseEntity<String>( "Ok" , HttpStatus.OK);
+    }  	
+    
 	// Check if we have the image already
     @GetMapping( value="/image/pulled", produces= MediaType.APPLICATION_JSON_VALUE )
     public ResponseEntity<String> imagePulled( ) {
@@ -47,5 +56,8 @@ public class BESUController {
     	return new ResponseEntity<String>( this.besuService.startContainer(), HttpStatus.OK);
     }    
 
-      
+    @GetMapping( value="/blockchain", produces= MediaType.APPLICATION_JSON_VALUE )
+    public ResponseEntity<String> getBlockchainData( ) {
+    	return new ResponseEntity<String>( this.besuService.getBlockchainData(), HttpStatus.OK);
+    }        
 }

@@ -17,7 +17,10 @@ $( document ).ready(function() {
 	
 	setInterval( ()=>{
 		$.get("/v1/container/get?container=besu", function( container, status) {
-			if( container && container.State ) processContainer( container );
+			if( container && container.State ) {
+				processContainer( container );
+				updateBlockchainData();
+			}
 		});
 	}, 4000 ); 
 	 
@@ -37,7 +40,9 @@ $( document ).ready(function() {
 				lastPullMessage = "";
 			}
 		});
-	});	
+	});
+	
+	bindFileButtons();
 
 	$("#removeCont").click( ()=>{
 		if( isDisabled( "#removeCont" ) ) return;
@@ -139,6 +144,19 @@ function updateData(){
 	
 }
 
+function updateBlockchainData(){
+	$.get("/v1/besu/blockchain", function(data, status) {
+		if( data.blockNumber ) {
+			$("#blockchainData").html(
+				'<table style="width:100%">' + 
+				'<tr><td>Block Number</td><td>'+data.blockNumber+'</td></tr>' +
+				'<tr><td>Connected Peers</td><td>'+data.peers.length+'</td></tr>' +
+				'</table>'
+			);	
+		}	
+	});
+}
+
 function processContainer( container ){
 	let localIP = container.NetworkSettings.Networks.ffmda.IPAddress
 	let ports = container.Ports;
@@ -176,6 +194,60 @@ function processContainer( container ){
 	}
 }
 
+function downloadFile( what ){
+	window.open("/v1/besu/config/file?name=" + what);
+}
+
+function bindFileButtons() {
+	
+	$("#uploadFile").change(function( input ){
+		
+		log( "Sending " + input.target.files[0].name + " to BESU configuration folder...");
+		
+		var data = new FormData( $('#uploadForm')[0] );
+		data.append('file', input.target.files[0] );
+		$.ajax( {
+			url: '/v1/besu/config/file',
+			type: 'POST',
+			data: data,
+			processData: false,
+			contentType: false
+		}).then(function( data, textStatus, jqXHR ) {
+			log( input.target.files[0].name + " sent.");
+			log( "Backend response: " + data );
+			$('#uploadFile').val(null);
+		});
+		
+	});	
+	
+	$("#dlGenesis").click( ()=>{
+		downloadFile('genesis');
+	});	
+	$(".fa-upload").click( ()=>{
+		$("#uploadFile").click();
+	});	
+	
+	$("#dlConfig").click( ()=>{
+		downloadFile('config');
+	});	
+	
+	$("#dlKey").click( ()=>{
+		downloadFile('key');
+	});	
+	
+	$("#dlPubKey").click( ()=>{
+		downloadFile('keypub');
+	});	
+
+	$("#dlStaticNodes").click( ()=>{
+		downloadFile('staticnodes');
+	});	
+
+	$("#dlPermissions").click( ()=>{
+		downloadFile('permissions');
+	});	
+		
+}
 
 
 
