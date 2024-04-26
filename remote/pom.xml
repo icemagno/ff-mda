@@ -39,11 +39,96 @@
 		    <version>${docker-java.version}</version>
 		</dependency>
 		
+		
+		<dependency>
+		    <groupId>com.github.ipfs-shipyard</groupId>
+		    <artifactId>java-ipfs-http-client</artifactId>
+		    <version>v1.4.4</version>
+		</dependency>
+	    
+	    <dependency>
+			<groupId>com.github.multiformats</groupId>
+			<artifactId>java-multibase</artifactId>
+			<version>v1.1.1</version>
+	    </dependency>		
+		
+		<dependency>
+			<groupId>com.github.multiformats</groupId>
+			<artifactId>java-multiaddr</artifactId>
+			<version>v1.4.12</version>
+		</dependency>		
+    	
+    	<dependency>
+      		<groupId>com.github.multiformats</groupId>
+      		<artifactId>java-multihash</artifactId>
+      		<version>v1.3.3</version>
+    	</dependency>
+    	
+    	<dependency>
+      		<groupId>com.github.ipld</groupId>
+      		<artifactId>java-cid</artifactId>
+      		<version>v1.3.8</version>
+    	</dependency>		
+		
        <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-websocket</artifactId>
         </dependency>
         
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-thymeleaf</artifactId>
+		</dependency>		
+	
+		<!-- https://mvnrepository.com/artifact/org.apache.commons/commons-math3 -->
+		<dependency>
+		    <groupId>org.apache.commons</groupId>
+		    <artifactId>commons-math3</artifactId>
+		    <version>3.0</version>
+		</dependency>
+	
+		<!-- https://mvnrepository.com/artifact/org.web3j/core -->
+		<dependency>
+		    <groupId>org.web3j</groupId>
+		    <artifactId>core</artifactId>
+		    <version>${webj3.version}</version>
+		</dependency>
+		
+		<!-- https://mvnrepository.com/artifact/org.web3j/crypto -->
+		<dependency>
+		    <groupId>org.web3j</groupId>
+		    <artifactId>crypto</artifactId>
+		    <version>${webj3.version}</version>
+		</dependency>
+		
+		<!-- https://mvnrepository.com/artifact/org.web3j/utils -->
+		<dependency>
+		    <groupId>org.web3j</groupId>
+		    <artifactId>utils</artifactId>
+		    <version>${webj3.version}</version>
+		</dependency>
+		
+		<!-- https://mvnrepository.com/artifact/org.web3j/codegen -->
+		<dependency>
+		    <groupId>org.web3j</groupId>
+		    <artifactId>codegen</artifactId>
+		    <version>${webj3.version}</version>
+		</dependency>
+		
+		<!-- https://mvnrepository.com/artifact/org.web3j/parity -->
+		<dependency>
+		    <groupId>org.web3j</groupId>
+		    <artifactId>parity</artifactId>
+		    <version>${webj3.version}</version>
+		</dependency>
+		
+		<!-- https://mvnrepository.com/artifact/org.web3j/contracts -->
+		<dependency>
+		    <groupId>org.web3j</groupId>
+		    <artifactId>contracts</artifactId>
+		<version>${webj3.version}</version>
+		</dependency>		
+	
 		<!-- https://mvnrepository.com/artifact/com.github.docker-java/docker-java-core -->
 		<dependency>
 			<groupId>com.github.docker-java</groupId>
