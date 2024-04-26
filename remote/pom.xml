@@ -20,6 +20,7 @@
 		<project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
 		<java.version>17</java.version>
 		<maven.test.skip>true</maven.test.skip>
+		<webj3.version>5.0.0</webj3.version>
 		<docker-java.version>3.3.6</docker-java.version>
 	</properties>
 
