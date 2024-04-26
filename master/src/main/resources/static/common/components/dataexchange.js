@@ -140,6 +140,8 @@ function processContainer( container ){
 	let nodeId = "Wait...";
 	if( peerId ) nodeId = peerId.id;
 	
+	console.log( peerStatus )
+	
 	$("#componentTips").html(
 		'<table style="width:100%">' + 
 		'<tr><td>Tag</td><td>'+container.Labels.tag+'</td></tr>' +
