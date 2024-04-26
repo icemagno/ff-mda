@@ -3,6 +3,7 @@ let dataExchangeImageName = null;
 let lastPullMessage = "";
 let mainConfig = null;
 let peerId = null;
+let peerStatus = {"messageQueueSize": 0, "inFlightCount": 0, "peers": [] };
 let working = false;
 
 $( document ).ready(function() {
@@ -146,7 +147,10 @@ function processContainer( container ){
 		'<tr><td>Status</td><td>'+container.Status+'</td></tr>' +
 		'<tr><td>Local IP</td><td>'+dataExchangeLocalIP+'</td></tr>' +
 		'<tr><td>Ports</td><td>'+pmCell+'</td></tr>' +
-		'<tr><td>Node ID</td><td>'+nodeId+'</td></tr>' +
+		'<tr><td>Peer ID</td><td>'+nodeId+'</td></tr>' +
+		'<tr><td>MSG Query Size</td><td>'+peerStatus.messageQueueSize+'</td></tr>' +
+		'<tr><td>In Flight Count</td><td>'+peerStatus.inFlightCount+'</td></tr>' +
+		'<tr><td>Peers</td><td>'+peerStatus.peers.length+'</td></tr>' +
 		'</table>'
 	);
 	
@@ -162,6 +166,7 @@ function processContainer( container ){
 
 	if( container.State == 'running' ){
 		getPeerId()
+		getPeerStatus();
 		setButtons('stop-restart');
 	} else {
 		setButtons('play');
@@ -177,3 +182,8 @@ function getPeerId(){
 	});
 }
 
+function getPeerStatus(){
+	$.get( "/v1/dataexchange/peer/status", function(data, status) {
+		peerStatus = data;
+	});
+}

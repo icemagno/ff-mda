@@ -240,6 +240,12 @@ public class DataExchangeService {
 		return peerId;
 	}
 	
+	public String getStatus() {
+		String status = "Wait...";
+		try { status = this.requestData("http://dataexchange:3000/api/v1/status");	} catch ( Exception e ) {	}
+		return status;
+	}
+
 	private String requestData( String endpoint ) {
 		return rt.getForObject( endpoint, String.class);
 	}

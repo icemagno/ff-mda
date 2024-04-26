@@ -60,6 +60,12 @@ public class DataExchangeController {
     	return new ResponseEntity<String>( this.dataExchangeService.getPeerId() , HttpStatus.OK);
     }    
     
+    // Get Status
+    @GetMapping( value="/peer/status", produces= MediaType.APPLICATION_JSON_VALUE )
+    public ResponseEntity<String> getStatus( ) {
+    	return new ResponseEntity<String>( this.dataExchangeService.getStatus() , HttpStatus.OK);
+    }    
+
     // Download peer certificate file (public key)
     @GetMapping( value="/peer/certificate", produces= MediaType.APPLICATION_OCTET_STREAM_VALUE )
     public @ResponseBody Resource getPeerCertificateFile( HttpServletResponse response ) throws Exception {
