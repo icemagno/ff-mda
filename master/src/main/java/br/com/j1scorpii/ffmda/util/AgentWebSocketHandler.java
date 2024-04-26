@@ -25,14 +25,12 @@ public class AgentWebSocketHandler implements StompSessionHandler {
 
 	@Override
 	public void handleFrame(StompHeaders headers, Object payload) {
-		System.out.println("HF");
 		String msg = (String)payload;
 		this.owner.processMessageFromAgent( this.session, new JSONObject(msg) );
 	}
 
 	@Override
 	public void afterConnected(StompSession session, StompHeaders connectedHeaders) {
-		System.out.println("AC");
 		this.session = session;
 	    session.subscribe("/ping", this);
 	}

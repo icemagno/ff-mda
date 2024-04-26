@@ -45,6 +45,7 @@ public class RemoteCommService {
 
 	public void processMessageFromAgent( StompSession session, JSONObject jsonObject ) {
 		System.out.println( jsonObject.toString(5) );
+		session.send("/main_channel", new JSONObject().put("ping", "I am Master (I think)") );
 	}
 	
 }
