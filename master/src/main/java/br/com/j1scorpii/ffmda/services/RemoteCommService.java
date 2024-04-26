@@ -37,13 +37,13 @@ public class RemoteCommService {
 	}
 	public void setSession(StompSession session) {
 		this.session = session;
-		session.send("/main_channel", new JSONObject().put("ping", "Connected!") );
+		session.send("/main_channel", new JSONObject().put("ping", "Connected!").toString() );
 	}
 	
 	@Scheduled( fixedRate = 4000 )
 	private void ping() {
 		if( this.session != null ) {
-			session.send("/main_channel", new JSONObject().put("ping", "I am Master") );
+			session.send("/main_channel", new JSONObject().put("ping", "I am Master").toString() );
 		}
 	}
 
