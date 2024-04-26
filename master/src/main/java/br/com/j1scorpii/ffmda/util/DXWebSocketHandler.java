@@ -28,7 +28,6 @@ public class DXWebSocketHandler extends AbstractWebSocketHandler {
 	
 	@Override
 	protected void handleTextMessage(WebSocketSession session, TextMessage message) throws Exception {
-		System.out.println( message.getPayload() );
 		owner.processMessageFromDX( session, new JSONObject( message.getPayload() ) );
 	}
 	
