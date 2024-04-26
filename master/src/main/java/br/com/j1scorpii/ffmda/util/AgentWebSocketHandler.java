@@ -12,7 +12,6 @@ import br.com.j1scorpii.ffmda.services.RemoteCommService;
 
 public class AgentWebSocketHandler implements StompSessionHandler {
 	private RemoteCommService owner;
-	private StompSession session;
 	
 	public AgentWebSocketHandler( RemoteCommService owner ) {
 		this.owner = owner;
@@ -26,12 +25,12 @@ public class AgentWebSocketHandler implements StompSessionHandler {
 	@Override
 	public void handleFrame(StompHeaders headers, Object payload) {
 		String msg = (String)payload;
-		this.owner.processMessageFromAgent( this.session, new JSONObject(msg) );
+		this.owner.processMessageFromAgent( new JSONObject(msg) );
 	}
 
 	@Override
 	public void afterConnected(StompSession session, StompHeaders connectedHeaders) {
-		this.session = session;
+		this.owner.setSession(session);
 	    session.subscribe("/ping", this);
 	}
 

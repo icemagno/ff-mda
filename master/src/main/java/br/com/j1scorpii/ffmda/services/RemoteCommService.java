@@ -29,11 +29,15 @@ public class RemoteCommService {
 			WebSocketStompClient stompClient = new WebSocketStompClient(client);
 			stompClient.setMessageConverter( new StringMessageConverter() );
 			CompletableFuture<StompSession> future = stompClient.connectAsync("ws://192.168.0.205:36780/ws", new AgentWebSocketHandler(this) , uri);
-			this.session = future.get();
+			future.get();
 		} catch ( Exception e ) {
 			e.printStackTrace();
 		}
 		
+	}
+	public void setSession(StompSession session) {
+		this.session = session;
+		session.send("/main_channel", new JSONObject().put("ping", "Connected!") );
 	}
 	
 	@Scheduled( fixedRate = 4000 )
@@ -43,9 +47,8 @@ public class RemoteCommService {
 		}
 	}
 
-	public void processMessageFromAgent( StompSession session, JSONObject jsonObject ) {
+	public void processMessageFromAgent( JSONObject jsonObject ) {
 		System.out.println( jsonObject.toString(5) );
-		session.send("/main_channel", new JSONObject().put("ping", "I am Master (I think)").toString() );
 	}
 	
 }
