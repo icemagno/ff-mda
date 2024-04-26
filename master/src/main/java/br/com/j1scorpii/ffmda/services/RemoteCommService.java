@@ -6,6 +6,7 @@ import java.util.concurrent.CompletableFuture;
 import org.json.JSONObject;
 import org.springframework.messaging.converter.StringMessageConverter;
 import org.springframework.messaging.simp.stomp.StompSession;
+import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import org.springframework.web.socket.client.WebSocketClient;
@@ -16,6 +17,7 @@ import br.com.j1scorpii.ffmda.util.AgentWebSocketHandler;
 import jakarta.annotation.PostConstruct;
 
 @Service
+@EnableScheduling
 public class RemoteCommService {
 
 	private StompSession session = null;
@@ -37,18 +39,23 @@ public class RemoteCommService {
 	}
 	public void setSession(StompSession session) {
 		this.session = session;
-		session.send("/main_channel", new JSONObject().put("ping", "Connected!").toString() );
+		send( new JSONObject().put("ping", "Connected!") );
 	}
 	
 	@Scheduled( fixedRate = 4000 )
 	private void ping() {
-		if( this.session != null ) {
-			session.send("/main_channel", new JSONObject().put("ping", "I am Master").toString() );
-		}
+		send( new JSONObject().put("ping", "I am Master") );		
 	}
 
 	public void processMessageFromAgent( JSONObject jsonObject ) {
 		System.out.println( jsonObject.toString(5) );
+	}
+	
+	private void send( JSONObject payload ) {
+		if( this.session != null ) {
+			session.send("/main_channel", payload.toString() );
+		}
+		
 	}
 	
 }
