@@ -18,11 +18,6 @@ public class RemoteAgentController {
 	
 	@Autowired private RemoteAgentService remoteAgentService;
 	
-    @GetMapping( value="/config", produces= MediaType.APPLICATION_JSON_VALUE )
-    public ResponseEntity<String> getConfig( ) throws Exception {
-    	return new ResponseEntity<String>( this.remoteAgentService.getAgentsConfig().toString() , HttpStatus.OK);
-    }  	
-
     @GetMapping( value="/list", produces= MediaType.APPLICATION_JSON_VALUE )
     public ResponseEntity<String> getAgents( ) throws Exception {
     	return new ResponseEntity<String>( this.remoteAgentService.getAgents().toString() , HttpStatus.OK);

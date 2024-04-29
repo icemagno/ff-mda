@@ -16,6 +16,7 @@ import org.springframework.web.socket.client.standard.StandardWebSocketClient;
 import org.springframework.web.socket.messaging.WebSocketStompClient;
 
 import br.com.j1scorpii.ffmda.services.RemoteAgentService;
+import br.com.j1scorpii.ffmda.util.FFMDAProtocol;
 import br.com.j1scorpii.ffmda.util.RemoteAgentStatus;
 
 public class RemoteAgent implements StompSessionHandler {
@@ -105,8 +106,8 @@ public class RemoteAgent implements StompSessionHandler {
 		logger.debug("Connected to " + this.address);
 		status = RemoteAgentStatus.CONNECTED;
 		this.session = session;
-		send( new JSONObject().put("ping", "Connected!") );
 		session.subscribe("/agent_master", this);
+		send( new JSONObject().put("protocol", FFMDAProtocol.QUERY_DATA.toString() ) );
 	}
 
 	@Override
@@ -122,5 +123,12 @@ public class RemoteAgent implements StompSessionHandler {
 		}
 	}
 	
+	public void setOrgName(String orgName) {
+		this.orgName = orgName;
+	}
+	
+	public void setNodeName(String nodeName) {
+		this.nodeName = nodeName;
+	}
 	
 }

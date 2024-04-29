@@ -25,6 +25,7 @@ import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
 import br.com.j1scorpii.ffmda.agent.RemoteAgent;
+import br.com.j1scorpii.ffmda.util.FFMDAProtocol;
 import jakarta.annotation.PostConstruct;
 
 @Service
@@ -39,7 +40,6 @@ public class RemoteAgentService {
 	private String configFile;
 	
 	private List<RemoteAgent> agents;
-	private JSONArray agentsConfig = new JSONArray();
 	
 	@PostConstruct
 	private void init() {
@@ -50,53 +50,44 @@ public class RemoteAgentService {
 	}
 	
 	private JSONObject getAgent( String ipAddress ) {
-		for( int x=0; x < this.agentsConfig.length(); x++ ) {
-			JSONObject agent = this.agentsConfig.getJSONObject(x);
-			if( agent.getString("ipAddress").equals(ipAddress) ) return agent;
+		for( RemoteAgent agent : this.agents ) {
+			if( agent.getIpAddress().equals(ipAddress) ) return new JSONObject( agent );			
 		}
 		return new JSONObject();
-	}
-	
-	public JSONArray getAgentsConfig() {
-		return agentsConfig;
 	}
 	
 	public JSONObject addAgent(String data) {
 		JSONObject ag = new JSONObject( data ).getJSONObject("data");
 		return addAgent( 
 			ag.getString("ipAddress"),
-			ag.getString("port"), 
-			ag.getString("orgName"),
-			ag.getString("nodeName")
+			ag.getString("port")
 		);
 	}
 	
-	public JSONObject addAgent( String ipAddress, String port, String orgName, String nodeName ) {
+	public JSONObject addAgent( String ipAddress, String port ) {
 		JSONObject test = getAgent( ipAddress ); 
 		if( test.has("nodeName") ) return test;
 		try {
 			String uuid = UUID.randomUUID().toString();
-			JSONObject newAgent = new JSONObject()
-					.put("uuid", uuid)
-					.put("orgName", orgName)
-					.put("nodeName", nodeName)
-					.put("ipAddress", ipAddress)
-					.put("port", port);
-			this.agentsConfig.put( newAgent );
-			saveConfig();
-			RemoteAgent ra = new RemoteAgent( ipAddress, port, orgName, nodeName, uuid, this );
+			RemoteAgent ra = new RemoteAgent( ipAddress, port, "Undefined", "Undefined", uuid, this );
 			this.agents.add( ra );
-			return new JSONObject( ra );
+			JSONObject newAgent = new JSONObject( ra );
+			saveConfig();
+			return newAgent;
 		} catch ( Exception e ) {
 			e.printStackTrace(); 
 		}
 		return new JSONObject();
 	}
 	
-	private void saveConfig() throws Exception {
-		BufferedWriter writer = new BufferedWriter( new FileWriter( this.configFile) );
-		writer.write( this.agentsConfig.toString() );
-		writer.close();			
+	private void saveConfig() {
+		try {
+			BufferedWriter writer = new BufferedWriter( new FileWriter( this.configFile ) );
+			writer.write( this.getAgents().toString() );
+			writer.close();
+		} catch ( Exception e ) { 
+			e.printStackTrace();
+		}
 	}
 
 	private void loadConfig() {
@@ -105,9 +96,9 @@ public class RemoteAgentService {
 		// Try to load. We may not have any file if no agent was created yet.
 		try {
 			String content = readFile( configFile , StandardCharsets.UTF_8);
-			this.agentsConfig = new JSONArray(content);
-			for( int x=0; x < this.agentsConfig.length(); x++ ) {
-				JSONObject agent = this.agentsConfig.getJSONObject(x);
+			JSONArray agentsConfig = new JSONArray(content);
+			for( int x=0; x < agentsConfig.length(); x++ ) {
+				JSONObject agent = agentsConfig.getJSONObject(x);
 				this.agents.add( new RemoteAgent( 
 					agent.getString("ipAddress"), 
 					agent.getString("port"), 
@@ -143,9 +134,36 @@ public class RemoteAgentService {
 	// Triggered by the agent when message arrive
 	public void receive( String uuid, JSONObject payload, StompHeaders headers ) {
 		payload.put("uuid", uuid);
-		messagingTemplate.convertAndSend( "/agent/message" , payload.toString() );
+		if( payload.has("protocol") ) processProtocol( payload );
 	}
 	
+	private void processProtocol( JSONObject payload ) {
+		String protocolType = payload.getString("protocol");
+		FFMDAProtocol protocol = FFMDAProtocol.valueOf(protocolType);
+		
+		switch (protocol) {
+			case NODE_DATA: {
+				assignNodeData( payload );
+			}
+			default:
+				break;
+		}
+		
+		// TEMP !!
+		messagingTemplate.convertAndSend( "/agent/message" , payload.toString() );
+	}	
+	
+	private void assignNodeData(JSONObject payload) {
+		String uuid = payload.getString("uuid");
+		this.agents.parallelStream().forEach( ( agent ) -> {
+			if( agent.getId().equals(uuid) ) {
+				agent.setOrgName( payload.getString("orgName") );
+				agent.setNodeName( payload.getString("nodeName") );
+				saveConfig();
+			}
+		});
+	}
+
 	// Call the agent to send a message
 	public void send( String uuid, JSONObject payload ) {
 		this.agents.forEach( ( agent ) -> {
