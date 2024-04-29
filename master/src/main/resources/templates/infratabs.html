@@ -1,0 +1,251 @@
+<div class="nav-tabs-custom">
+	<ul class="nav nav-tabs">
+		<li class="active"><a href="#tab_1" data-toggle="tab">Data
+				Exchange</a></li>
+		<li><a href="#tab_2" data-toggle="tab">PostgreSQL</a></li>
+		<li><a href="#tab_3" data-toggle="tab">IPFS</a></li>
+		<li><a href="#tab_4" data-toggle="tab">BESU</a></li>
+		<li><a href="#tab_5" data-toggle="tab">Tokens</a></li>
+		<li><a href="#tab_6" data-toggle="tab">Signer</a></li>
+		<li><a href="#tab_7" data-toggle="tab">EVM Connector</a></li>
+		<li><a href="#tab_8" data-toggle="tab">Sandbox</a></li>
+		<li><a href="#tab_9" data-toggle="tab">FireFly Core</a></li>
+	</ul>
+	<div class="tab-content">
+		<div class="tab-pane active" id="tab_1">
+			<b>Data Exchange</b>
+			<p>Uses peer-to-peer transfer over a synchronous HTTPS transport,
+				backed by Mutual TLS authentication. X509 certificate exchange is
+				orchestrated by FireFly, such that self-signed certificates can be
+				used (or multiple PKI trust roots) and bound to the
+				blockchain-backed identities of the organizations in FireFly.</p>
+			<p>
+				<a target="_BLANK"
+					href="https://github.com/hyperledger/firefly-dataexchange-https">Repository</a>
+			</p>
+			The Data Exchange connector must be started before any other to
+			establish a secure communication channel between this Agent and
+			others that will be started on remote servers.
+
+			<br /><br />
+			<table class="table table-striped table-bordered">
+				<tbody>
+					<tr>
+						<th>It is dependent on</th>
+						<th style="width: 50%">It is dependence on</th>
+					</tr>
+					<tr>
+						<td>***</td>
+						<td>FireFly Core</td>
+					</tr>
+				</tbody>
+			</table>
+			<br />
+			<a href="/component?name=dataexchange" class="btn btn-default btn-manage btn-block">Manage</a>
+		</div>
+
+
+
+		<div class="tab-pane" id="tab_2">
+			<b>PostgreSQL</b>
+			<p>Database for storing FireFly information. It can be started
+				second because it has no dependencies.</p>
+
+			<br /><br />
+			<table class="table table-striped table-bordered">
+				<tbody>
+					<tr>
+						<th>It is dependent on</th>
+						<th style="width: 50%">It is dependence on</th>
+					</tr>
+					<tr>
+						<td>***</td>
+						<td>FireFly Core</td>
+					</tr>
+				</tbody>
+			</table>
+			<br />
+			<a href="/component?name=postgresql" class="btn btn-default btn-manage btn-block">Manage</a>
+		</div>
+
+
+		<div class="tab-pane" id="tab_3">
+			<b>IPFS Peer</b>
+			<p>
+			The InterPlanetary File System (IPFS) is a distributed technology for peer-to-peer storage and distribution of large data in FireFly.
+			 Due to its loose coupling within the infrastructure, you can start it third.
+			</p>
+
+			<br /><br />
+			<table class="table table-striped table-bordered">
+				<tbody>
+					<tr>
+						<th>It is dependent on</th>
+						<th style="width: 50%">It is dependence on</th>
+					</tr>
+					<tr>
+						<td>***</td>
+						<td>FireFly Core</td>
+					</tr>
+				</tbody>
+			</table>
+			<br />
+			<a href="/component?name=ipfs" class="btn btn-default btn-manage btn-block">Manage</a>
+		</div>
+
+
+		<div class="tab-pane" id="tab_4">
+			<b>BESU Blockchain Node</b>
+			<p>Hyperledger Besu is an Ethereum client designed to be enterprise-friendly for both public and private permissioned network use cases, with an extractable EVM implementation. </p>
+			<p>
+				<a target="_BLANK"
+					href="https://github.com/hyperledger/besu">Repository</a>
+			</p>
+			<br /><br />
+			<table class="table table-striped table-bordered">
+				<tbody>
+					<tr>
+						<th>It is dependent on</th>
+						<th style="width: 50%">It is dependence on</th>
+					</tr>
+					<tr>
+						<td>***</td>
+						<td>FireFly Signer</td>
+					</tr>
+				</tbody>
+			</table>
+			<br />
+			<a href="/component?name=besu" class="btn btn-default btn-manage btn-block">Manage</a>
+		</div>
+
+		<div class="tab-pane" id="tab_5">
+			<b>Tokens Connector</b>
+			<p>FireFly Tokens Microservice for ERC20 & ERC721.</p>
+			<p>
+				<a target="_BLANK"
+					href="https://github.com/hyperledger/firefly-tokens-erc20-erc721">Repository</a>
+			</p>
+			<br /><br />
+			<table class="table table-striped table-bordered">
+				<tbody>
+					<tr>
+						<th>It is dependent on</th>
+						<th style="width: 50%">It is dependence on</th>
+					</tr>
+					<tr>
+						<td>FireFly EVM Connector</td>
+						<td>FireFly Core</td>
+					</tr>
+				</tbody>
+			</table>
+			<br />
+			<a href="/component?name=tokens" class="btn btn-default btn-manage btn-block">Manage</a>
+		</div>
+
+		<div class="tab-pane" id="tab_6">
+			<b>FireFly Signer</b>
+			<p>Signing, Keystore, ABI and RLP encoding utilities for EVM / Ethereum / secp256k1 based blockchains. Written in Go with an enterprise friendly Apache 2.0</p>
+			<p>
+				<a target="_BLANK"
+					href="https://github.com/hyperledger/firefly-signer">Repository</a>
+			</p>
+			<br /><br />
+			<table class="table table-striped table-bordered">
+				<tbody>
+					<tr>
+						<th>It is dependent on</th>
+						<th style="width: 50%">It is dependence on</th>
+					</tr>
+					<tr>
+						<td>Hyperledger Besu</td>
+						<td>FireFly EVM Connector</td>
+					</tr>
+				</tbody>
+			</table>
+			<br />
+			<a href="/component?name=signer" class="btn btn-default btn-manage btn-block">Manage</a>
+		</div>
+		<div class="tab-pane" id="tab_7">
+			<b>FireFly EVM Connector</b>
+			<p>Connector for connectivity to your EVM based chains (whether public, or private).</p>
+			<p>
+				<a target="_BLANK"
+					href="https://github.com/hyperledger/firefly-evmconnect">Repository</a>
+			</p>
+			<br /><br />
+			<table class="table table-striped table-bordered">
+				<tbody>
+					<tr>
+						<th>It is dependent on</th>
+						<th style="width: 50%">It is dependence on</th>
+					</tr>
+					<tr>
+						<td>Hyperledger Signer</td>
+						<td>FireFly Tokens</td>
+					</tr>
+				</tbody>
+			</table>
+			<br />
+			<a href="/component?name=evmconnect" class="btn btn-default btn-manage btn-block">Manage</a>
+		</div>
+		<div class="tab-pane" id="tab_8">
+			<b>FireFly Sandbox</b>
+			<p>This is an API exerciser and prototyping tool for applications that communicate with FireFly.</p>
+			<p>
+				<a target="_BLANK"
+					href="https://github.com/hyperledger/firefly-sandbox">Repository</a>
+			</p>
+			<br /><br />
+			<table class="table table-striped table-bordered">
+				<tbody>
+					<tr>
+						<th>It is dependent on</th>
+						<th style="width: 50%">It is dependence on</th>
+					</tr>
+					<tr>
+						<td>***</td>
+						<td>FireFly Core</td>
+					</tr>
+				</tbody>
+			</table>
+			<br />
+			<a href="/component?name=sandbox" class="btn btn-default btn-manage btn-block">Manage</a>
+		</div>
+		<div class="tab-pane" id="tab_9">
+			<b>FireFly Core</b>
+			<p>Hyperledger FireFly is the first open source Supernode: a complete stack for enterprises to build and scale secure Web3 applications. The FireFly API for digital assets, data flows, and blockchain transactions makes it radically faster to build production-ready apps on popular chains and protocols.</p>
+			<p>
+				<a target="_BLANK"
+					href="https://github.com/hyperledger/firefly">Repository</a>
+			</p>
+			<br /><br />
+			<table class="table table-striped table-bordered">
+				<tbody>
+					<tr>
+						<th>It is dependent on</th>
+						<th style="width: 50%">It is dependence on</th>
+					</tr>
+					<tr>
+						<td>Data Exchange</td>
+						<td>FireFly Sandbox</td>
+					</tr>
+					<tr>
+						<td>IPFS</td>
+						<td>FireFly EVM Connector</td>
+					</tr>
+					<tr>
+						<td>FireFly Tokens</td>
+						<td>***</td>
+					</tr>
+					<tr>
+						<td>FireFly EVM Connector</td>
+						<td>***</td>
+					</tr>
+				</tbody>
+			</table>
+			<br />
+			<a href="/component?name=core" class="btn btn-default btn-manage btn-block">Manage</a>
+		</div>
+
+	</div>
+</div>

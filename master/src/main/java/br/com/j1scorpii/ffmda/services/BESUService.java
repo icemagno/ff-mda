@@ -91,7 +91,7 @@ public class BESUService {
 	}
 
 	public String getBlockchainData() {
-		// blockchainData is global becaus this is a kind of asynchronous call.
+		// blockchainData is global because this is a kind of asynchronous call.
 		// The frontend will request the data and will not wait for all calls to the BESU node to finish.
 		// So I'll respond ASAP with the global variable and fill it as I finish each call to the node.
 		// I'll assume the node is an EVM implementation ( like BESU ) and use Ethereum RPC API.

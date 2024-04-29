@@ -51,6 +51,9 @@ $( document ).ready(function() {
 		let ipAddress = $("#ipAddress").val();
 
 		let data = { orgName: orgName, nodeName: nodeName, ipAddress: ipAddress, hostName: hostName }
+		
+		if ( !data.orgName || !data.nodeName || !data.ipAddress || !data.hostName ) return;
+		
 		$.ajax ({
 		    url: "/v1/org/save",
 		    type: "POST",

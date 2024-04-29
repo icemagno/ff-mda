@@ -9,15 +9,32 @@
 
 	<div class="wrapper" style="height: auto; min-height: 100%;">
 
+        <div class="modal modal-danger fade" id="modal-danger">
+          <div class="modal-dialog">
+            <div class="modal-content">
+              <div class="modal-header">
+                <h4 class="modal-title">Register this new Agent?</h4>
+              </div>
+              <div class="modal-body">
+                <p>Make sure you have already checked the IP address and port where the agent is (or will be) running.</p>
+                <p>Are you sure?</p>
+              </div>
+              <div class="modal-footer">
+                <button type="button" class="btn btn-outline pull-left" data-dismiss="modal">Cancel</button>
+                <button id="btnRegisterAgent" data-dismiss="modal" type="button" class="btn btn-outline">Register</button>
+              </div>
+            </div>
+          </div>
+        </div>
+
 		<header class="main-header" th:insert="~{navbar}" ></header>
 		<aside class="main-sidebar" th:insert="~{sidebar}"></aside>
 
-		<div class="content-wrapper"
-			style="position: relative; min-height: 600px;">
+		<div class="content-wrapper" style="position: relative; min-height: 600px;">
 
 			<section class="content-header">
 				<h1>
-					Manage Remote Nodes <small>All your conglomerate will be here.</small>
+					Manage Remote Agent <small>Agents under your will.</small>
 				</h1>
 				<ol class="breadcrumb">
 					<li><a href="/"><i class="fa fa-dashboard"></i> Home</a></li>
@@ -30,9 +47,9 @@
 
 						<div class="box box-primary">
 							<div class="box-header ui-sortable-handle">
-								<i class="fa fa-envelope"></i>
+								<i class="fa fa-user"></i>
 
-								<h3 class="box-title">Node Configuration</h3>
+								<h3 class="box-title">Register Agent</h3>
 								<!-- tools box -->
 								<div class="pull-right box-tools">&nbsp;</div>
 								<!-- /. tools -->
@@ -40,156 +57,52 @@
 							<div class="box-body">
 								<form action="#" method="post">
 									<div class="form-group">
-										<input type="email" class="form-control" name="emailto"
-											placeholder="Organization Name:">
+										<input type="text" class="form-control" id="agOrgName"
+											placeholder="Organization Name">
 									</div>
 									<div class="form-group">
-										<input type="text" class="form-control" name="subject"
+										<input type="text" class="form-control" id="agNodeName"
 											placeholder="Node Name">
 									</div>
-
-								</form>
-							</div>
-							<div class="box-footer clearfix">
-								<button type="button" class="pull-right btn btn-default"
-									id="sendEmail">
-									Update <i class="fa fa-arrow-circle-right"></i>
-								</button>
-							</div>
-						</div>
-
-						<div class="box box-primary">
-							<div class="box-header ui-sortable-handle">
-								<i class="fa fa-envelope"></i>
-
-								<h3 class="box-title">Node Information</h3>
-								<!-- tools box -->
-								<div class="pull-right box-tools">&nbsp;</div>
-								<!-- /. tools -->
-							</div>
-							<div class="box-body">
-								<form action="#" method="post">
 									<div class="form-group">
-										<input type="email" class="form-control" name="emailto"
-											placeholder="Wallet Address">
-									</div>
-									<div class="form-group">
-										<input type="text" class="form-control" name="subject"
+										<input type="text" class="form-control" id="agIpAddress"
 											placeholder="IP Address">
 									</div>
+									<div class="form-group">
+										<input type="text" class="form-control" id="agPort"
+											placeholder="Port">
+									</div>
 
 								</form>
 							</div>
 							<div class="box-footer clearfix">
-								<button type="button" class="pull-right btn btn-default"
-									id="sendEmail">
-									Refresh <i class="fa fa-arrow-circle-right"></i>
+								<button type="button" class="pull-right btn btn-default" data-toggle="modal" data-target="#modal-danger" >
+									Register
 								</button>
 							</div>
 						</div>
 
 					</section>
-					<section class="col-lg-6">
+					<section class="col-lg-9">
 
 
 						<div class="box box-primary">
 							<div class="box-header ui-sortable-handle">
-								<i class="fa fa-envelope"></i>
-
-								<h3 class="box-title">Stack Configuration</h3>
-								<!-- tools box -->
-								<div class="pull-right box-tools">&nbsp;</div>
-								<!-- /. tools -->
+								<i class="fa fa-sitemap"></i>
+								<h3 class="box-title">Remote Agents</h3>
 							</div>
 							<div class="box-body">
-								<form action="#" method="post">
-									<div class="form-group">
-										<input type="email" class="form-control" name="emailto"
-											placeholder="Stack Name:">
-									</div>
-								</form>
+								<ul class="mailbox-attachments clearfix"  id="agentContainer">
+								</ul>								
 							</div>
 							<div class="box-footer clearfix">
-								<button type="button" class="pull-right btn btn-default"
-									id="sendEmail">
-									Update <i class="fa fa-arrow-circle-right"></i>
-								</button>
+								&nbsp;
 							</div>
 						</div>
 
-
-						<div class="box box-primary">
-							<div class="box-header with-border">
-								<i class="fa fa-envelope"></i>
-								<h3 class="box-title">Agent Slaves</h3>
-
-								<div class="box-tools pull-right">&nbsp;</div>
-							</div>
-							<!-- /.box-header -->
-							<div class="box-body">Body</div>
-							<div class="box-footer text-center">Footer</div>
-						</div>
 					</section>
 
 
-					<section class="col-lg-3">
-						<div class="box box-primary">
-							<div class="box-header with-border">
-								<i class="fa fa-envelope"></i>
-								<h3 class="box-title">FireFly Components</h3>
-
-								<div class="box-tools pull-right">&nbsp;</div>
-							</div>
-							<div class="box-body">
-								<ul class="products-list product-list-in-box">
-									<li class="item">
-										<div class="product-img">
-											<img src="common/img/default-50x50.gif" alt="Product Image">
-										</div>
-										<div class="product-info">
-											<a href="javascript:void(0)" class="product-title">Data
-												Exchange <span class="label label-warning pull-right">STARTING</span>
-											</a> <span class="product-description"> Nice data </span>
-										</div>
-									</li>
-									<li class="item">
-										<div class="product-img">
-											<img src="common/img/default-50x50.gif" alt="Product Image">
-										</div>
-										<div class="product-info">
-											<a href="javascript:void(0)" class="product-title">IPFS
-												Peer<span class="label label-danger pull-right">STOPED</span>
-											</a> <span class="product-description"> A text </span>
-										</div>
-									</li>
-									<li class="item">
-										<div class="product-img">
-											<img src="common/img/default-50x50.gif" alt="Product Image">
-										</div>
-										<div class="product-info">
-											<a href="javascript:void(0)" class="product-title">Besu
-												Node <span class="label label-danger pull-right">STOPED</span>
-											</a> <span class="product-description"> Will decide later
-											</span>
-										</div>
-									</li>
-									<li class="item">
-										<div class="product-img">
-											<img src="common/img/default-50x50.gif" alt="Product Image">
-										</div>
-										<div class="product-info">
-											<a href="javascript:void(0)" class="product-title">FireFly
-												Core <span class="label label-success pull-right">RUNNING</span>
-											</a> <span class="product-description"> Open room </span>
-										</div>
-									</li>
-								</ul>
-							</div>
-							
-							<div class="box-footer text-center">Footer</div>
-							
-						</div>
-					</section>
 				</div>
 			</section>
 		</div>
@@ -233,7 +146,7 @@
 	
 	<script src="common/websocket/sockjs.min.js"></script>
 	<script src="common/websocket/stomp.min.js"></script>
-	<script src="common/script.js"></script>
+	<script src="common/remote.js"></script>
 
 </body>
 

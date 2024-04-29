@@ -30,7 +30,6 @@ public class BESUController {
 
     @PostMapping( value="/config/file" )
     public ResponseEntity<String> receiveFile( @RequestParam("file") MultipartFile file ) throws Exception {
-    	System.out.println("Chegou arquivo: " + file.getOriginalFilename() + " " + file.getContentType() );
     	this.besuService.receiveFile( file );
     	return new ResponseEntity<String>( "Ok" , HttpStatus.OK);
     }  	
