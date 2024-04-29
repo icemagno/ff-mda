@@ -56,7 +56,7 @@ public class RemoteAgentService {
 		return new JSONObject();
 	}
 	
-	public JSONObject addAgent(String data, int x) {
+	public JSONObject addAgent( String data ) {
 		JSONObject ag = new JSONObject( data ).getJSONObject("data");
 		ag.put("orgName", "Undefined");
 		ag.put("nodeName", "Undefined");
