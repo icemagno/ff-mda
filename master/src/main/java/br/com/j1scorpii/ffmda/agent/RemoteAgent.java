@@ -32,17 +32,22 @@ public class RemoteAgent implements StompSessionHandler {
 	private String port;
 	private String orgName;
 	private String nodeName;
+	private String hostName;
 	private RemoteAgentService owner;
 	
 	// "ws://192.168.0.205:36780/ws"
-	public RemoteAgent( String ipAddress, String port, String orgName, String nodeName, String uuid, RemoteAgentService owner ) throws Exception {
-		this.uuid = uuid;
+	public RemoteAgent( JSONObject agent, RemoteAgentService owner ) throws Exception {
+		
+		// String ipAddress, String port, String orgName, String nodeName, String uuid,
+		
+		this.uuid = agent.getString("uuid");
 		this.owner = owner;
-		this.orgName = orgName;
-		this.nodeName = nodeName;
+		this.orgName = agent.getString("orgName");
+		this.nodeName = agent.getString("nodeName");
 		this.address = "ws://" + ipAddress + ":" + port + "/ws";
-		this.ipAddress = ipAddress;
-		this.port = port;
+		this.ipAddress = agent.getString("ipAddress");
+		this.hostName = agent.getString("hostName");
+		this.port = agent.getString("port");
 		this.uri = new URI( address );
 		this.client = new StandardWebSocketClient();
 		this.stompClient = new WebSocketStompClient(client);
@@ -51,6 +56,10 @@ public class RemoteAgent implements StompSessionHandler {
 	
 	public String getOrgName() {
 		return orgName;
+	}
+	
+	public String getHostName() {
+		return hostName;
 	}
 	
 	public String getNodeName() {
@@ -123,12 +132,18 @@ public class RemoteAgent implements StompSessionHandler {
 		}
 	}
 	
+	// These may be confirmed / send by the node itself. We won't set it from Master
+	// So they start as "Undefined" and filled after conect with the Remote Agent
 	public void setOrgName(String orgName) {
 		this.orgName = orgName;
 	}
 	
 	public void setNodeName(String nodeName) {
 		this.nodeName = nodeName;
+	}
+	
+	public void setHostName(String hostName) {
+		this.hostName = hostName;
 	}
 	
 }

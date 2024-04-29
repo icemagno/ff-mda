@@ -29,14 +29,12 @@ $( document ).ready(function() {
 	});		
 	
 	$("#btnRegisterAgent").click( ()=>{
-		let orgName = $("#agOrgName").val();
-		let nodeName = $("#agNodeName").val();
 		let port = $("#agPort").val();
 		let ipAddress = $("#agIpAddress").val();
 		
-		let data = { orgName: orgName, nodeName: nodeName, ipAddress: ipAddress, port: port }
+		let data = { ipAddress: ipAddress, port: port }
 		
-		if ( !data.orgName || !data.nodeName || !data.ipAddress || !data.port ) return;
+		if ( !data.ipAddress || !data.port ) return;
 		
 		$.ajax ({
 		    url: "/v1/agent/add",

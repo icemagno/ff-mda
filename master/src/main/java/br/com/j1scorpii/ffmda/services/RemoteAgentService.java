@@ -56,20 +56,25 @@ public class RemoteAgentService {
 		return new JSONObject();
 	}
 	
-	public JSONObject addAgent(String data) {
+	public JSONObject addAgent(String data, int x) {
 		JSONObject ag = new JSONObject( data ).getJSONObject("data");
-		return addAgent( 
-			ag.getString("ipAddress"),
-			ag.getString("port")
-		);
+		ag.put("orgName", "Undefined");
+		ag.put("nodeName", "Undefined");
+		ag.put("hostName", "Undefined");
+		return addAgent( ag );
 	}
 	
-	public JSONObject addAgent( String ipAddress, String port ) {
-		JSONObject test = getAgent( ipAddress ); 
+	public JSONObject addAgent( JSONObject ag ) {
+		// Check if it already exist ( the 'nodeName' attribute is present)
+		JSONObject test = getAgent( ag.getString("ipAddress") ); 
+		// If so then return it without do anything else.
 		if( test.has("nodeName") ) return test;
+		// We don't have this one. Register and wait for connect.
+		// After connect the Remote Agent will send the rest of data that we started as 'Undefined'.
 		try {
 			String uuid = UUID.randomUUID().toString();
-			RemoteAgent ra = new RemoteAgent( ipAddress, port, "Undefined", "Undefined", uuid, this );
+			ag.put("uuid", uuid);
+			RemoteAgent ra = new RemoteAgent( ag, this );
 			this.agents.add( ra );
 			JSONObject newAgent = new JSONObject( ra );
 			saveConfig();
@@ -99,14 +104,7 @@ public class RemoteAgentService {
 			JSONArray agentsConfig = new JSONArray(content);
 			for( int x=0; x < agentsConfig.length(); x++ ) {
 				JSONObject agent = agentsConfig.getJSONObject(x);
-				this.agents.add( new RemoteAgent( 
-					agent.getString("ipAddress"), 
-					agent.getString("port"), 
-					agent.getString("orgName"), 
-					agent.getString("nodeName"), 
-					agent.getString("uuid"), 
-					this ) 
-				);
+				this.agents.add( new RemoteAgent( agent, this ) );
 			}
 		} catch ( Exception e ) {
 			// I don't care ... just do nothing.
