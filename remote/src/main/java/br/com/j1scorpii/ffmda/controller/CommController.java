@@ -13,9 +13,10 @@ public class CommController {
 
 	@Autowired private CommService localService;
 	
-	@MessageMapping("/main_channel")
+	@MessageMapping("/master_agent")
 	public void receiveData(@Payload String message, MessageHeaders messageHeaders) {
 		localService.receive( message, messageHeaders );
 	}	
+
 	
 }

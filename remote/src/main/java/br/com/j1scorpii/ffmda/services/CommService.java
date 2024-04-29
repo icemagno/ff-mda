@@ -11,9 +11,9 @@ import org.springframework.core.annotation.Order;
 import org.springframework.messaging.MessageHeaders;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.scheduling.annotation.EnableScheduling;
-import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
+import br.com.j1scorpii.ffmda.util.FFMDAProtocol;
 import jakarta.annotation.PostConstruct;
 
 @Service
@@ -45,21 +45,32 @@ public class CommService {
 		new File( localDataFolder ).mkdirs();
 	}
 	
-	@Scheduled(fixedDelay = 4000 )
-	private void ping() {
-		messagingTemplate.convertAndSend( "/ping", new JSONObject(  )
-			.put("nodeName", this.nodeName )
-			.put("hostName", this.hostName )
-			.put("orgName", this.orgName )
-			.put("hostAddress", this.hostAddress )
-			.toString() 
-		);
+	public void receive(String message, MessageHeaders messageHeaders) {
+		JSONObject payload = new JSONObject( message );
+		if( payload.has("protocol") ) processProtocol( payload );
 	}
 
-	public void receive(String message, MessageHeaders messageHeaders) {
-		String sessionId = new JSONObject( messageHeaders ).getString("simpSessionId");
-		System.out.println( "[" + sessionId +  "]  Recebido pelo CommController (WebSocket) " );
-		System.out.println( message );		
+	private void processProtocol( JSONObject payload ) {
+		String protocolType = payload.getString("protocol");
+		FFMDAProtocol protocol = FFMDAProtocol.valueOf(protocolType);
+		switch (protocol) {
+			case QUERY_DATA: {
+				respondQueryData( );
+			}
+			default:
+				break;
+		}		
+	}
+	
+	private void respondQueryData() {
+		messagingTemplate.convertAndSend( "/agent_master", new JSONObject(  )
+				.put("protocol", FFMDAProtocol.NODE_DATA.toString() )
+				.put("nodeName", this.nodeName )
+				.put("hostName", this.hostName )
+				.put("orgName", this.orgName )
+				.put("hostAddress", this.hostAddress )
+				.toString() 
+			);
 	}
 	
 }
