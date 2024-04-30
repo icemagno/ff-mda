@@ -35,16 +35,11 @@ public class RemoteAgent implements StompSessionHandler {
 	private String hostName;
 	private RemoteAgentService owner;
 	
-	// "ws://192.168.0.205:36780/ws"
 	public RemoteAgent( JSONObject agent, RemoteAgentService owner ) throws Exception {
-		
-		// String ipAddress, String port, String orgName, String nodeName, String uuid,
-		
 		this.uuid = agent.getString("uuid");
 		this.owner = owner;
 		this.orgName = agent.getString("orgName");
 		this.nodeName = agent.getString("nodeName");
-		this.address = "ws://" + ipAddress + ":" + port + "/ws";
 		this.ipAddress = agent.getString("ipAddress");
 		this.hostName = agent.getString("hostName");
 		this.port = agent.getString("port");
@@ -52,6 +47,7 @@ public class RemoteAgent implements StompSessionHandler {
 		this.client = new StandardWebSocketClient();
 		this.stompClient = new WebSocketStompClient(client);
 		this.stompClient.setMessageConverter( new StringMessageConverter() );
+		this.address = "ws://" + ipAddress + ":" + port + "/ws";
 	}
 	
 	public String getOrgName() {
