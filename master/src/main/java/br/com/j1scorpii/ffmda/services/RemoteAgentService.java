@@ -133,15 +133,13 @@ public class RemoteAgentService {
 
 	
 	// Triggered by the agent when message arrive
-	public void receive( String uuid, JSONObject payload, StompHeaders headers ) {
-		payload.put("uuid", uuid);
+	public void receive( JSONObject payload, StompHeaders headers ) {
 		if( payload.has("protocol") ) processProtocol( payload );
 	}
 	
 	private void processProtocol( JSONObject payload ) {
 		String protocolType = payload.getString("protocol");
 		FFMDAProtocol protocol = FFMDAProtocol.valueOf(protocolType);
-		
 		switch (protocol) {
 			case NODE_DATA: {
 				assignNodeData( payload );
@@ -149,20 +147,30 @@ public class RemoteAgentService {
 			default:
 				break;
 		}
-		
-		// TEMP !!
-		messagingTemplate.convertAndSend( "/agent/message" , payload.toString() );
 	}	
 	
 	private void assignNodeData(JSONObject payload) {
 		String uuid = payload.getString("uuid");
+		
+		for( RemoteAgent agent : this.agents ) {
+			if( agent.getId().equals(uuid) ) {
+				agent.setOrgName( payload.getString("orgName") );
+				agent.setNodeName( payload.getString("nodeName") );
+				agent.setHostName( payload.getString("hostName") );
+				saveConfig();
+			}
+		}
+		
+		/*
 		this.agents.parallelStream().forEach( ( agent ) -> {
 			if( agent.getId().equals(uuid) ) {
 				agent.setOrgName( payload.getString("orgName") );
 				agent.setNodeName( payload.getString("nodeName") );
+				agent.setHostName( payload.getString("hostName") );
 				saveConfig();
 			}
 		});
+		*/
 	}
 
 	// Call the agent to send a message

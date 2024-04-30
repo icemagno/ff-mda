@@ -102,8 +102,9 @@ public class RemoteAgent implements StompSessionHandler {
 
 	@Override
 	public void handleFrame(StompHeaders headers, Object payload) {
-		String msg = (String)payload;
-		this.owner.receive( this.uuid, new JSONObject(msg), headers );
+		JSONObject msg = new JSONObject( (String)payload );
+		msg.put("uuid", this.uuid);
+		this.owner.receive( msg, headers );
 	}
 
 	@Override
