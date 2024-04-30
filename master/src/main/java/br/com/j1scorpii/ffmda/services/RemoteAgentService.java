@@ -66,6 +66,9 @@ public class RemoteAgentService {
 	
 	public JSONObject addAgent( JSONObject ag ) {
 		// Check if it already exist ( the 'nodeName' attribute is present)
+		
+		System.out.println( ag.toString(5) );
+		
 		JSONObject test = getAgent( ag.getString("ipAddress") ); 
 		// If so then return it without do anything else.
 		if( test.has("nodeName") ) return test;
