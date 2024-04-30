@@ -16,7 +16,6 @@ $( document ).ready(function() {
 			
 			stompClient.subscribe('/agent/status', (message) => {
 				let payload = JSON.parse( message.body );
-				console.log( payload );
 				processAgent( payload );
 			});
 			
@@ -44,7 +43,6 @@ $( document ).ready(function() {
 		    dataType: "json",
 		    contentType: "application/json; charset=utf-8",
 		    success: function( data ){
-				console.log( data );
 		        processAgent( data );
 		    }
 		});
