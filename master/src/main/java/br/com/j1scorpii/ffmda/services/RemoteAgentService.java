@@ -25,6 +25,7 @@ import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
 import br.com.j1scorpii.ffmda.agent.RemoteAgent;
+import br.com.j1scorpii.ffmda.util.EtcHosts;
 import br.com.j1scorpii.ffmda.util.FFMDAProtocol;
 import jakarta.annotation.PostConstruct;
 
@@ -36,13 +37,16 @@ public class RemoteAgentService {
 	@Autowired private SimpMessagingTemplate messagingTemplate;
 	
 	@Value("${ffmda.local.data.folder}")
+	
 	private String localDataFolder;	
 	private String configFile;
-	
+	private EtcHosts hosts;
 	private List<RemoteAgent> agents;
 	
 	@PostConstruct
 	private void init() {
+		hosts = new EtcHosts( localDataFolder );
+		hosts.print();		
 		this.configFile	= localDataFolder + "/remote-agents.json";
 		this.agents = new ArrayList<RemoteAgent>();
 		this.loadConfig();
@@ -142,6 +146,7 @@ public class RemoteAgentService {
 			switch (protocol) {
 				case NODE_DATA: {
 					assignNodeData( payload );
+					break;
 				}
 				default:
 					break;
@@ -160,6 +165,10 @@ public class RemoteAgentService {
 				agent.setNodeName( payload.getString("nodeName") );
 				agent.setHostName( payload.getString("hostName") );
 				saveConfig();
+				
+				// Save the agent host name to the /etc/hosts file 
+				// so we can find them by using names instead IP
+				hosts.addIfNotExists( agent.getIpAddress(), agent.getHostName() );
 			}
 		}
 	}
