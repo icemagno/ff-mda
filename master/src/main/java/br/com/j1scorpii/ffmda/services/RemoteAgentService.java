@@ -121,7 +121,9 @@ public class RemoteAgentService {
 	@Scheduled( fixedRate = 5000 )
 	private void connectAgents() {
 		for( RemoteAgent agent : this.agents ) {
-			messagingTemplate.convertAndSend( "/agent/status" , new JSONObject(agent).toString() );
+			JSONObject agentJson = new JSONObject(agent);
+			messagingTemplate.convertAndSend( "/agent/status" , agentJson.toString() );
+			broadcast( agentJson.put("protocol", FFMDAProtocol.AGENT_INFO.toString() ) );
 			try { if( !agent.isConnected() ) agent.connect(); } catch ( Exception e ) { }
 		}; 
 	}
@@ -129,24 +131,26 @@ public class RemoteAgentService {
 	public JSONArray getAgents(){
 		return new JSONArray( this.agents );
 	}
-
 	
-	// Triggered by the agent when message arrive
+	// Triggered by the agent when a message arrive
 	public void receive( JSONObject payload, StompHeaders headers ) {
-		if( payload.has("protocol") ) processProtocol( payload );
-	}
-	
-	private void processProtocol( JSONObject payload ) {
-		String protocolType = payload.getString("protocol");
-		FFMDAProtocol protocol = FFMDAProtocol.valueOf(protocolType);
-		switch (protocol) {
-			case NODE_DATA: {
-				assignNodeData( payload );
+		// The Agent must obey the protocol otherwise the message will be discarded
+		if( !payload.has("protocol") ) return;
+		try {
+			String protocolType = payload.getString("protocol");
+			FFMDAProtocol protocol = FFMDAProtocol.valueOf(protocolType);
+			switch (protocol) {
+				case NODE_DATA: {
+					assignNodeData( payload );
+				}
+				default:
+					break;
 			}
-			default:
-				break;
+		} catch ( Exception e ) {
+			// Protocol error (unknown). 
+			e.printStackTrace();
 		}
-	}	
+	}
 	
 	private void assignNodeData(JSONObject payload) {
 		String uuid = payload.getString("uuid");
@@ -167,4 +171,12 @@ public class RemoteAgentService {
 		}); 
 	}
 
+	// Call all agents to send a message
+	public void broadcast( JSONObject payload ) {
+		this.agents.forEach( ( agent ) -> {
+			// Do not send to myself
+			if( !agent.getId().equals( payload.getString("id") ) ) agent.send(payload);
+		}); 
+	}	
+	
 }
