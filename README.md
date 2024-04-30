@@ -9,7 +9,7 @@ I'm still working on this...
 
 ![local-node](https://github.com/icemagno/ff-mda/assets/4127512/8ee5dc03-caca-4063-a809-574f6a8fd3b2)
 
-![register-remote](https://github.com/icemagno/ff-mda/assets/4127512/6ffc11ca-d068-45a3-837c-db0a52273ce8)
+![register-remote](https://github.com/icemagno/ff-mda/assets/4127512/5ea1284a-0f9a-4198-bfc1-400cf5f4a9dc)
 
 ![dx](https://github.com/icemagno/ff-mda/assets/4127512/8f318e6c-795e-44c6-bafb-4a8a0b3b978e)
 
