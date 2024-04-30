@@ -59,7 +59,7 @@ function processAgent( agent ){
 	let statusColor = getStatusColor( agent.status );
 	if ( $( "#" + agent.id ).length ) {
 		addStatusColor("#ico_" + agent.id, statusColor );
-		$("#sts_" + agent.id).text( agent.status );
+		$("#sts_" + agent.id).text( agent.hostName );
 		$("#nn_" + agent.id).text( agent.nodeName );
 		$("#on_" + agent.id).text( agent.orgName );
 	} else {
@@ -74,7 +74,7 @@ function getAgentCard( agent ){
       '<span class="mailbox-attachment-icon" style="padding-bottom: 0px; padding-top:0px;"><i id="ico_'+agent.id+'"  class="fa fa-desktop '+statusColor+'"></i></span>' +
       '<span class="mailbox-attachment-name"><small id="nn_'+agent.id+'">'+agent.nodeName+'</small></span>' +
       '<div class="mailbox-attachment-info text-left">' +
-      		'<small id="sts_'+agent.id+'">' + agent.status + '</small>' +  
+      		'<small id="sts_'+agent.id+'">' + agent.hostName + '</small>' +  
             '<span class="mailbox-attachment-size">' +
               agent.ipAddress + ":" + agent.port + 
              '<a href="#" class="btn btn-default btn-xs pull-right"><i class="fa fa-external-link"></i></a>' +

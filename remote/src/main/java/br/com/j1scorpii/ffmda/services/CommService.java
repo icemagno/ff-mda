@@ -37,9 +37,6 @@ public class CommService {
 	@Value("${ffmda.host.name}")
 	private String hostName;
 	
-	@Value("${ffmda.host.address}")
-	private String hostAddress;
-	
 	private EtcHosts hosts;
 	
 	@PostConstruct
@@ -86,13 +83,7 @@ public class CommService {
 		System.out.println("A brother Agent...");
 		System.out.println( payload.toString(5) );
 
-		String ipAddress = payload.getString("ipAddress");
-		if( !hosts.getHosts().containsKey( ipAddress ) ) {
-			hosts.getHosts().put( ipAddress, payload.getString("hostName") );
-			hosts.save();
-		}
-		
-		
+		hosts.addIfNotExists( payload.getString("ipAddress"), payload.getString("hostName") );
 	}
 
 	// The Master is asking me about who am I.
@@ -104,7 +95,6 @@ public class CommService {
 			.put("nodeName", this.nodeName )
 			.put("hostName", this.hostName )
 			.put("orgName", this.orgName )
-			.put("hostAddress", this.hostAddress )
 			.toString() 
 		);
 	}

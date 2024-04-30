@@ -20,6 +20,13 @@ public class EtcHosts {
 		if ( new File( this.backupFile ).exists() ) giveMyHostsBackPlease();
 	}
 	
+	public void addIfNotExists( String ipAddress, String hostName ) {
+		if( !hosts.containsKey( ipAddress ) || !hosts.get(ipAddress).equals(hostName) ) {
+			hosts.put( ipAddress, hostName );
+			save();
+		} 
+	}
+	
 	private void read( String fromWhere ) {
 		try {
 			Scanner s = new Scanner(new File( fromWhere ));
@@ -60,7 +67,7 @@ public class EtcHosts {
 	private void save( String toWhere ) {
 		try {
 			FileWriter writer = new FileWriter( toWhere );
-			writer.write( "#  FF-MDA Controll this file. Do not edit! " + System.lineSeparator() );
+			writer.write( "#  FF-MDA controls this file. Do not edit! " + System.lineSeparator() );
 			for (Map.Entry<String, String> entry : hosts.entrySet()) {
 			    String key = entry.getKey();
 			    String value = entry.getValue();

@@ -21,10 +21,10 @@ public class EtcHosts {
 	}
 	
 	public void addIfNotExists( String ipAddress, String hostName ) {
-		if( !hosts.containsKey( ipAddress ) ) {
+		if( !hosts.containsKey( ipAddress ) || !hosts.get(ipAddress).equals(hostName) ) {
 			hosts.put( ipAddress, hostName );
 			save();
-		}		
+		} 
 	}
 	
 	private void read( String fromWhere ) {
