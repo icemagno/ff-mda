@@ -16,7 +16,6 @@ $( document ).ready(function() {
 			
 			stompClient.subscribe('/agent/status', (message) => {
 				let payload = JSON.parse( message.body );
-				console.log( payload );
 				processAgent( payload );
 			});
 			
@@ -61,6 +60,8 @@ function processAgent( agent ){
 	if ( $( "#" + agent.id ).length ) {
 		addStatusColor("#ico_" + agent.id, statusColor );
 		$("#sts_" + agent.id).text( agent.status );
+		$("#nn_" + agent.id).text( agent.nodeName );
+		$("#on_" + agent.id).text( agent.orgName );
 	} else {
 		$("#agentContainer").append( getAgentCard(agent) );
 	}
@@ -69,9 +70,9 @@ function processAgent( agent ){
 function getAgentCard( agent ){
 	let statusColor = getStatusColor( agent.status );
 	let ac = '<li style="width: 150px;" id="'+agent.id+'" class="text-center" > ' + 
-      '<span class="mailbox-attachment-name"><small>'+agent.orgName+'</small></span>' +
+      '<span class="mailbox-attachment-name"><small id="on_'+agent.id+'">'+agent.orgName+'</small></span>' +
       '<span class="mailbox-attachment-icon" style="padding-bottom: 0px; padding-top:0px;"><i id="ico_'+agent.id+'"  class="fa fa-desktop '+statusColor+'"></i></span>' +
-      '<span class="mailbox-attachment-name"><small>'+agent.nodeName+'</small></span>' +
+      '<span class="mailbox-attachment-name"><small id="nn_'+agent.id+'">'+agent.nodeName+'</small></span>' +
       '<div class="mailbox-attachment-info text-left">' +
       		'<small id="sts_'+agent.id+'">' + agent.status + '</small>' +  
             '<span class="mailbox-attachment-size">' +
