@@ -1,4 +1,8 @@
 ```
+
+sysctl -w net.core.rmem_max=2500000
+sysctl -w net.core.wmem_max=2500000
+
 docker run --name ffmda-agent --network=ffmda --hostname=ffmda-agent \
 --restart=always \
 -d -p 36780:8080 \
