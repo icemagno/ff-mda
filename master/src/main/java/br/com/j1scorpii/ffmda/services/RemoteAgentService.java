@@ -104,10 +104,11 @@ public class RemoteAgentService {
 			JSONArray agentsConfig = new JSONArray(content);
 			for( int x=0; x < agentsConfig.length(); x++ ) {
 				JSONObject agent = agentsConfig.getJSONObject(x);
+				// Shame! Shame! Shame!
+				agent.put("uuid", agent.getString("id") );
 				this.agents.add( new RemoteAgent( agent, this ) );
 			}
 		} catch ( Exception e ) {
-			// I don't care ... just do nothing.
 			e.printStackTrace();
 		}
 	}
