@@ -16,6 +16,7 @@ $( document ).ready(function() {
 			
 			stompClient.subscribe('/agent/status', (message) => {
 				let payload = JSON.parse( message.body );
+				console.log( payload );
 				processAgent( payload );
 			});
 			
@@ -47,8 +48,6 @@ $( document ).ready(function() {
 		    }
 		});
 
-		$("#agOrgName").val('');
-		$("#agNodeName").val('');
 		$("#agPort").val('');
 		$("#agIpAddress").val('');
 				

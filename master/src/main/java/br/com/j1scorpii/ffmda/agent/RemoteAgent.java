@@ -88,7 +88,7 @@ public class RemoteAgent implements StompSessionHandler {
 	
 	public void connect() {
 		if( this.status == RemoteAgentStatus.CONNECTING ) return;
-		logger.debug("Trying to connect to " + this.address );
+		logger.info("Trying to connect to " + this.address );
 		this.status = RemoteAgentStatus.CONNECTING;
 		stompClient.connectAsync( this.address, this , uri );
 	}
@@ -112,7 +112,7 @@ public class RemoteAgent implements StompSessionHandler {
 
 	@Override
 	public void afterConnected(StompSession session, StompHeaders connectedHeaders) {
-		logger.debug("Connected to " + this.address);
+		logger.info("Connected to " + this.address);
 		status = RemoteAgentStatus.CONNECTED;
 		this.session = session;
 		session.subscribe("/agent_master", this);
