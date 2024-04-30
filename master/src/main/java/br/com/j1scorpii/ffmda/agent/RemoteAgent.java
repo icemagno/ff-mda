@@ -43,11 +43,11 @@ public class RemoteAgent implements StompSessionHandler {
 		this.ipAddress = agent.getString("ipAddress");
 		this.hostName = agent.getString("hostName");
 		this.port = agent.getString("port");
-		this.uri = new URI( address );
 		this.client = new StandardWebSocketClient();
 		this.stompClient = new WebSocketStompClient(client);
 		this.stompClient.setMessageConverter( new StringMessageConverter() );
 		this.address = "ws://" + ipAddress + ":" + port + "/ws";
+		this.uri = new URI( address );
 	}
 	
 	public String getOrgName() {
