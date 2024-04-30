@@ -120,10 +120,10 @@ public class RemoteAgentService {
 	
 	@Scheduled( fixedRate = 5000 )
 	private void connectAgents() {
-		this.agents.parallelStream().forEach( ( agent ) -> {
+		for( RemoteAgent agent : this.agents ) {
 			messagingTemplate.convertAndSend( "/agent/status" , new JSONObject(agent).toString() );
 			try { if( !agent.isConnected() ) agent.connect(); } catch ( Exception e ) { }
-		}); 
+		}; 
 	}
 	
 	public JSONArray getAgents(){
@@ -150,7 +150,6 @@ public class RemoteAgentService {
 	
 	private void assignNodeData(JSONObject payload) {
 		String uuid = payload.getString("uuid");
-		
 		for( RemoteAgent agent : this.agents ) {
 			if( agent.getId().equals(uuid) ) {
 				agent.setOrgName( payload.getString("orgName") );
@@ -159,17 +158,6 @@ public class RemoteAgentService {
 				saveConfig();
 			}
 		}
-		
-		/*
-		this.agents.parallelStream().forEach( ( agent ) -> {
-			if( agent.getId().equals(uuid) ) {
-				agent.setOrgName( payload.getString("orgName") );
-				agent.setNodeName( payload.getString("nodeName") );
-				agent.setHostName( payload.getString("hostName") );
-				saveConfig();
-			}
-		});
-		*/
 	}
 
 	// Call the agent to send a message
