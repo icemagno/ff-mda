@@ -28,14 +28,16 @@ $( document ).ready(function() {
 
 	});		
 	
+	$("#btnDeleteAgent").click( ()=>{
+		let id = $("#agentUuid").text();
+		console.log("delete " + id );
+	});
+
 	$("#btnRegisterAgent").click( ()=>{
 		let port = $("#agPort").val();
 		let ipAddress = $("#agIpAddress").val();
-		
 		let data = { ipAddress: ipAddress, port: port }
-		
 		if ( !data.ipAddress || !data.port ) return;
-		
 		$.ajax ({
 		    url: "/v1/agent/add",
 		    type: "POST",
@@ -46,12 +48,9 @@ $( document ).ready(function() {
 		        processAgent( data );
 		    }
 		});
-
 		$("#agPort").val('');
 		$("#agIpAddress").val('');
-				
 	});
-  
   
 });
 
@@ -67,18 +66,24 @@ function processAgent( agent ){
 	}
 }
 
+function deleteAgent( id ){
+	$("#agentUuid").text( id );
+	$('#delete-agent').modal('show');
+}
+
 function getAgentCard( agent ){
 	let statusColor = getStatusColor( agent.status );
 	let ac = '<li style="width: 150px;" id="'+agent.id+'" class="text-center" > ' + 
       '<span class="mailbox-attachment-name"><small id="on_'+agent.id+'">'+agent.orgName+'</small></span>' +
       '<span class="mailbox-attachment-icon" style="padding-bottom: 0px; padding-top:0px;"><i id="ico_'+agent.id+'"  class="fa fa-desktop '+statusColor+'"></i></span>' +
       '<span class="mailbox-attachment-name"><small id="nn_'+agent.id+'">'+agent.nodeName+'</small></span>' +
-      '<div class="mailbox-attachment-info text-left">' +
-      		'<small id="sts_'+agent.id+'">' + agent.hostName + '</small>' +  
+      '<div class="mailbox-attachment-info text-left" style="padding-bottom: 5px;padding-top: 5px;">' +
+      		'<small id="sts_'+agent.id+'">' + agent.hostName + '</small>' +
             '<span class="mailbox-attachment-size">' +
               agent.ipAddress + ":" + agent.port + 
-             '<a href="#" class="btn btn-default btn-xs pull-right"><i class="fa fa-external-link"></i></a>' +
             '</span>' +
+   			'<a href="#" class="btn btn-default btn-xs pull-right"><i class="fa fa-external-link"></i></a>' +
+            '<a href="#" onClick="deleteAgent(\''+ agent.id + '\')" class="btn btn-default btn-xs"><i class="fa fa-trash-o text-red"></i></a>' +
       '</div>' +
     '</li>';
 	return ac;
