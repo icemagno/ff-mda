@@ -1,7 +1,6 @@
 package br.com.j1scorpii.ffmda.services;
 
 import java.io.File;
-import java.io.FileWriter;
 import java.math.BigInteger;
 import java.net.URL;
 import java.nio.file.Files;
@@ -25,7 +24,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.multipart.MultipartFile;
 
-import br.com.j1scorpii.ffmda.model.Wallet;
 import jakarta.annotation.PostConstruct;
 import jakarta.servlet.http.HttpServletResponse;
 
@@ -268,50 +266,32 @@ public class BESUService {
 	
 	// *********************************************
 	
-	// Will copy the blockchain default data (genesis, keys and etc) to the data folder
+	// Will copy the blockchain default data to the data folder
 	// The user must download from web interface, change as it needs and then upload again. 
 	private void copyDefaultData() {
-		/*
 		// Do it just once
 		// It will prevent override the files every time the container restarts  
 		if( new File( this.genesisFile ).exists() ) return;
 		// It is the first time. Do it.
 		try {
 			FileUtils.copyDirectory( new File("/besu-data"), new File( this.dataFolder ) );
-			// Override the default key.pub and key files using this node keys.
-			// The besu node wallet address will be the same address you can see on the Web Interface at the top
-			// left corner.
-			overrideKeys();
+			// Generate the Genesis file and 10 validator node keys
+			// based on the 'bc_config.json' file 
+			createValidatorNodes();
 		} catch ( Exception e ) {
 			e.printStackTrace();
 		}
-		*/
 	}
 	
-	private void overrideKeys() {
-		/*
-		Wallet w = this.localService.getWallet();
-		String privK = w.getPrivk();
-		String pubK = w.getPubk();
-		// this.keyFile
-		// this.keyPubFile
-		try {
-			// Write the private key file
-			FileWriter writerPriv = new FileWriter( this.keyFile );
-			writerPriv.write( "0x" + privK );
-			writerPriv.close();
-			// Write the public key file
-			FileWriter writerPub = new FileWriter( this.keyPubFile );
-			writerPub.write( "0x" + pubK );
-			writerPub.close();
-		} catch ( Exception e ) {
-			e.printStackTrace();
-		}
-		*/
-	}	
-	
 	private void createValidatorNodes() {
-		String[] command = { "/besu/generate.sh" };		
+		String[] command = { 
+			"/besu/bin/besu",
+			"operator",
+			"generate-blockchain-config",
+			"--config-file=/data/bc_config.json",
+			"--to=/data/nodefiles",
+			"--private-key-file-name=key"
+		};		
 		this.containerManager.executeAndRemoveContainer( this.imageName, command, this.dataFolder, "/data" );
 	}
 	
