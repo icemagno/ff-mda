@@ -174,6 +174,13 @@ public class LocalService {
 		Credentials credentials = WalletUtils.loadCredentials( this.myPassword, f );
 		ECKeyPair privateKey = credentials.getEcKeyPair();
 		this.myWallet = new Wallet(credentials.getAddress(), null, privateKey.getPublicKey().toString(16), privateKey.getPrivateKey().toString(16) );
+		/*		
+			{
+			     "address": "0x51956efe0a1e998f901458a449876afaef80fdb3",
+			     "privk": "61cd0dc3d2de6d2c8415de3a81f2385c96290598695798dc765b60386cfa31f6",
+			     "pubk": "6acd8cbfe5f6803a14ce8d60fead8e8fca8d96cc744079d0c671a1e084ab6f1813c009d0686c671561820f6f99f2abef6645dacbe5755ce89a37ef948210392"
+			}	
+		*/		
 	}
 	
 	// Create my wallet ( private and public blockchain keys also the mnemonic )
@@ -257,7 +264,7 @@ public class LocalService {
 	}
 	
 	public Wallet getWallet() {
-		return myWallet;
+		return this.myWallet;
 	}
 	
 	private void saveConfig() throws Exception {

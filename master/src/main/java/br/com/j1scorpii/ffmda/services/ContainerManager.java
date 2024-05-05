@@ -62,9 +62,6 @@ public class ContainerManager {
 	}
 	
 	public String create( JSONObject container ) {
-		
-		System.out.println( container.toString(5) );
-		
 		String name = container.getString("name");
 		String fromImage = container.getString("image");
 		logger.info("Creating container " + name + " based on " + fromImage + " image.");
@@ -201,6 +198,11 @@ public class ContainerManager {
 
 	public String exec(String containerName, String[] command) {
 		return this.dockerService.execute(containerName, command );
+	}
+
+	
+	public String executeAndRemoveContainer(String imageName, String[] command, String volumeHost, String volumeContainer) {
+		return this.dockerService.executeAndRemoveContainer( imageName, command, volumeHost, volumeContainer );
 	}
 
 }

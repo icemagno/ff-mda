@@ -19,9 +19,13 @@ import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.stereotype.Service;
 
 import com.github.dockerjava.api.DockerClient;
+import com.github.dockerjava.api.command.CreateContainerResponse;
 import com.github.dockerjava.api.command.ExecCreateCmdResponse;
 import com.github.dockerjava.api.command.PullImageResultCallback;
+import com.github.dockerjava.api.model.Bind;
+import com.github.dockerjava.api.model.HostConfig;
 import com.github.dockerjava.api.model.PullResponseItem;
+import com.github.dockerjava.api.model.Volume;
 import com.github.dockerjava.core.DefaultDockerClientConfig;
 import com.github.dockerjava.core.DockerClientConfig;
 import com.github.dockerjava.core.DockerClientImpl;
@@ -47,6 +51,16 @@ public class DockerService {
 	@Value("${spring.profiles.active}")
 	private String activeProfile;
 	
+	public String executeAndRemoveContainer( String imageName, String[] command, String volumeHost, String volumeContainer ) {
+		Bind bd = new Bind( volumeHost, new Volume( volumeContainer ) );
+		HostConfig hc = new HostConfig()
+			.withAutoRemove( true )
+			.withBinds( bd );
+
+		CreateContainerResponse container = dockerClient.createContainerCmd( imageName )
+			.withHostConfig( hc ).exec();
+		return this.execute( container.getId(), command );
+	}
 	
 	public String execute( String containerId, String[] command ) {
 		// echo "hello world" > /srv/ffmda/ipfs/staging/hello.txt
@@ -82,13 +96,6 @@ public class DockerService {
 	}
 	
 	
-	
-	
-	
-	
-	
-	
-
 	@PostConstruct
 	private void init() {
 		logger.info("init");

@@ -1,6 +1,7 @@
 package br.com.j1scorpii.ffmda.services;
 
 import java.io.File;
+import java.io.FileWriter;
 import java.math.BigInteger;
 import java.net.URL;
 import java.nio.file.Files;
@@ -24,6 +25,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.multipart.MultipartFile;
 
+import br.com.j1scorpii.ffmda.model.Wallet;
 import jakarta.annotation.PostConstruct;
 import jakarta.servlet.http.HttpServletResponse;
 
@@ -122,14 +124,25 @@ public class BESUService {
 		return blockchainData.toString();
 	}	
 	
+	// Will copy the blockchain default data (genesis, keys and etc) to the data folder
+	// The user must download from web interface, change as it needs and then upload again. 
 	private void copyDefaultData() {
+		// Do it just once
+		// It will prevent override the files every time the container restarts  
+		if( new File( this.genesisFile ).exists() ) return;
+		// It is the first time. Do it.
 		try {
 			FileUtils.copyDirectory( new File("/besu-data"), new File( this.dataFolder ) );
+			// Override the default key.pub and key files using this node keys.
+			// The besu node wallet address will be the same address you can see on the Web Interface at the top
+			// left corner.
+			overrideKeys();
 		} catch ( Exception e ) {
 			e.printStackTrace();
 		}
 	}
 	
+	// Start the container. Duh.
 	public String startContainer() {
 		JSONObject container = getContainer();
 		if( container.has("State") ) {
@@ -170,12 +183,11 @@ public class BESUService {
 		
 		String result = this.containerManager.create( containerDef );
 		containerDef.put("result", new JSONObject( result ) );
-		
 		containerManager.startContainer(COMPONENT_NAME);
-		
 		return containerDef.toString();
 	}
 	
+	// Get the image data
 	public JSONObject imagePulled() {
 		JSONObject result = new JSONObject();
 		boolean exists = imageManager.exists(COMPONENT_NAME);
@@ -208,6 +220,10 @@ public class BESUService {
 		return generalConfig.toString(5);
 	}
 
+	// Allow to the user download the node files.
+	// So they can be configured as the needs of the user and uploaded again.
+	// Common files like Genesis will be propagated to the nodes so it will be no need
+	// to user take care about configure nodes. I'll will automate from this point.
 	public Resource downloadFile( String fileName, HttpServletResponse response ) {
     	Path path = null;
     	String actualFileName = null;
@@ -247,6 +263,8 @@ public class BESUService {
     	return null;
 	}
 
+	// Take a node config file uploaded by user and put at the BESU data folder
+	// They will be propagated to the other nodes later.
 	public String receiveFile(MultipartFile file) {
 		try {
 			Path targetPath = Paths.get( this.dataFolder );
@@ -257,6 +275,41 @@ public class BESUService {
 			e.printStackTrace();
 			return e.getMessage();
 		}
+	}
+
+
+	
+	// *********************************************
+	
+	
+	private void overrideKeys() {
+		
+		System.out.println( createValidatorNodes() );
+		
+		/*
+		Wallet w = this.localService.getWallet();
+		String privK = w.getPrivk();
+		String pubK = w.getPubk();
+		// this.keyFile
+		// this.keyPubFile
+		try {
+			// Write the private key file
+			FileWriter writerPriv = new FileWriter( this.keyFile );
+			writerPriv.write( "0x" + privK );
+			writerPriv.close();
+			// Write the public key file
+			FileWriter writerPub = new FileWriter( this.keyPubFile );
+			writerPub.write( "0x" + pubK );
+			writerPub.close();
+		} catch ( Exception e ) {
+			e.printStackTrace();
+		}
+		*/
+	}	
+	
+	private String createValidatorNodes() {
+		String[] command = { "/besu/generate.sh" };		
+		return this.containerManager.executeAndRemoveContainer( this.imageName, command, this.dataFolder, "/data" );
 	}
 	
 }
