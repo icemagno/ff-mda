@@ -81,7 +81,6 @@ public class BESUService {
 		new File( this.dataFolder ).mkdirs();
 		
 		getConfig();
-		
 		copyDefaultData();
 		createValidatorNodes();
 		
@@ -204,6 +203,13 @@ public class BESUService {
 		generalConfig.put("container", getContainer() );
 		// Plus the local node config ( I need this server's IP and host )
 		generalConfig.put("localAgentConfig", localAgentConfig );
+		
+		
+		try {
+			loadNodeKeysToConfig();
+		} catch ( Exception e ) {}
+		
+		
 		return generalConfig.toString(5);
 	}
 
