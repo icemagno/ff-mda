@@ -7,6 +7,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
+import java.util.Scanner;
 
 import org.apache.commons.io.FileUtils;
 import org.json.JSONArray;
@@ -204,13 +205,11 @@ public class BESUService {
 		// Plus the local node config ( I need this server's IP and host )
 		generalConfig.put("localAgentConfig", localAgentConfig );
 		
+		generalConfig.put("validators", loadNodeKeysToConfig() );
 		
-		try {
-			loadNodeKeysToConfig();
-		} catch ( Exception e ) {}
+		System.out.println( generalConfig.toString(5) );
 		
-		
-		return generalConfig.toString(5);
+		return generalConfig.toString();
 	}
 
 	// Allow to the user download the node files.
@@ -287,20 +286,33 @@ public class BESUService {
 		// It is the first time. Do it.
 		try {
 			FileUtils.copyDirectory( new File("/besu-data"), new File( this.dataFolder ) );
-			// Generate the Genesis file and 10 validator node keys
+			// Generate the Genesis file and 20 validator node keys
 			// based on the 'bc_config.json' file 
 			createValidatorNodes();
+			getConfig();
 		} catch ( Exception e ) {
 			e.printStackTrace();
 		}
 	}
 	
-	private void loadNodeKeysToConfig() {
-		File f = new File( this.keysFolder );
-		String[] listOfFolders = f.list();
-		for ( String address: listOfFolders ) {           
-		    System.out.println( " > " + address ); 
-		}		
+	private JSONArray loadNodeKeysToConfig() {
+		JSONArray validators = new JSONArray();
+		try {
+			File kf = new File( this.keysFolder );
+			String[] listOfFolders = kf.list();
+			for ( String address: listOfFolders ) {           
+			    Scanner s = new Scanner(new File( this.keysFolder + "/" + address + "/key.pub" ) );
+			    String pubKey = s.nextLine();
+			    JSONObject nd = new JSONObject()
+			    		.put("address", address)
+			    		.put("available", true)
+			    		.put("pubKey", pubKey )
+			    		.put("usedByNode", JSONObject.NULL );
+			    validators.put(nd);
+			    s.close();
+			}
+		} catch ( Exception e ) { e.printStackTrace(); }	
+		return validators;
 	}
 	
 	private void createValidatorNodes() {
