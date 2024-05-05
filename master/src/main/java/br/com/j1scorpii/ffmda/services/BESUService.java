@@ -124,24 +124,6 @@ public class BESUService {
 		return blockchainData.toString();
 	}	
 	
-	// Will copy the blockchain default data (genesis, keys and etc) to the data folder
-	// The user must download from web interface, change as it needs and then upload again. 
-	private void copyDefaultData() {
-		// Do it just once
-		// It will prevent override the files every time the container restarts  
-		if( new File( this.genesisFile ).exists() ) return;
-		// It is the first time. Do it.
-		try {
-			FileUtils.copyDirectory( new File("/besu-data"), new File( this.dataFolder ) );
-			// Override the default key.pub and key files using this node keys.
-			// The besu node wallet address will be the same address you can see on the Web Interface at the top
-			// left corner.
-			overrideKeys();
-		} catch ( Exception e ) {
-			e.printStackTrace();
-		}
-	}
-	
 	// Start the container. Duh.
 	public String startContainer() {
 		JSONObject container = getContainer();
@@ -281,11 +263,28 @@ public class BESUService {
 	
 	// *********************************************
 	
+	// Will copy the blockchain default data (genesis, keys and etc) to the data folder
+	// The user must download from web interface, change as it needs and then upload again. 
+	private void copyDefaultData() {
+		/*
+		// Do it just once
+		// It will prevent override the files every time the container restarts  
+		if( new File( this.genesisFile ).exists() ) return;
+		// It is the first time. Do it.
+		try {
+			FileUtils.copyDirectory( new File("/besu-data"), new File( this.dataFolder ) );
+			// Override the default key.pub and key files using this node keys.
+			// The besu node wallet address will be the same address you can see on the Web Interface at the top
+			// left corner.
+			overrideKeys();
+		} catch ( Exception e ) {
+			e.printStackTrace();
+		}
+		*/
+	}
 	
 	private void overrideKeys() {
-		
 		System.out.println( createValidatorNodes() );
-		
 		/*
 		Wallet w = this.localService.getWallet();
 		String privK = w.getPrivk();
