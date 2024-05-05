@@ -211,9 +211,6 @@ public class BESUService {
 		// Plus the local node config ( I need this server's IP and host )
 		generalConfig.put("localAgentConfig", localAgentConfig );
 		generalConfig.put("validators", this.validatorsData );
-
-		System.out.println( generalConfig.toString(5) );
-		
 		return generalConfig.toString();
 	}
 
