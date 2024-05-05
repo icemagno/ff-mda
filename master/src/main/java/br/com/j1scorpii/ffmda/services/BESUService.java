@@ -282,6 +282,7 @@ public class BESUService {
 		try {
 			byte[] encoded = Files.readAllBytes(Paths.get( this.validatorsFile ));
 			this.validatorsData = new JSONArray( new String(encoded, StandardCharsets.UTF_8 ) );
+			logger.info("We have " + this.validatorsData.length() + " validator keys" );
 		} catch ( Exception e ) { this.validatorsData = new JSONArray();  }
 	}
 	
@@ -322,12 +323,21 @@ public class BESUService {
 	}
 	
 	private void reserveKeysToThisNode() {
+		// Reserve the first keys to this node
+		logger.info("reserving keys to this node");
 		if( this.validatorsData.length() > 0 ) {
-			JSONObject firstAvailable = this.validatorsData.getJSONObject(0);
-			System.out.println("Will use this data to this BESU node:");
-			System.out.println( firstAvailable.toString(5) );
+			String address = this.validatorsData.getJSONObject(0).getString("address");
+			try {
+				FileUtils.copyFile( new File( this.dataFolder + "/nodefiles/" + address + "/key"), new File( this.dataFolder + "/key" ) );
+				FileUtils.copyFile( new File( this.dataFolder + "/nodefiles/" + address + "/key.pub"), new File( this.dataFolder + "/key.pub" ) );
+				this.validatorsData.getJSONObject(0).put("available", false);
+				this.validatorsData.getJSONObject(0).put("usedByNode", "local");
+				saveValidatorsData();
+				logger.info("this node will use address " + address);
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
 		}
-		
 	}
 	
 	private void createValidatorNodes() {
@@ -344,7 +354,7 @@ public class BESUService {
 		// TODO: Edit the wallets and balances
 		this.containerManager.executeAndRemoveContainer( this.imageName, command, this.dataFolder, "/data" );
 		try {
-			FileUtils.copyFile( new File(this.dataFolder + "/nodefiles/genesis.json"), new File(this.genesisFile ) );
+			FileUtils.copyFile( new File( this.dataFolder + "/nodefiles/genesis.json"), new File(this.genesisFile ) );
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -359,7 +369,9 @@ public class BESUService {
 			    		.put("usedByNode", JSONObject.NULL );
 			    this.validatorsData.put(nd);
 			}
-			saveValidatorsData();	
+			saveValidatorsData();
+			// Remove the original genesis config file. No need to keep it
+			new File(this.dataFolder + "/bc_config.json").delete();
 		} catch ( Exception e ) { e.printStackTrace(); }		
 		
 	}
