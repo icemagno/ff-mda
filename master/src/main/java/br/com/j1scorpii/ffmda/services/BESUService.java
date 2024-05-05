@@ -288,11 +288,11 @@ public class BESUService {
 			"/besu/bin/besu",
 			"operator",
 			"generate-blockchain-config",
-			"--config-file=/data/bc_config.json",
+			"--config-file=/besu-data/bc_config.json",
 			"--to=/data/nodefiles",
 			"--private-key-file-name=key"
 		};		
-		this.containerManager.executeAndRemoveContainer( this.imageName, command, this.dataFolder, "/data" );
+		this.containerManager.executeAndRemoveContainer( this.imageName, command, this.localDataFolder, "/data" );
 	}
 	
 }

@@ -54,7 +54,7 @@ public class DockerService {
 	public void executeAndRemoveContainer( String imageName, String[] command, String volumeHost, String volumeContainer ) {
 		Bind bd = new Bind( volumeHost, new Volume( volumeContainer ) );
 		HostConfig hc = new HostConfig()
-			.withAutoRemove( true )
+			.withAutoRemove( false )
 			.withBinds( bd );
 
 		CreateContainerResponse container = dockerClient.createContainerCmd( imageName )
