@@ -271,7 +271,10 @@ public class BESUService {
 	private void copyDefaultData() {
 		// Do it just once
 		// It will prevent override the files every time the container restarts  
-		if( new File( this.genesisFile ).exists() ) return;
+		if( new File( this.genesisFile ).exists() ) {
+			logger.info("Genesis file already in place. Assuming that keys was created too");
+			return;
+		}
 		// It is the first time. Do it.
 		try {
 			FileUtils.copyDirectory( new File("/besu-data"), new File( this.dataFolder ) );
@@ -284,6 +287,7 @@ public class BESUService {
 	}
 	
 	private void createValidatorNodes() {
+		logger.info("creating validators keys and Genesis file");
 		String[] command = { 
 			"/besu/bin/besu",
 			"operator",
