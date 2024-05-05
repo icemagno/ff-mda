@@ -58,8 +58,29 @@ public class DockerService {
 			.withBinds( bd );
 
 		CreateContainerResponse container = dockerClient.createContainerCmd( imageName )
+			.withName( "besu_create_genesis" )
+			.withAttachStdout(true)
+			.withAttachStderr(true)
+			.withCmd( command )
 			.withHostConfig( hc ).exec();
-		return this.execute( container.getId(), command );
+
+        String cmdStdout = null;
+        String cmdStderr = null ;
+        
+        try (
+        		ByteArrayOutputStream stdout = new ByteArrayOutputStream();
+        		ByteArrayOutputStream stderr = new ByteArrayOutputStream();
+        		ExecStartResultCallback cmdCallback = new ExecStartResultCallback(stdout, stderr)  ) {
+        	
+        	    dockerClient.execStartCmd(container.getId()).exec( cmdCallback ).awaitCompletion();
+        	    
+        	    cmdStdout = stdout.toString(StandardCharsets.UTF_8.name());
+        	    cmdStderr = stderr.toString(StandardCharsets.UTF_8.name());
+        } catch (Exception e) {
+        	e.printStackTrace();
+        }	
+        String output = cmdStdout == null ? cmdStderr : cmdStdout;        
+        return output;        
 	}
 	
 	public String execute( String containerId, String[] command ) {
@@ -88,10 +109,7 @@ public class DockerService {
         } catch (Exception e) {
         	e.printStackTrace();
         }
-        	  
-        int exitCode = dockerClient.inspectExecCmd(cmd.getId()).exec().getExitCode();
         String output = cmdStdout == null ? cmdStderr : cmdStdout;        
-		
         return output;
 	}
 	
