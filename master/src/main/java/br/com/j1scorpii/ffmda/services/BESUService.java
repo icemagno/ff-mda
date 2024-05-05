@@ -90,7 +90,6 @@ public class BESUService {
 		loadValidatorsData();
 		getConfig();
 		copyDefaultData();
-		createValidatorNodes();
 	}
 	
 	private String requestData( String endpoint, JSONObject payload ) throws Exception {
@@ -357,7 +356,7 @@ public class BESUService {
 		while( !genesisFile.exists() ) {
 			// Wait to genesis.json be present
 		}
-		
+		logger.info("done. will copy keys and genesis files to this node.");
 		try {
 			FileUtils.copyFile( genesisFile , new File(this.genesisFile ) );
 		} catch (Exception e) {
