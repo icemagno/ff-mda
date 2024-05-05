@@ -80,6 +80,9 @@ public class BESUService {
 		logger.info("init " + this.componentDataFolder );
 		new File( this.dataFolder ).mkdirs();
 		copyDefaultData();
+		
+		System.out.println( createValidatorNodes() );
+		
 	}
 	
 	private String requestData( String endpoint, JSONObject payload ) throws Exception {
@@ -284,7 +287,6 @@ public class BESUService {
 	}
 	
 	private void overrideKeys() {
-		System.out.println( createValidatorNodes() );
 		/*
 		Wallet w = this.localService.getWallet();
 		String privK = w.getPrivk();
