@@ -43,6 +43,7 @@ public class BESUService {
 	private String componentDataFolder;
 	private String pluginsFolder;
 	private String dataFolder;
+	private String keysFolder;
 	private String imageName;
 
 	private String configFile;
@@ -74,6 +75,7 @@ public class BESUService {
 		this.keyPubFile = this.dataFolder + "/key.pub";
 		this.staticNodesFile = this.dataFolder + "/static-nodes.json";
 		this.permissionsFile = this.dataFolder + "/permissions_config.toml";
+		this.keysFolder = this.dataFolder + "/nodefiles/keys";
 		
 		logger.info("init " + this.componentDataFolder );
 		new File( this.dataFolder ).mkdirs();
@@ -275,6 +277,7 @@ public class BESUService {
 			logger.info("Genesis file already in place. Assuming that keys was created too");
 			return;
 		}
+		logger.info("Initializing BESU files");
 		// It is the first time. Do it.
 		try {
 			FileUtils.copyDirectory( new File("/besu-data"), new File( this.dataFolder ) );
@@ -284,6 +287,14 @@ public class BESUService {
 		} catch ( Exception e ) {
 			e.printStackTrace();
 		}
+	}
+	
+	private void loadNodeKeysToConfig() {
+		File f = new File( this.keysFolder );
+		String[] listOfFolders = f.list();
+		for ( String address: listOfFolders ) {           
+		    System.out.println( " > " + address ); 
+		}		
 	}
 	
 	private void createValidatorNodes() {
