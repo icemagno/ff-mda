@@ -1,13 +1,15 @@
 package br.com.j1scorpii.ffmda.services;
 
+import java.io.BufferedWriter;
 import java.io.File;
+import java.io.FileWriter;
 import java.math.BigInteger;
 import java.net.URL;
+import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
-import java.util.Scanner;
 
 import org.apache.commons.io.FileUtils;
 import org.json.JSONArray;
@@ -49,10 +51,13 @@ public class BESUService {
 
 	private String configFile;
 	private String genesisFile;
+	private String validatorsFile;
 	private String keyFile;
 	private String keyPubFile;
 	private String staticNodesFile;
 	private String permissionsFile;
+	
+	private JSONArray validatorsData;
 	
 	private RestTemplate rt;
 
@@ -71,6 +76,7 @@ public class BESUService {
 		this.dataFolder = this.componentDataFolder + "/data";
 		
 		this.configFile = this.dataFolder + "/config.toml";
+		this.validatorsFile = this.dataFolder + "/validators.json";
 		this.genesisFile = this.dataFolder + "/genesis.json";
 		this.keyFile = this.dataFolder + "/key";
 		this.keyPubFile = this.dataFolder + "/key.pub";
@@ -81,10 +87,10 @@ public class BESUService {
 		logger.info("init " + this.componentDataFolder );
 		new File( this.dataFolder ).mkdirs();
 		
+		loadValidatorsData();
 		getConfig();
 		copyDefaultData();
 		createValidatorNodes();
-		
 	}
 	
 	private String requestData( String endpoint, JSONObject payload ) throws Exception {
@@ -204,9 +210,8 @@ public class BESUService {
 		generalConfig.put("container", getContainer() );
 		// Plus the local node config ( I need this server's IP and host )
 		generalConfig.put("localAgentConfig", localAgentConfig );
-		
-		generalConfig.put("validators", loadNodeKeysToConfig() );
-		
+		generalConfig.put("validators", this.validatorsData );
+
 		System.out.println( generalConfig.toString(5) );
 		
 		return generalConfig.toString();
@@ -273,13 +278,34 @@ public class BESUService {
 	
 	// *********************************************
 	
+	private void loadValidatorsData() {
+		try {
+			byte[] encoded = Files.readAllBytes(Paths.get( this.validatorsFile ));
+			this.validatorsData = new JSONArray( new String(encoded, StandardCharsets.UTF_8 ) );
+		} catch ( Exception e ) { this.validatorsData = new JSONArray();  }
+	}
+	
+	private void saveValidatorsData() throws Exception {
+		BufferedWriter writer = new BufferedWriter( new FileWriter( this.validatorsFile) );
+		writer.write( this.validatorsData.toString() );
+		writer.close();			
+	}	
+
 	// Will copy the blockchain default data to the data folder
 	// The user must download from web interface, change as it needs and then upload again. 
 	private void copyDefaultData() {
+
 		// Do it just once
-		// It will prevent override the files every time the container restarts  
+		// It will prevent override the files every time the container restarts
 		if( new File( this.genesisFile ).exists() ) {
 			logger.info("Genesis file already in place. Assuming that keys was created too");
+			
+			// Check if we have key and key.pub files.
+			if( ! new File( this.keyPubFile ).exists() ) {
+				logger.info("No keys are reserved to this node. Getting some ... ");
+				reserveKeysToThisNode();
+			}		
+			
 			return;
 		}
 		logger.info("Initializing BESU files");
@@ -295,24 +321,13 @@ public class BESUService {
 		}
 	}
 	
-	private JSONArray loadNodeKeysToConfig() {
-		JSONArray validators = new JSONArray();
-		try {
-			File kf = new File( this.keysFolder );
-			String[] listOfFolders = kf.list();
-			for ( String address: listOfFolders ) {           
-			    Scanner s = new Scanner(new File( this.keysFolder + "/" + address + "/key.pub" ) );
-			    String pubKey = s.nextLine();
-			    JSONObject nd = new JSONObject()
-			    		.put("address", address)
-			    		.put("available", true)
-			    		.put("pubKey", pubKey )
-			    		.put("usedByNode", JSONObject.NULL );
-			    validators.put(nd);
-			    s.close();
-			}
-		} catch ( Exception e ) { e.printStackTrace(); }	
-		return validators;
+	private void reserveKeysToThisNode() {
+		if( this.validatorsData.length() > 0 ) {
+			JSONObject firstAvailable = this.validatorsData.getJSONObject(0);
+			System.out.println("Will use this data to this BESU node:");
+			System.out.println( firstAvailable.toString(5) );
+		}
+		
 	}
 	
 	private void createValidatorNodes() {
@@ -333,6 +348,20 @@ public class BESUService {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
+		
+		try {
+			File kf = new File( this.keysFolder );
+			String[] listOfFolders = kf.list();
+			for ( String address: listOfFolders ) {           
+			    JSONObject nd = new JSONObject()
+			    		.put("address", address)
+			    		.put("available", true)
+			    		.put("usedByNode", JSONObject.NULL );
+			    this.validatorsData.put(nd);
+			}
+			saveValidatorsData();	
+		} catch ( Exception e ) { e.printStackTrace(); }		
+		
 	}
 	
 }
