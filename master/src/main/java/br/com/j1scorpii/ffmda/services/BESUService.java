@@ -90,7 +90,6 @@ public class BESUService {
 		loadValidatorsData();
 		getConfig();
 		copyDefaultData();
-		createValidatorNodes();
 	}
 	
 	private String requestData( String endpoint, JSONObject payload ) throws Exception {
