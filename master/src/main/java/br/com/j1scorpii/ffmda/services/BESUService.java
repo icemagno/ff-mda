@@ -296,13 +296,6 @@ public class BESUService {
 		// It will prevent override the files every time the container restarts
 		if( new File( this.genesisFile ).exists() ) {
 			logger.info("Genesis file already in place. Assuming that keys was created too");
-			
-			// Check if we have key and key.pub files.
-			if( ! new File( this.keyPubFile ).exists() ) {
-				logger.info("No keys are reserved to this node. Getting some ... ");
-				reserveKeysToThisNode();
-			}		
-			
 			return;
 		}
 		logger.info("Initializing BESU files");
@@ -315,24 +308,6 @@ public class BESUService {
 			getConfig();
 		} catch ( Exception e ) {
 			e.printStackTrace();
-		}
-	}
-	
-	private void reserveKeysToThisNode() {
-		// Reserve the first keys to this node
-		logger.info("reserving keys to this node");
-		if( this.validatorsData.length() > 0 ) {
-			String address = this.validatorsData.getJSONObject(0).getString("address");
-			try {
-				FileUtils.copyFile( new File( this.dataFolder + "/nodefiles/keys/" + address + "/key"), new File( this.dataFolder + "/key" ) );
-				FileUtils.copyFile( new File( this.dataFolder + "/nodefiles/keys/" + address + "/key.pub"), new File( this.dataFolder + "/key.pub" ) );
-				this.validatorsData.getJSONObject(0).put("available", false);
-				this.validatorsData.getJSONObject(0).put("usedByNode", "local");
-				saveValidatorsData();
-				logger.info("this node will use address " + address);
-			} catch (Exception e) {
-				e.printStackTrace();
-			}
 		}
 	}
 	
@@ -373,6 +348,23 @@ public class BESUService {
 			    		.put("usedByNode", JSONObject.NULL );
 			    this.validatorsData.put(nd);
 			}
+			
+			
+			// Reserve the first keys to this node
+			logger.info("reserving keys to this node");
+			if( this.validatorsData.length() > 0 ) {
+				String address = this.validatorsData.getJSONObject(0).getString("address");
+				try {
+					FileUtils.copyFile( new File( this.dataFolder + "/nodefiles/keys/" + address + "/key"), new File( this.dataFolder + "/key" ) );
+					FileUtils.copyFile( new File( this.dataFolder + "/nodefiles/keys/" + address + "/key.pub"), new File( this.dataFolder + "/key.pub" ) );
+					this.validatorsData.getJSONObject(0).put("available", false);
+					this.validatorsData.getJSONObject(0).put("usedByNode", "local");
+					logger.info("this node will use address " + address);
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+			}			
+			
 			saveValidatorsData();
 			// Remove the original genesis config file. No need to keep it
 			new File(this.dataFolder + "/bc_config.json").delete();
