@@ -51,14 +51,14 @@ public class DockerService {
 	@Value("${spring.profiles.active}")
 	private String activeProfile;
 	
-	public void executeAndRemoveContainer( String imageName, String[] command, String volumeHost, String volumeContainer ) {
+	public void executeAndRemoveContainer( String containerName, String imageName, String[] command, String volumeHost, String volumeContainer ) {
 		Bind bd = new Bind( volumeHost, new Volume( volumeContainer ) );
 		HostConfig hc = new HostConfig()
 			.withAutoRemove( true )
 			.withBinds( bd );
 
 		CreateContainerResponse container = dockerClient.createContainerCmd( imageName )
-			.withName( "besu_create_genesis" )
+			.withName( containerName )
 			.withCmd( command )
 			.withHostConfig( hc ).exec();
 		

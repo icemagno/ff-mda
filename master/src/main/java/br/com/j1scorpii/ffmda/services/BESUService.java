@@ -90,6 +90,7 @@ public class BESUService {
 		loadValidatorsData();
 		getConfig();
 		copyDefaultData();
+		createValidatorNodes();
 	}
 	
 	private String requestData( String endpoint, JSONObject payload ) throws Exception {
@@ -349,9 +350,16 @@ public class BESUService {
 		};
 		// Run a temp BESU container to create the Genesis file and the validators
 		// TODO: Edit the wallets and balances
-		this.containerManager.executeAndRemoveContainer( this.imageName, command, this.dataFolder, "/data" );
+		this.containerManager.executeAndRemoveContainer( "besu_create_genesis", this.imageName, command, this.dataFolder, "/data" );
+		File genesisFile = new File( this.dataFolder + "/nodefiles/genesis.json");
+		
+		logger.info("waiting for container 'besu_create_genesis' to generate genesis file and keys ... ");
+		while( !genesisFile.exists() ) {
+			// Wait to genesis.json be present
+		}
+		
 		try {
-			FileUtils.copyFile( new File( this.dataFolder + "/nodefiles/genesis.json"), new File(this.genesisFile ) );
+			FileUtils.copyFile( genesisFile , new File(this.genesisFile ) );
 		} catch (Exception e) {
 			e.printStackTrace();
 		}

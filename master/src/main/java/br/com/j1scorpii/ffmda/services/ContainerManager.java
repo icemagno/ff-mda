@@ -201,8 +201,8 @@ public class ContainerManager {
 	}
 
 	
-	public void executeAndRemoveContainer(String imageName, String[] command, String volumeHost, String volumeContainer) {
-		this.dockerService.executeAndRemoveContainer( imageName, command, volumeHost, volumeContainer );
+	public void executeAndRemoveContainer( String containerName, String imageName, String[] command, String volumeHost, String volumeContainer) {
+		this.dockerService.executeAndRemoveContainer( containerName, imageName, command, volumeHost, volumeContainer );
 	}
 
 }
