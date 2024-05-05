@@ -338,6 +338,7 @@ public class BESUService {
 	}
 	
 	private void createValidatorNodes() {
+		this.validatorsData = new JSONArray();
 		logger.info("creating validators keys and Genesis file");
 		String[] command = { 
 			"/besu/bin/besu",
