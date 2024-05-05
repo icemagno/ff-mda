@@ -328,8 +328,8 @@ public class BESUService {
 		if( this.validatorsData.length() > 0 ) {
 			String address = this.validatorsData.getJSONObject(0).getString("address");
 			try {
-				FileUtils.copyFile( new File( this.dataFolder + "/nodefiles/" + address + "/key"), new File( this.dataFolder + "/key" ) );
-				FileUtils.copyFile( new File( this.dataFolder + "/nodefiles/" + address + "/key.pub"), new File( this.dataFolder + "/key.pub" ) );
+				FileUtils.copyFile( new File( this.dataFolder + "/nodefiles/keys/" + address + "/key"), new File( this.dataFolder + "/key" ) );
+				FileUtils.copyFile( new File( this.dataFolder + "/nodefiles/keys/" + address + "/key.pub"), new File( this.dataFolder + "/key.pub" ) );
 				this.validatorsData.getJSONObject(0).put("available", false);
 				this.validatorsData.getJSONObject(0).put("usedByNode", "local");
 				saveValidatorsData();
