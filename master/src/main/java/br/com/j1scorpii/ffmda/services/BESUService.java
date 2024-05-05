@@ -79,8 +79,10 @@ public class BESUService {
 		
 		logger.info("init " + this.componentDataFolder );
 		new File( this.dataFolder ).mkdirs();
-		copyDefaultData();
 		
+		getConfig();
+		
+		copyDefaultData();
 		System.out.println( createValidatorNodes() );
 		
 	}
