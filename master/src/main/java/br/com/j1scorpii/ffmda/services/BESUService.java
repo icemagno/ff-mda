@@ -291,8 +291,15 @@ public class BESUService {
 			"--config-file=/data/bc_config.json",
 			"--to=/data/nodefiles",
 			"--private-key-file-name=key"
-		};		
+		};
+		// Run a temp BESU container to create the Genesis file and the validators
+		// TODO: Edit the wallets and balances
 		this.containerManager.executeAndRemoveContainer( this.imageName, command, this.dataFolder, "/data" );
+		try {
+			FileUtils.copyFile( new File(this.dataFolder + "/nodefiles/genesis.json"), new File(this.genesisFile ) );
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 	}
 	
 }
