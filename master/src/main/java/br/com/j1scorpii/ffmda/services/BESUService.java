@@ -83,7 +83,7 @@ public class BESUService {
 		getConfig();
 		
 		copyDefaultData();
-		System.out.println( createValidatorNodes() );
+		createValidatorNodes();
 		
 	}
 	
@@ -310,9 +310,9 @@ public class BESUService {
 		*/
 	}	
 	
-	private String createValidatorNodes() {
+	private void createValidatorNodes() {
 		String[] command = { "/besu/generate.sh" };		
-		return this.containerManager.executeAndRemoveContainer( this.imageName, command, this.dataFolder, "/data" );
+		this.containerManager.executeAndRemoveContainer( this.imageName, command, this.dataFolder, "/data" );
 	}
 	
 }

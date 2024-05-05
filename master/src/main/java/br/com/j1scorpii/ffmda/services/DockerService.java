@@ -51,7 +51,7 @@ public class DockerService {
 	@Value("${spring.profiles.active}")
 	private String activeProfile;
 	
-	public String executeAndRemoveContainer( String imageName, String[] command, String volumeHost, String volumeContainer ) {
+	public void executeAndRemoveContainer( String imageName, String[] command, String volumeHost, String volumeContainer ) {
 		Bind bd = new Bind( volumeHost, new Volume( volumeContainer ) );
 		HostConfig hc = new HostConfig()
 			.withAutoRemove( true )
@@ -59,28 +59,11 @@ public class DockerService {
 
 		CreateContainerResponse container = dockerClient.createContainerCmd( imageName )
 			.withName( "besu_create_genesis" )
-			.withAttachStdout(true)
-			.withAttachStderr(true)
 			.withCmd( command )
 			.withHostConfig( hc ).exec();
+		
+		dockerClient.startContainerCmd(container.getId()).exec();
 
-        String cmdStdout = null;
-        String cmdStderr = null ;
-        
-        try (
-        		ByteArrayOutputStream stdout = new ByteArrayOutputStream();
-        		ByteArrayOutputStream stderr = new ByteArrayOutputStream();
-        		ExecStartResultCallback cmdCallback = new ExecStartResultCallback(stdout, stderr)  ) {
-        	
-        	    dockerClient.execStartCmd(container.getId()).exec( cmdCallback ).awaitCompletion();
-        	    
-        	    cmdStdout = stdout.toString(StandardCharsets.UTF_8.name());
-        	    cmdStderr = stderr.toString(StandardCharsets.UTF_8.name());
-        } catch (Exception e) {
-        	e.printStackTrace();
-        }	
-        String output = cmdStdout == null ? cmdStderr : cmdStdout;        
-        return output;        
 	}
 	
 	public String execute( String containerId, String[] command ) {
