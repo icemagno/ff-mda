@@ -10,6 +10,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
+import java.util.Scanner;
 
 import org.apache.commons.io.FileUtils;
 import org.json.JSONArray;
@@ -246,6 +247,10 @@ public class BESUService {
 	    			path = Paths.get( this.permissionsFile );
 	    			actualFileName = "permissions_config.toml";
 	    			break;
+	    		case "validatorpool":
+	    			path = Paths.get( this.validatorsFile );
+	    			actualFileName = "validators.json";
+	    			break;
 	    	}
 	    	response.setHeader("Content-Disposition", "attachment; filename=" + actualFileName );
 	    	ByteArrayResource resource = new ByteArrayResource( Files.readAllBytes( path ) );
@@ -311,6 +316,13 @@ public class BESUService {
 		}
 	}
 	
+	
+	// Run a BESU container just to create some node keys and addresses
+	// as the genesis file to be used in our new blockchain.
+	// The user can always edit these files from the web interface.
+	// This must be done just once. I'll check the presence of the genesis file to
+	// determine if I must do this. See 'copyDefaultData()'
+	// This container will be removed.
 	private void createValidatorNodes() {
 		this.validatorsData = new JSONArray();
 		logger.info("creating validators keys and Genesis file");
@@ -322,8 +334,13 @@ public class BESUService {
 			"--to=/data/nodefiles",
 			"--private-key-file-name=key"
 		};
-		// Run a temp BESU container to create the Genesis file and the validators
-		// TODO: Edit the wallets and balances
+		// Run a temp BESU container to create the Genesis file and the validators keys
+		// TODO: Edit the chain ID, wallets and balances
+		
+		System.out.println("-------------------- BESUService --------------------");
+		System.out.println(" What about allow some Genesis customization?        ");
+		System.out.println("-----------------------------------------------------");
+		
 		this.containerManager.executeAndRemoveContainer( "besu_create_genesis", this.imageName, command, this.dataFolder, "/data" );
 		File genesisFile = new File( this.dataFolder + "/nodefiles/genesis.json");
 		
@@ -331,45 +348,78 @@ public class BESUService {
 		while( !genesisFile.exists() ) {
 			// Wait to genesis.json be present
 		}
-		logger.info("done. will copy keys and genesis files to this node.");
+		logger.info("Done. will copy genesis file to data folder.");
 		try {
 			FileUtils.copyFile( genesisFile , new File(this.genesisFile ) );
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
 		
+		// At this point we must have a genesis file and a folder with 20 validators keys.
+		// Do NOT FORGET that all these validators addresses are in the genesis file as a node validator.
+		// So... the first 20 nodes you create will become a validator with no need to register into BC.
+		// In many common cases 5 validators are enough but I'll reserve a pool of 20 just in case...
+		// If you decide to create the 21th node then no key pair will be send and BESU will
+		// generate they making the node to not be a validator (it will not be in genesis)
+		// Need to register by API (or let it go as is)
+
+		// Here I'll read all key files generated and populate an array to serve as repository
+		// So it will be easy to take keys to distribute to new nodes from memory instead read from disk
 		try {
 			File kf = new File( this.keysFolder );
 			String[] listOfFolders = kf.list();
-			for ( String address: listOfFolders ) {           
-			    JSONObject nd = new JSONObject()
+			for ( String address: listOfFolders ) {
+				// Take the content of the files
+			    Scanner s1 = new Scanner( new File( this.dataFolder + "/nodefiles/keys/" + address + "/key" ) );
+			    Scanner s2 = new Scanner( new File( this.dataFolder + "/nodefiles/keys/" + address + "/key.pub" ) );
+			    String privKey = s1.nextLine();
+			    String pubKey = s2.nextLine();
+				// Create an entry to store address, private and public keys for each validator
+				JSONObject nd = new JSONObject()
 			    		.put("address", address)
 			    		.put("available", true)
+			    		.put("privKey", privKey.trim() )
+			    		.put("pubKey", pubKey.trim() )
 			    		.put("usedByNode", JSONObject.NULL );
 			    this.validatorsData.put(nd);
 			}
 			
 			
-			// Reserve the first keys to this node
+			// Reserve the first key pair to this node
 			logger.info("reserving keys to this node");
-			if( this.validatorsData.length() > 0 ) {
-				String address = this.validatorsData.getJSONObject(0).getString("address");
-				try {
-					FileUtils.copyFile( new File( this.dataFolder + "/nodefiles/keys/" + address + "/key"), new File( this.dataFolder + "/key" ) );
-					FileUtils.copyFile( new File( this.dataFolder + "/nodefiles/keys/" + address + "/key.pub"), new File( this.dataFolder + "/key.pub" ) );
-					this.validatorsData.getJSONObject(0).put("available", false);
-					this.validatorsData.getJSONObject(0).put("usedByNode", "local");
-					logger.info("this node will use address " + address);
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
-			}			
-			
+			// Since it is the first time I call this function, it will take the 
+			// index zero (the first entry)
+			int av = getNextAvailableValidator();
+			// Yes I know.. I call the object every time to make sure the global array
+			// will reflect the changes so I can save it to disk. Need to improve this later.
+			String address = this.validatorsData.getJSONObject(av).getString("address");
+			// Save keys to disk
+			FileWriter w1 = new FileWriter( this.dataFolder + "/key" );
+			FileWriter w2 = new FileWriter( this.dataFolder + "/key.pub" );
+			w1.write( this.validatorsData.getJSONObject(av).getString("privKey") );
+			w2.write( this.validatorsData.getJSONObject(av).getString("pubKey") );
+			w1.close();
+			w2.close();
+			// Mark the entry as used by this node so no one can take it again
+			this.validatorsData.getJSONObject(av).put("available", false);
+			this.validatorsData.getJSONObject(av).put("usedByNode", "local");
+			logger.info("this BESU node will use address " + address);
+			// Update the validators repository to disk
 			saveValidatorsData();
 			// Remove the original genesis config file. No need to keep it
 			new File(this.dataFolder + "/bc_config.json").delete();
 		} catch ( Exception e ) { e.printStackTrace(); }		
 		
+	}
+	
+	// Every time you register a new node, I need to send a key pair to it.
+	// So it will become a BESU validator (don't forget it was already registered into genesis file.
+	// no need to register again)
+	private int getNextAvailableValidator() {
+		for( int x=0; x < this.validatorsData.length(); x++ ) {
+			if ( this.validatorsData.getJSONObject(0).getBoolean("available") == true ) return x;
+		}
+		return -1;
 	}
 	
 }

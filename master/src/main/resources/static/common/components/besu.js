@@ -200,6 +200,9 @@ function bindFileButtons() {
 	$("#dlPermissions").click( ()=>{
 		downloadFile('permissions');
 	});	
+	$("#dlValidators").click( ()=>{
+		downloadFile('validatorpool');
+	});	
 		
 }
 
