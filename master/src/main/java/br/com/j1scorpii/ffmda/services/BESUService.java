@@ -129,7 +129,7 @@ public class BESUService {
 			res = new JSONObject ( this.requestData("http://besu:8545", requestData) );
 			blockchainData.put("peers", res.getJSONArray("result") );
 			
-		} catch ( Exception e ) { e.printStackTrace(); }
+		} catch ( Exception e ) {  }
 		
 		
 		return blockchainData.toString();
@@ -275,24 +275,17 @@ public class BESUService {
 		}
 	}
 
-
-	
-	// *********************************************
-	
 	private void loadValidatorsData() {
 		try {
-			byte[] encoded = Files.readAllBytes(Paths.get( this.validatorsFile ));
-			this.validatorsData = new JSONArray( new String(encoded, StandardCharsets.UTF_8 ) );
+			this.validatorsData = new JSONArray( loadFile( this.validatorsFile ) );
 			logger.info("We have " + this.validatorsData.length() + " validator keys" );
 		} catch ( Exception e ) { this.validatorsData = new JSONArray();  }
 	}
 	
 	private void saveValidatorsData() throws Exception {
-		BufferedWriter writer = new BufferedWriter( new FileWriter( this.validatorsFile) );
-		writer.write( this.validatorsData.toString() );
-		writer.close();			
-	}	
-
+		saveFile( this.validatorsFile, this.validatorsData.toString() );
+	}
+	
 	// Will copy the blockchain default data to the data folder
 	// The user must download from web interface, change as it needs and then upload again. 
 	private void copyDefaultData() {
@@ -382,8 +375,9 @@ public class BESUService {
 			    		.put("pubKey", pubKey.trim() )
 			    		.put("usedByNode", JSONObject.NULL );
 			    this.validatorsData.put(nd);
+			    s1.close();
+			    s2.close();
 			}
-			
 			
 			// Reserve the first key pair to this node
 			logger.info("reserving keys to this node");
@@ -420,6 +414,59 @@ public class BESUService {
 			if ( this.validatorsData.getJSONObject(0).getBoolean("available") == true ) return x;
 		}
 		return -1;
+	}
+
+	// *******************************************************************************
+	
+	private void saveFile( String file, String data ) throws Exception {
+		BufferedWriter writer = new BufferedWriter( new FileWriter( file ) );
+		writer.write( data );
+		writer.close();			
+	}
+	
+	private String loadFile( String file ) {
+		try {
+			byte[] encoded = Files.readAllBytes(Paths.get( file ));
+			return new String(encoded, StandardCharsets.UTF_8 ) ;
+		} catch ( Exception e ) {   }
+		return null;
+	}
+	
+	public void updateStaticNode( String enode, boolean remove ) {
+		JSONArray staticNodes = new JSONArray();
+		try { 
+			// Copy enodes and make sure to delete proposed enode if exists
+			JSONArray staticNodesTmp = new JSONArray( loadFile( this.staticNodesFile ) );
+			for ( int x=0; x< staticNodesTmp.length(); x++ ) {
+				if( !enode.equals(staticNodesTmp.get(x) ) ) staticNodes.put( enode );
+			}
+			// May I request this peer to delete that enode? 
+			// Think about it later. It will removed when restart anyway
+			
+			// Save the updated list to 'static-nodes.json' file to make this node to remember
+			// when restarts
+			saveFile( this.staticNodesFile, staticNodes.toString() );
+			
+			// Just to remove. Quit now without adding
+			if( remove ) return;
+			
+			// Add the new node to this node right now
+			JSONObject requestData = new JSONObject()
+					.put("jsonrpc", "2.0")
+					.put("id", 99)
+					.put("params", new JSONArray().put(enode) )
+					.put("method", "admin_addPeer");
+			this.requestData("http://besu:8545", requestData);
+		} catch (Exception e) {	e.printStackTrace(); }
+		/*		
+			[
+			    "enode://f6f0628abeced644e5549cc4fe8463202058271eef3b4ea0f4ddec898ea369744940eac0503e7f3f8f652919eef8dd5d94786370832c4ed295e21016a1f9f268@node-01:30303",
+			    "enode://28577627e0047dd243b938aeac5e6997b28b7bdeda7a92eb7f002a3243448af746baed5669cf236d3dc371bc70c88f549142afd8078f0e2133a2b39183b2121f@node-02:30304",
+			    "enode://57a77df902756ab20a69932a45435e0d53ee1e6b9b1f3e2e6d46f3d1862fe9b600c9e43cad199e7e4c6d8080314e470f2d50a35f01ce5b00b6d60cf4122473c6@node-03:30305",
+			    "enode://8446da4d3605215ccb561c84966fdabdf14a6611c5953d40fe16d3141b5d394acbb4ce69d9a1b4ff034d2bf3f09cdef069e6c67e331f3da581550b1e13019bb2@node-04:30306",
+			    "enode://ba4bcebb4b7b97e5260de0c1d43918e9c8b742eda1e51aa05d7d9b6f051e0c02852a97d5ad3ca641ab87f90d794fdfff537a5ec7f28b8e58ed06efd648492607@node-05:30307"
+			]
+		*/
 	}
 	
 }

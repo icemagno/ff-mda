@@ -35,6 +35,7 @@ public class RemoteAgentService {
 	private Logger logger = LoggerFactory.getLogger( RemoteAgentService.class );
 	
 	@Autowired private SimpMessagingTemplate messagingTemplate;
+	@Autowired private BESUService besuService;
 	
 	@Value("${ffmda.local.data.folder}")
 	
@@ -129,7 +130,7 @@ public class RemoteAgentService {
 			messagingTemplate.convertAndSend( "/agent/status" , agentJson.toString() );
 			broadcast( agentJson.put("protocol", FFMDAProtocol.AGENT_INFO.toString() ) );
 			try { if( !agent.isConnected() ) agent.connect(); } catch ( Exception e ) { }
-		}; 
+		};
 	}
 	
 	public JSONArray getAgents(){
@@ -164,6 +165,10 @@ public class RemoteAgentService {
 				agent.setOrgName( payload.getString("orgName") );
 				agent.setNodeName( payload.getString("nodeName") );
 				agent.setHostName( payload.getString("hostName") );
+				
+				logger.info("DON'T FORGET TO RECEIVE THE BESU ENODE FROM AGENT ");
+				// besuService.
+				
 				saveConfig();
 				
 				// Save the agent host name to the /etc/hosts file 
