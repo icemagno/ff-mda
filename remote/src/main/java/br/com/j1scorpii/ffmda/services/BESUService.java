@@ -6,6 +6,7 @@ import org.json.JSONArray;
 import org.json.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.http.RequestEntity;
@@ -18,13 +19,36 @@ import jakarta.annotation.PostConstruct;
 public class BESUService {
 	private Logger logger = LoggerFactory.getLogger( BESUService.class );
 	private RestTemplate rt;
+	private String besuEnode;
+	private final String COMPONENT_NAME = "besu";
+	private String imageName;
+	
+	@Autowired private ImageManager imageManager;
+	@Autowired private ContainerManager containerManager;	
 	
 	@PostConstruct
 	private void init() {
 		this.rt = new RestTemplate();
 		logger.info("init");
+		besuEnode = "";		
+	}
+	
+	public String getBesuEnode() {
+		return besuEnode;
 	}
 
+	// Get the image data
+	public JSONObject imagePulled() {
+		JSONObject result = new JSONObject();
+		boolean exists = imageManager.exists(COMPONENT_NAME);
+		result.put("exists", exists);
+		if( exists ) {
+			this.imageName = imageManager.getImageForComponent(COMPONENT_NAME);
+			result.put("imageName", this.imageName );
+		}
+		return result;
+	}
+	
 	public JSONObject getNodeID( ) {
 		JSONObject res = new JSONObject ();
 		try {

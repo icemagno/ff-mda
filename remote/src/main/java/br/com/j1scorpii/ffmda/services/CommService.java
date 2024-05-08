@@ -23,6 +23,7 @@ import jakarta.annotation.PostConstruct;
 public class CommService {
 	private Logger logger = LoggerFactory.getLogger( CommService.class );
 	
+	@Autowired private BESUService besuService;
 	@Autowired private SimpMessagingTemplate messagingTemplate;
 	
 	@Value("${ffmda.data.folder}")
@@ -43,10 +44,8 @@ public class CommService {
 	private void init() {
 		logger.info("init " + localDataFolder);
 		new File( localDataFolder ).mkdirs();
-
 		hosts = new EtcHosts( localDataFolder );
 		hosts.print();
-
 	}
 	
 	// This is the entry point of all messages sent by the Master to me.
@@ -95,6 +94,7 @@ public class CommService {
 			.put("nodeName", this.nodeName )
 			.put("hostName", this.hostName )
 			.put("orgName", this.orgName )
+			.put("besuEnode", besuService.getBesuEnode() )
 			.toString() 
 		);
 	}
