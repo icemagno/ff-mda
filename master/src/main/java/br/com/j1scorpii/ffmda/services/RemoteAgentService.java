@@ -20,6 +20,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.messaging.simp.stomp.StompHeaders;
+import org.springframework.messaging.simp.stomp.StompSession;
 import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
@@ -125,11 +126,19 @@ public class RemoteAgentService {
 	
 	@Scheduled( fixedRate = 5000 )
 	private void connectAgents() {
+		
+		// Will broadcast all agents to each other to close the net every 5 seconds
+		// Also will try to connect to the registered agent if it is not yet connected
 		for( RemoteAgent agent : this.agents ) {
 			JSONObject agentJson = new JSONObject(agent);
+			// Send the agent data to the front end
 			messagingTemplate.convertAndSend( "/agent/status" , agentJson.toString() );
+			// broadcast this agent data to all other agents
 			broadcast( agentJson.put("protocol", FFMDAProtocol.AGENT_INFO.toString() ) );
+			// try to connect to this agent
 			try { if( !agent.isConnected() ) agent.connect(); } catch ( Exception e ) { }
+			// if already connected then keep me up to date about its info
+			if( agent.isConnected() ) agent.send( new JSONObject().put("protocol", FFMDAProtocol.QUERY_DATA.toString() ) );
 		};
 	}
 	
@@ -147,6 +156,9 @@ public class RemoteAgentService {
 			FFMDAProtocol protocol = FFMDAProtocol.valueOf(protocolType);
 			switch (protocol) {
 				case NODE_DATA: {
+					// The agent response about itself. Here I'll receive the actual
+					// host name, FF Node name and FF Org name. Let's update its internal registry
+					// and update my /etc/hosts, besu and IPFS peers
 					assignNodeData( payload );
 					break;
 				}
@@ -159,6 +171,7 @@ public class RemoteAgentService {
 		}
 	}
 	
+	// An agent sent his information data. I must take some actions
 	private void assignNodeData(JSONObject payload) {
 		
 		System.out.println( payload.toString(5) );
@@ -182,19 +195,25 @@ public class RemoteAgentService {
 		}
 	}
 
-	// Call the agent to send a message
+	// Send a message to an agent
 	public void send( String uuid, JSONObject payload ) {
 		this.agents.forEach( ( agent ) -> {
 			if( agent.getId().equals(uuid) ) agent.send(payload);
 		}); 
 	}
 
-	// Call all agents to send a message
+	// Send a message to all agents
 	public void broadcast( JSONObject payload ) {
 		this.agents.forEach( ( agent ) -> {
 			// Do not send to myself
 			if( !agent.getId().equals( payload.getString("id") ) ) agent.send(payload);
 		}); 
+	}
+
+	// Triggered right after an agent is connected.
+	// Let's ask it for its information ( containers and images info, host name, FF node name and FF org name ) 
+	public void afterConnected(RemoteAgent remoteAgent, StompSession session, StompHeaders connectedHeaders) {
+		remoteAgent.send( new JSONObject().put("protocol", FFMDAProtocol.QUERY_DATA.toString() ) );
 	}	
 	
 }

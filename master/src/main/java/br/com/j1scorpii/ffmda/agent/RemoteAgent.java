@@ -109,11 +109,11 @@ public class RemoteAgent implements StompSessionHandler {
 
 	@Override
 	public void afterConnected(StompSession session, StompHeaders connectedHeaders) {
-		logger.debug("Connected to " + this.address);
+		logger.debug("Connected to " + this.address );
 		status = RemoteAgentStatus.CONNECTED;
 		this.session = session;
 		session.subscribe("/agent_master", this);
-		send( new JSONObject().put("protocol", FFMDAProtocol.QUERY_DATA.toString() ) );
+		this.owner.afterConnected( this, session, connectedHeaders );
 	}
 
 	@Override
