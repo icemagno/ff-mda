@@ -163,6 +163,9 @@ public class RemoteAgentService {
 					assignNodeData( payload );
 					break;
 				}
+				case COMMAND_ERROR: {
+					processCommandError( payload );
+				}
 				default:
 					break;
 			}
@@ -172,6 +175,11 @@ public class RemoteAgentService {
 		}
 	}
 	
+	private void processCommandError(JSONObject payload) {
+		String uuid = payload.getString("uuid");
+		logger.error( "ERROR: " + uuid + " " + payload.getJSONObject("command").getString("protocol") + " " + payload.getString("reason") );
+	}
+
 	// An agent sent his information data. I must take some actions
 	private void assignNodeData(JSONObject payload) {
 		String uuid = payload.getString("uuid");

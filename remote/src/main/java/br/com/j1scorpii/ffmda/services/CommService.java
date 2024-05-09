@@ -81,10 +81,36 @@ public class CommService {
 	// The Master is commanding me to start a BESU node.
 	// Let's deploy one based on the Master instructions
 	private void deployBesu( JSONObject payload ) {
+		// check if master is telling me to deploy a besu node but give 
+		// no information about it
+		if( !payload.has("Status") ) {
+			commandError(payload, "No BESU data was given");
+			return;
+		}
+		
+		// Check if we already have all files needed by the BESU
+		// to start...
+		// if( no files here) commandError() ... 
+		
 		System.out.println("Must deploy a BESU node....");
 		System.out.println( payload.toString(5) );
 	}
 
+	
+	// I can't understand or execute the command from master.
+	// Throw it back to inform the error
+	private void commandError( JSONObject command, String reason ) {
+		this.sendToMaster( new JSONObject(  )
+			.put("protocol", FFMDAProtocol.COMMAND_ERROR.toString() )
+			.put("command", command )
+			.put("reason", reason)
+		);
+	}
+	
+	// Send messages to Master thru main channel
+	private void sendToMaster( JSONObject payload ) {
+		messagingTemplate.convertAndSend( "/agent_master", payload.toString() );
+	}
 	
 	// The Master is telling me about a brother Agent found on network. 
 	// Let's know how glorious is my brother!
@@ -101,13 +127,12 @@ public class CommService {
 	// Don't let it waiting! Tell him how glorious I am and let him to 
 	// spread this to all my brothers on network.
 	private void respondQueryData() {
-		messagingTemplate.convertAndSend( "/agent_master", new JSONObject(  )
+		this.sendToMaster( new JSONObject(  )
 			.put("protocol", FFMDAProtocol.NODE_DATA.toString() )
 			.put("nodeName", this.nodeName )
 			.put("hostName", this.hostName )
 			.put("orgName", this.orgName )
 			.put("besuEnode", besuService.getNodeID() )
-			.toString() 
 		);
 	}
 	
