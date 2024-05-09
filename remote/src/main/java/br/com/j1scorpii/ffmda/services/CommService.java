@@ -65,6 +65,10 @@ public class CommService {
 					processAgentInfo( payload );
 					break;
 				}
+				case DEPLOY_BESU: {
+					deployBesu( payload );
+					break;
+				}
 				default:
 					break;
 			}		
@@ -73,13 +77,21 @@ public class CommService {
 			e.printStackTrace();
 		}
 	}
+	
+	// The Master is commanding me to start a BESU node.
+	// Let's deploy one based on the Master instructions
+	private void deployBesu( JSONObject payload ) {
+		System.out.println("Must deploy a BESU node....");
+		System.out.println( payload.toString(5) );
+	}
 
 	
 	// The Master is telling me about a brother Agent found on network. 
-	// Let's know my brother!
+	// Let's know how glorious is my brother!
 	// I must register its host name on my /etc/hosts ....
 	private void processAgentInfo(JSONObject payload) {
 		System.out.println("A brother Agent...");
+		System.out.println("--- Don't forget to register it's BESU enode as a static peer");
 		System.out.println( payload.toString(5) );
 
 		hosts.addIfNotExists( payload.getString("ipAddress"), payload.getString("hostName") );
@@ -94,7 +106,7 @@ public class CommService {
 			.put("nodeName", this.nodeName )
 			.put("hostName", this.hostName )
 			.put("orgName", this.orgName )
-			.put("besuEnode", besuService.getBesuEnode() )
+			.put("besuEnode", besuService.getNodeID() )
 			.toString() 
 		);
 	}

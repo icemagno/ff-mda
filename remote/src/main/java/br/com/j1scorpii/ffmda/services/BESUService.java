@@ -19,7 +19,6 @@ import jakarta.annotation.PostConstruct;
 public class BESUService {
 	private Logger logger = LoggerFactory.getLogger( BESUService.class );
 	private RestTemplate rt;
-	private String besuEnode;
 	private final String COMPONENT_NAME = "besu";
 	private String imageName;
 	
@@ -30,12 +29,8 @@ public class BESUService {
 	private void init() {
 		this.rt = new RestTemplate();
 		logger.info("init");
-		besuEnode = "";		
 	}
 	
-	public String getBesuEnode() {
-		return besuEnode;
-	}
 
 	// Get the image data
 	public JSONObject imagePulled() {
@@ -58,9 +53,7 @@ public class BESUService {
 					.put("params", new JSONArray() )
 					.put("method", "net_enode");
 			res = new JSONObject ( this.requestData( "http://besu:8545", requestData) );
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
+		} catch (Exception e) { /* Probably I have no BESU running yet. Just ignore the error */ }
 		return res; 
 	}
 	
