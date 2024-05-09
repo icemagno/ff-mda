@@ -137,7 +137,8 @@ public class RemoteAgentService {
 		return new JSONArray( this.agents );
 	}
 	
-	// Triggered by the agent when a message arrive
+	// Triggered when a message arrive from the Remote Agent
+	// This is the entry point of the messages sent by agents
 	public void receive( JSONObject payload, StompHeaders headers ) {
 		// The Agent must obey the protocol otherwise the message will be discarded
 		if( !payload.has("protocol") ) return;
@@ -159,6 +160,9 @@ public class RemoteAgentService {
 	}
 	
 	private void assignNodeData(JSONObject payload) {
+		
+		System.out.println( payload.toString(5) );
+		
 		String uuid = payload.getString("uuid");
 		for( RemoteAgent agent : this.agents ) {
 			if( agent.getId().equals(uuid) ) {
