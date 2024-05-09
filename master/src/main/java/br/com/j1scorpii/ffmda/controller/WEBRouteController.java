@@ -59,7 +59,7 @@ public class WEBRouteController {
     	// Try to take the main config
     	try {
     		// In case of succes ( already have configured ) go to component page
-    		String configured = localService.getAgentConfig().getString("nodeName");
+    		String configured = localService.getMainConfig().getString("nodeName");
     		if( configured.length() > 1 ) return "components/" + name ;
     	} catch ( Exception e ) {	}
     	
@@ -83,7 +83,7 @@ public class WEBRouteController {
         model.addAttribute("walletBalance", localService.getMyWalletBalance() );
         
         // Inform to front if the stack is locked to edit
-        JSONObject config = localService.getAgentConfig();
+        JSONObject config = localService.getMainConfig();
         model.addAttribute("stackIsLocked", config.getJSONObject("stackStatus").getBoolean("locked") );
         model.addAttribute("orgName", config.getString("orgName") );
         model.addAttribute("nodeName", config.getString("nodeName") );

@@ -37,6 +37,7 @@ public class RemoteAgentService {
 	
 	@Autowired private SimpMessagingTemplate messagingTemplate;
 	@Autowired private BESUService besuService;
+	@Autowired private LocalService localService;
 	
 	@Value("${ffmda.local.data.folder}")
 	
@@ -173,19 +174,18 @@ public class RemoteAgentService {
 	
 	// An agent sent his information data. I must take some actions
 	private void assignNodeData(JSONObject payload) {
-		
-		System.out.println( payload.toString(5) );
-		
 		String uuid = payload.getString("uuid");
 		for( RemoteAgent agent : this.agents ) {
 			if( agent.getId().equals(uuid) ) {
 				agent.setOrgName( payload.getString("orgName") );
 				agent.setNodeName( payload.getString("nodeName") );
 				agent.setHostName( payload.getString("hostName") );
+				agent.setBesuEnode( payload.getJSONObject("besuEnode") );
 				
 				logger.info("DON'T FORGET TO RECEIVE THE BESU ENODE FROM AGENT ");
 				// besuService.
 				
+				// Duh
 				saveConfig();
 				
 				// Save the agent host name to the /etc/hosts file 
@@ -193,6 +193,12 @@ public class RemoteAgentService {
 				hosts.addIfNotExists( agent.getIpAddress(), agent.getHostName() );
 			}
 		}
+	}
+	
+	public String deployBesuNode() {
+		JSONObject localAgentConfig = localService.getMainConfig();
+		return localAgentConfig.toString(5);
+		
 	}
 
 	// Send a message to an agent

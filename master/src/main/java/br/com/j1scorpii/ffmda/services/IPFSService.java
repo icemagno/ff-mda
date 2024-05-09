@@ -215,7 +215,7 @@ public class IPFSService {
 	
 	public String getConfig( ) {
 		try { loadConfig(); } catch (Exception e) {	}
-		JSONObject localAgentConfig = localService.getAgentConfig();
+		JSONObject localAgentConfig = localService.getMainConfig();
 		// Use a object wrapper to send component configuration 
 		// plus some relevant configuration to the UI.
 		JSONObject generalConfig = new JSONObject();

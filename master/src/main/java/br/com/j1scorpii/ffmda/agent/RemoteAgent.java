@@ -16,7 +16,6 @@ import org.springframework.web.socket.client.standard.StandardWebSocketClient;
 import org.springframework.web.socket.messaging.WebSocketStompClient;
 
 import br.com.j1scorpii.ffmda.services.RemoteAgentService;
-import br.com.j1scorpii.ffmda.util.FFMDAProtocol;
 import br.com.j1scorpii.ffmda.util.RemoteAgentStatus;
 
 public class RemoteAgent implements StompSessionHandler {
@@ -33,6 +32,7 @@ public class RemoteAgent implements StompSessionHandler {
 	private String orgName;
 	private String nodeName;
 	private String hostName;
+	private JSONObject besuEnode = new JSONObject();
 	private RemoteAgentService owner;
 	
 	public RemoteAgent( JSONObject agent, RemoteAgentService owner ) throws Exception {
@@ -60,6 +60,10 @@ public class RemoteAgent implements StompSessionHandler {
 	
 	public String getNodeName() {
 		return nodeName;
+	}
+	
+	public JSONObject getBesuEnode() {
+		return besuEnode;
 	}
 	
 	public String getIpAddress() {
@@ -141,6 +145,10 @@ public class RemoteAgent implements StompSessionHandler {
 	
 	public void setHostName(String hostName) {
 		this.hostName = hostName;
+	}
+
+	public void setBesuEnode(JSONObject enode) {
+		this.besuEnode = enode;
 	}
 	
 }

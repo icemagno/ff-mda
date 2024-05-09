@@ -81,9 +81,9 @@ public class DataExchangeService {
 	// We have the CA created, Org name and Node name.
 	// I think we can create the DataExchange key pair and sign the certificate with the CA.
 	private void createCertificateAndKeys() {
-		boolean stackIsLocked = localService.getAgentConfig().getJSONObject("stackStatus").getBoolean("locked");
-		String hostName = this.localService.getAgentConfig().getString("hostName");
-		String nodeName = this.localService.getAgentConfig().getString("nodeName");
+		boolean stackIsLocked = localService.getMainConfig().getJSONObject("stackStatus").getBoolean("locked");
+		String hostName = this.localService.getMainConfig().getString("hostName");
+		String nodeName = this.localService.getMainConfig().getString("nodeName");
 		boolean stackCertsWasCreated = this.localService.getPkiManager().caWasCreated();
 		if( stackIsLocked && stackCertsWasCreated && !certAndKeysExists() ) {
 		    String hostCn = "/CN="+hostName+"/O="+nodeName+"/OU=FireFly/OU=Multiparty Deployer Agent";
@@ -160,7 +160,7 @@ public class DataExchangeService {
 	}
 	
 	public String getConfig( ) {
-		JSONObject localAgentConfig = localService.getAgentConfig();
+		JSONObject localAgentConfig = localService.getMainConfig();
 		
 		// If we don't have keys yet ...
 		createCertificateAndKeys();

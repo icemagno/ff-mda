@@ -44,7 +44,7 @@ public class LocalService {
 	private String myPassword;
 	private boolean imReady = false;
 	private String myBalance = "0";
-	private JSONObject agentConfig;
+	private JSONObject mainConfig;
 	
 	@Autowired private PKIManagerService pkiManager;
 	@Autowired private ContainerManager containerManager;
@@ -54,7 +54,7 @@ public class LocalService {
 		
 		localWalletFolder 	= localDataFolder + "/wallets";
 		myPasswordFile 		= localDataFolder + "/.password.txt";
-		myConfigFile		= localDataFolder + "/agent-config.json";		
+		myConfigFile		= localDataFolder + "/config.json";		
 		
 		logger.info("init");
 		
@@ -96,7 +96,7 @@ public class LocalService {
 				this.loadConfig();
 			} else {
 				logger.info("Configuration file not found. Will create one.");
-				this.agentConfig = new JSONObject();
+				this.mainConfig = new JSONObject();
 				JSONObject stackStatus = new JSONObject();
 				
 				stackStatus
@@ -111,12 +111,12 @@ public class LocalService {
 				.put("sandbox", false)
 				.put("core", false);
 				
-				this.agentConfig.put("orgName", "");
-				this.agentConfig.put("nodeName", "");
+				this.mainConfig.put("orgName", "");
+				this.mainConfig.put("nodeName", "");
 				// TODO: Try to get IP and name from Docker NAT
-				this.agentConfig.put("hostName", "");
-				this.agentConfig.put("ipAddress", "");
-				this.agentConfig.put("stackStatus", stackStatus);
+				this.mainConfig.put("hostName", "");
+				this.mainConfig.put("ipAddress", "");
+				this.mainConfig.put("stackStatus", stackStatus);
 				
 				saveConfig();
 				
@@ -127,7 +127,7 @@ public class LocalService {
 		
 		
 		// If we have a wallet and a valid config data then we are ready to go ahead.
-		this.imReady = ( this.myWallet != null && this.agentConfig != null && this.agentConfig.has("orgName") );
+		this.imReady = ( this.myWallet != null && this.mainConfig != null && this.mainConfig.has("orgName") );
 		
 		// Start the PKI Manager
 		if( this.imReady ) {
@@ -135,7 +135,7 @@ public class LocalService {
 			// we will check if we have the CA files (certificate) already created. 
 			// If so, will lock config again
 			if( this.pkiManager.caWasCreated() ) {
-				this.agentConfig.getJSONObject("stackStatus").put("locked", true);	
+				this.mainConfig.getJSONObject("stackStatus").put("locked", true);	
 				try { this.saveConfig(); } catch (Exception e) { e.printStackTrace(); }
 			}
 		}
@@ -196,16 +196,16 @@ public class LocalService {
 	// Save Organization name and NOde name to configuration
 	public JSONObject saveOrgData(String data) throws Exception {
 		// Will only save Org config if it is open
-		if ( this.agentConfig.getJSONObject("stackStatus").getBoolean("locked") == false ) {
+		if ( this.mainConfig.getJSONObject("stackStatus").getBoolean("locked") == false ) {
 			JSONObject obj = new JSONObject( data );
 			if( obj.has("data") ) {
 				obj = obj.getJSONObject("data");
-				if( obj.has("orgName") ) this.agentConfig.put("orgName", obj.getString("orgName") );
-				if( obj.has("nodeName") ) this.agentConfig.put("nodeName", obj.getString("nodeName") );
-				if( obj.has("ipAddress") ) this.agentConfig.put("ipAddress", obj.getString("ipAddress") );
-				if( obj.has("hostName") ) this.agentConfig.put("hostName", obj.getString("hostName") );	
+				if( obj.has("orgName") ) this.mainConfig.put("orgName", obj.getString("orgName") );
+				if( obj.has("nodeName") ) this.mainConfig.put("nodeName", obj.getString("nodeName") );
+				if( obj.has("ipAddress") ) this.mainConfig.put("ipAddress", obj.getString("ipAddress") );
+				if( obj.has("hostName") ) this.mainConfig.put("hostName", obj.getString("hostName") );	
 				// Lock this part of configuration
-				this.agentConfig.getJSONObject("stackStatus").put("locked", true);	
+				this.mainConfig.getJSONObject("stackStatus").put("locked", true);	
 				this.saveConfig();
 				
 				// Create the Certificate Authority for all Conglomerate
@@ -215,7 +215,7 @@ public class LocalService {
 			}
 		}
 		// Just return current config ( changed or not )
-		return this.agentConfig;
+		return this.mainConfig;
 	}
 
 	// Reload configuration from disk. Useful when someone edits the JSON file directly
@@ -235,18 +235,18 @@ public class LocalService {
 	private void loadConfig() throws Exception {
 		// REad config file from disk
 		String content = readFile( myConfigFile , StandardCharsets.UTF_8);
-		this.agentConfig = new JSONObject(content);
+		this.mainConfig = new JSONObject(content);
 		
 		// Get the stack situation
-		this.agentConfig.getJSONObject("stackStatus").put("dataExchange", containerManager.getContainer( "dataexchange" ) );
-		this.agentConfig.getJSONObject("stackStatus").put("postgresql", containerManager.getContainer( "postgresql" ) );
-		this.agentConfig.getJSONObject("stackStatus").put("ipfs", containerManager.getContainer( "ipfs" ) );
-		this.agentConfig.getJSONObject("stackStatus").put("besu", containerManager.getContainer( "besu" ) );
-		this.agentConfig.getJSONObject("stackStatus").put("core", containerManager.getContainer( "core" ) );
-		this.agentConfig.getJSONObject("stackStatus").put("sandbox", containerManager.getContainer( "sandbox" ) );
-		this.agentConfig.getJSONObject("stackStatus").put("signer", containerManager.getContainer( "signer" ) );
-		this.agentConfig.getJSONObject("stackStatus").put("tokens", containerManager.getContainer( "tokens" ) );
-		this.agentConfig.getJSONObject("stackStatus").put("evmConn", containerManager.getContainer( "evmconnect" ) );
+		this.mainConfig.getJSONObject("stackStatus").put("dataExchange", containerManager.getContainer( "dataexchange" ) );
+		this.mainConfig.getJSONObject("stackStatus").put("postgresql", containerManager.getContainer( "postgresql" ) );
+		this.mainConfig.getJSONObject("stackStatus").put("ipfs", containerManager.getContainer( "ipfs" ) );
+		this.mainConfig.getJSONObject("stackStatus").put("besu", containerManager.getContainer( "besu" ) );
+		this.mainConfig.getJSONObject("stackStatus").put("core", containerManager.getContainer( "core" ) );
+		this.mainConfig.getJSONObject("stackStatus").put("sandbox", containerManager.getContainer( "sandbox" ) );
+		this.mainConfig.getJSONObject("stackStatus").put("signer", containerManager.getContainer( "signer" ) );
+		this.mainConfig.getJSONObject("stackStatus").put("tokens", containerManager.getContainer( "tokens" ) );
+		this.mainConfig.getJSONObject("stackStatus").put("evmConn", containerManager.getContainer( "evmconnect" ) );
 		
 	}
 	
@@ -254,9 +254,9 @@ public class LocalService {
 		return this.myBalance + " ETH";
 	}
 	
-	public JSONObject getAgentConfig() {
+	public JSONObject getMainConfig() {
 		reloadConfig();
-		return this.agentConfig;
+		return this.mainConfig;
 	}
 	
 	public boolean amIReady() {
@@ -269,7 +269,7 @@ public class LocalService {
 	
 	private void saveConfig() throws Exception {
 		BufferedWriter writer = new BufferedWriter( new FileWriter( myConfigFile) );
-		writer.write( this.agentConfig.toString() );
+		writer.write( this.mainConfig.toString() );
 		writer.close();			
 	}
 

@@ -26,7 +26,7 @@ public class LocalAgentController {
 	// Return the config data
     @GetMapping( value="/config/get", produces= MediaType.APPLICATION_JSON_VALUE )
     public ResponseEntity<String> config( ) {
-    	return new ResponseEntity<>( this.localService.getAgentConfig().toString() , HttpStatus.OK);
+    	return new ResponseEntity<>( this.localService.getMainConfig().toString() , HttpStatus.OK);
     }
     
 
@@ -34,7 +34,7 @@ public class LocalAgentController {
     @GetMapping( value="/config/reload", produces= MediaType.APPLICATION_JSON_VALUE )
     public ResponseEntity<String> reloadConfig( ) {
     	this.localService.reloadConfig();
-    	return new ResponseEntity<>( this.localService.getAgentConfig().toString() , HttpStatus.OK);
+    	return new ResponseEntity<>( this.localService.getMainConfig().toString() , HttpStatus.OK);
     }
 
     // Download peer certificate file (public key)

@@ -22,6 +22,13 @@ public class RemoteAgentController {
     public ResponseEntity<String> getAgents( ) throws Exception {
     	return new ResponseEntity<String>( this.remoteAgentService.getAgents().toString() , HttpStatus.OK);
     }  	
+
+    
+    @GetMapping( value="/deploy", produces= MediaType.APPLICATION_JSON_VALUE )
+    public ResponseEntity<String> deploy( ) throws Exception {
+    	return new ResponseEntity<String>( this.remoteAgentService.deployBesuNode() , HttpStatus.OK);
+    }  	
+    
     
     @PostMapping( value="/add", consumes= MediaType.APPLICATION_JSON_VALUE )
     public ResponseEntity<String> addAgent( @RequestBody String data ) throws Exception {
