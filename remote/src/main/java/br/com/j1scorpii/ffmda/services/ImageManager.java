@@ -1,5 +1,7 @@
 package br.com.j1scorpii.ffmda.services;
 
+import java.io.BufferedWriter;
+import java.io.FileWriter;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Paths;
@@ -105,13 +107,30 @@ public class ImageManager {
 		}
 		return result;
 	}
+
+	
+	public void addToManifest(String componentName, String imageName ) {
+		this.manifest.put(componentName, imageName);
+	}
+	
+	
+	private void saveManifest( ) {
+		try {
+			BufferedWriter writer = new BufferedWriter( new FileWriter( this.localDataFolder + "/manifest.json" ) );
+			writer.write( this.manifest.toString(5) );
+			writer.close();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}	
 	
 	private void readManifest() {
 		try {	
 			byte[] encoded = Files.readAllBytes(Paths.get( this.localDataFolder + "/manifest.json" ));
 			this.manifest = new JSONObject( new String(encoded, StandardCharsets.UTF_8 ) );
 		}catch (Exception e) {
-			e.printStackTrace();
+			this.manifest = new JSONObject();
+			saveManifest();
 		}		
 	}
 		
