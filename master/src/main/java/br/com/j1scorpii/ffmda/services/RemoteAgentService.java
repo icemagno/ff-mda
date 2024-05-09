@@ -195,8 +195,16 @@ public class RemoteAgentService {
 		}
 	}
 	
+	// Command an agent to deploy a besu node there
 	public String deployBesuNode() {
 		JSONObject localAgentConfig = localService.getMainConfig();
+		JSONObject besuData = localAgentConfig.getJSONObject("stackStatus").getJSONObject("besu");
+		
+		// Send to all for instance ( I'm lazy to search for an UUID now )
+		this.broadcast( new JSONObject()
+			.put("protocol", FFMDAProtocol.DEPLOY_BESU.toString() )
+			.put("besuData", besuData )
+		);
 		return localAgentConfig.toString(5);
 		
 	}
