@@ -200,11 +200,17 @@ public class RemoteAgentService {
 		JSONObject localAgentConfig = localService.getMainConfig();
 		JSONObject besuData = localAgentConfig.getJSONObject("stackStatus").getJSONObject("besu");
 		
+		// ***************************************************
+		// 		DON'T FORGET TO SEND THE BESU FILES FIRST !!!
+		// ***************************************************
+		
 		// Send to all for instance ( I'm lazy to search for an UUID now )
-		this.broadcast( new JSONObject()
-			.put("protocol", FFMDAProtocol.DEPLOY_BESU.toString() )
-			.put("besuData", besuData )
-		);
+		this.agents.forEach( ( agent ) -> {
+			if( agent.isConnected() ) this.send( agent.getId(), new JSONObject()
+				.put("protocol", FFMDAProtocol.DEPLOY_BESU.toString() )
+				.put("besuData", besuData )
+			);
+		});
 		return localAgentConfig.toString(5);
 		
 	}
@@ -216,7 +222,7 @@ public class RemoteAgentService {
 		}); 
 	}
 
-	// Send a message to all agents
+	// Send agent data to all agents
 	public void broadcast( JSONObject payload ) {
 		this.agents.forEach( ( agent ) -> {
 			// Do not send to myself
