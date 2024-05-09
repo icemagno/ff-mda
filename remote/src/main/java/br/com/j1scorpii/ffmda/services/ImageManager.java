@@ -24,7 +24,7 @@ public class ImageManager {
 	private JSONArray images;
 	private JSONObject manifest;
 	
-	@Value("${ffmda.local.data.folder}")
+	@Value("${ffmda.data.folder}")
 	private String localDataFolder;		
 	
 	@Value("${spring.profiles.active}")
@@ -84,17 +84,6 @@ public class ImageManager {
 	}
 
 	public String getImages() {
-		// If active profile is DEV then I will mock the image list. I'm on Windows and have no Docker socket to test.
-		if( this.activeProfile.equals("dev") ) { 
-			try {	
-				byte[] encoded = Files.readAllBytes(Paths.get( this.localDataFolder + "/images-mock.json" ));
-				return new String(encoded, StandardCharsets.UTF_8 );
-			}catch (Exception e) {
-				e.printStackTrace();
-			}
-			
-		}
-		// The game is for real. Read images from Docker.
 		return dockerService.getResponse( Request.Method.GET, "/images/json?all=false&digests=true", null );
 	}
 	

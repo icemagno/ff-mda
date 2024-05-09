@@ -1,8 +1,5 @@
 package br.com.j1scorpii.ffmda.services;
 
-import java.nio.charset.StandardCharsets;
-import java.nio.file.Files;
-import java.nio.file.Paths;
 import java.util.Iterator;
 
 import org.json.JSONArray;
@@ -23,7 +20,7 @@ public class ContainerManager {
 	private Logger logger = LoggerFactory.getLogger( ContainerManager.class );
 	private JSONArray containers;
 	
-	@Value("${ffmda.local.data.folder}")
+	@Value("${ffmda.data.folder}")
 	private String localDataFolder;	
 	
 	@Autowired private DockerService dockerService;
@@ -168,14 +165,6 @@ public class ContainerManager {
 	}
 
 	public String getContainers() {
-		if( this.activeProfile.equals("dev") ) {
-			try {	
-				byte[] encoded = Files.readAllBytes(Paths.get( this.localDataFolder + "/containers-mock.json" ));
-				return new String(encoded, StandardCharsets.UTF_8 );
-			} catch (Exception e) {
-				e.printStackTrace();
-			}
-		}
 		return dockerService.getResponse( Request.Method.GET, "/containers/json?all=true&size=true", null );
 	}
 
