@@ -16,17 +16,21 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.stereotype.Service;
 
+import br.com.j1scorpii.ffmda.util.IFireFlyComponent;
 import jakarta.annotation.PostConstruct;
 
 @Service
-public class IPFSService {
+@EnableScheduling
+public class IPFSService implements IFireFlyComponent {
 	private Logger logger = LoggerFactory.getLogger( IPFSService.class );
 
 	@Autowired private ImageManager imageManager;
 	@Autowired private ContainerManager containerManager;
 	@Autowired private LocalService localService;
+	@Autowired private EtcHostsService hosts;
 	
 	private final String COMPONENT_NAME = "ipfs";
 	
@@ -60,6 +64,11 @@ public class IPFSService {
 		new File( this.dataFolder ).mkdirs();
 		new File( this.stagingFolder ).mkdirs();
 		if( ! new File( this.swarmKeyFile ).exists() ) this.createSwarmKeyFile();
+		hosts.register( this );
+	}
+	
+	public JSONObject getIdentity() {
+		return identity;
 	}
 	
 	public String getSwarmKeyFile() throws Exception {
@@ -111,9 +120,6 @@ public class IPFSService {
 		this.config.getJSONObject("Addresses").put("NoAnnounce", new JSONArray() );
 		this.config.put("Bootstrap", JSONObject.NULL );
 		this.identity = config.getJSONObject("Identity");
-		
-		System.out.println( this.identity.toString(5) );
-		
 		this.config.getJSONObject("Swarm").put("AddrFilters", JSONObject.NULL );
 		this.config.getJSONObject("Routing").put("AcceleratedDHTClient", true);
 		this.config.getJSONObject("Routing").put("Type", "dht");
@@ -166,6 +172,7 @@ public class IPFSService {
 		volumes.put("/etc/localtime:/etc/localtime:ro");
 		volumes.put(  this.stagingFolder + ":/export");
 		volumes.put(  this.dataFolder + ":/data/ipfs");
+		volumes.put(  this.componentDataFolder + "/hosts:/etc/hosts");		
 		
 		JSONObject containerDef = new JSONObject();
 		containerDef.put("name", COMPONENT_NAME);
@@ -173,7 +180,7 @@ public class IPFSService {
 		containerDef.put("ports", portBidings );
 		containerDef.put("image", this.imageName );
 		containerDef.put("connectToNetwork", "ffmda");
-		containerDef.put("restart", "always");
+		//containerDef.put("restart", "always");
 		containerDef.put("environments", envs);
 		containerDef.put("volumes", volumes);
 		
@@ -238,6 +245,11 @@ public class IPFSService {
 				"connect", 
 				"/ip4/"+peerIp+"/tcp/"+peerPort+"/ipfs/" + peerId };
 		return this.containerManager.exec("ipfs", command);
+	}
+
+	@Override
+	public String getComponentDataFolder() {
+		return this.componentDataFolder;
 	}
 	
 

@@ -28,16 +28,18 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.multipart.MultipartFile;
 
+import br.com.j1scorpii.ffmda.util.IFireFlyComponent;
 import jakarta.annotation.PostConstruct;
 import jakarta.servlet.http.HttpServletResponse;
 
 @Service
-public class BESUService {
+public class BESUService implements IFireFlyComponent  {
 	private Logger logger = LoggerFactory.getLogger( BESUService.class );
 
 	@Autowired private ImageManager imageManager;
 	@Autowired private ContainerManager containerManager;
 	@Autowired private LocalService localService;
+	@Autowired private EtcHostsService hosts;
 	
 	private final String COMPONENT_NAME = "besu";
 	
@@ -91,6 +93,7 @@ public class BESUService {
 		loadValidatorsData();
 		getConfig();
 		copyDefaultData();
+		hosts.register( this );
 	}
 	
 	private String requestData( String endpoint, JSONObject payload ) throws Exception {
@@ -162,6 +165,7 @@ public class BESUService {
 		volumes.put("/etc/localtime:/etc/localtime:ro");
 		volumes.put(  this.pluginsFolder + ":/besu/plugins");
 		volumes.put(  this.dataFolder + ":/data");
+		volumes.put(  this.componentDataFolder + "/hosts:/etc/hosts");
 		
 		JSONObject containerDef = new JSONObject();
 		containerDef.put("name", COMPONENT_NAME);
@@ -169,7 +173,7 @@ public class BESUService {
 		containerDef.put("ports", portBidings );
 		containerDef.put("image", this.imageName );
 		containerDef.put("connectToNetwork", "ffmda");
-		containerDef.put("restart", "always");
+		//containerDef.put("restart", "always");
 		containerDef.put("environments", envs);
 		containerDef.put("volumes", volumes);
 		containerDef.put("args", new JSONArray().put("/besu/bin/besu").put("--config-file=/data/config.toml") );
@@ -468,5 +472,11 @@ public class BESUService {
 			]
 		*/
 	}
+
+	@Override
+	public String getComponentDataFolder() {
+		return this.componentDataFolder;
+	}
+
 	
 }

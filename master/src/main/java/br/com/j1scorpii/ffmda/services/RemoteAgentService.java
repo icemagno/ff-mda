@@ -26,7 +26,6 @@ import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
 import br.com.j1scorpii.ffmda.agent.RemoteAgent;
-import br.com.j1scorpii.ffmda.util.EtcHosts;
 import br.com.j1scorpii.ffmda.util.FFMDAProtocol;
 import jakarta.annotation.PostConstruct;
 
@@ -36,20 +35,18 @@ public class RemoteAgentService {
 	private Logger logger = LoggerFactory.getLogger( RemoteAgentService.class );
 	
 	@Autowired private SimpMessagingTemplate messagingTemplate;
-	@Autowired private BESUService besuService;
+	// @Autowired private BESUService besuService;
 	@Autowired private LocalService localService;
+	@Autowired private EtcHostsService hosts;
 	
 	@Value("${ffmda.local.data.folder}")
-	
 	private String localDataFolder;	
+
 	private String configFile;
-	private EtcHosts hosts;
 	private List<RemoteAgent> agents;
 	
 	@PostConstruct
 	private void init() {
-		hosts = new EtcHosts( localDataFolder );
-		hosts.print();		
 		this.configFile	= localDataFolder + "/remote-agents.json";
 		this.agents = new ArrayList<RemoteAgent>();
 		this.loadConfig();
@@ -242,6 +239,7 @@ public class RemoteAgentService {
 	// Let's ask it for its information ( containers and images info, host name, FF node name and FF org name ) 
 	public void afterConnected(RemoteAgent remoteAgent, StompSession session, StompHeaders connectedHeaders) {
 		remoteAgent.send( new JSONObject().put("protocol", FFMDAProtocol.QUERY_DATA.toString() ) );
-	}	
+	}
+
 	
 }

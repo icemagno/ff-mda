@@ -33,17 +33,18 @@ import org.springframework.web.socket.client.WebSocketClient;
 import org.springframework.web.socket.client.standard.StandardWebSocketClient;
 
 import br.com.j1scorpii.ffmda.util.DXWebSocketHandler;
+import br.com.j1scorpii.ffmda.util.IFireFlyComponent;
 import jakarta.annotation.PostConstruct;
 
 @Service
-public class DataExchangeService {
+public class DataExchangeService implements IFireFlyComponent {
 	private Logger logger = LoggerFactory.getLogger( DataExchangeService.class );
 
 	@Autowired private ImageManager imageManager;
 	@Autowired private ContainerManager containerManager;
 	@Autowired private LocalService localService;
 	@Autowired private SimpMessagingTemplate messagingTemplate;
-
+	@Autowired private EtcHostsService hosts;
 	
 	private final String COMPONENT_NAME = "dataexchange";
 	
@@ -71,6 +72,7 @@ public class DataExchangeService {
 		this.pemKey = this.componentDataFolder + "/key.pem";
 		new File( this.peersFolder ).mkdirs();
 		logger.info("init " + this.componentDataFolder );
+		hosts.register( this );
 	}
 
 	public boolean certAndKeysExists() {
@@ -123,13 +125,14 @@ public class DataExchangeService {
 		JSONArray volumes = new JSONArray();
 		volumes.put("/etc/localtime:/etc/localtime:ro");
 		volumes.put(  this.componentDataFolder + ":/data");
+		volumes.put(  this.componentDataFolder + "/hosts:/etc/hosts");		
 		
 		JSONObject containerDef = new JSONObject();
 		containerDef.put("name", COMPONENT_NAME);
 		containerDef.put("ports", portBidings );
 		containerDef.put("image", this.imageName );
 		containerDef.put("connectToNetwork", "ffmda");
-		containerDef.put("restart", "always");
+		//containerDef.put("restart", "always");
 		containerDef.put("environments", envs);
 		containerDef.put("volumes", volumes);
 		
@@ -302,6 +305,11 @@ public class DataExchangeService {
 	    Path path = Paths.get( this.pemCer );
 	    ByteArrayResource resource = new ByteArrayResource( Files.readAllBytes( path ) );
 	    return resource;	    
+	}
+
+	@Override
+	public String getComponentDataFolder() {
+		return this.componentDataFolder;
 	}
 	
 }

@@ -13,7 +13,6 @@ import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.stereotype.Service;
 
-import br.com.j1scorpii.ffmda.util.EtcHosts;
 import br.com.j1scorpii.ffmda.util.FFMDAProtocol;
 import jakarta.annotation.PostConstruct;
 
@@ -25,6 +24,7 @@ public class CommService {
 	
 	@Autowired private BESUService besuService;
 	@Autowired private SimpMessagingTemplate messagingTemplate;
+	@Autowired private EtcHostsService hosts;
 	
 	@Value("${ffmda.data.folder}")
 	private String localDataFolder;
@@ -38,14 +38,10 @@ public class CommService {
 	@Value("${ffmda.host.name}")
 	private String hostName;
 	
-	private EtcHosts hosts;
-	
 	@PostConstruct
 	private void init() {
 		logger.info("init " + localDataFolder);
 		new File( localDataFolder ).mkdirs();
-		hosts = new EtcHosts( localDataFolder );
-		hosts.print();
 	}
 	
 	// This is the entry point of all messages sent by the Master to me.
@@ -119,7 +115,6 @@ public class CommService {
 		System.out.println("A brother Agent...");
 		System.out.println("--- Don't forget to register it's BESU enode as a static peer");
 		System.out.println( payload.toString(5) );
-
 		hosts.addIfNotExists( payload.getString("ipAddress"), payload.getString("hostName") );
 	}
 
