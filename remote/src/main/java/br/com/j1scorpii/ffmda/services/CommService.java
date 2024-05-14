@@ -104,6 +104,8 @@ public class CommService {
 	
 	// Send messages to Master thru main channel
 	private void sendToMaster( JSONObject payload ) {
+		System.out.println("SEND TO MASTER");
+		System.out.println( payload.toString(5) );
 		messagingTemplate.convertAndSend( "/agent_master", payload.toString() );
 	}
 	

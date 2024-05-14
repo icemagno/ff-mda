@@ -209,7 +209,7 @@ public class RemoteAgentService {
 		this.agents.forEach( ( agent ) -> {
 			if( agent.isConnected() ) this.send( agent.getId(), new JSONObject()
 				.put("protocol", FFMDAProtocol.DEPLOY_BESU.toString() )
-				.put("besuData", besuData )
+				.put("imageName", besuData.getString("Image") )
 			);
 		});
 		return localAgentConfig.toString(5);
