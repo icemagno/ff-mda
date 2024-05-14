@@ -44,7 +44,6 @@ public class DataExchangeService implements IFireFlyComponent {
 	@Autowired private ContainerManager containerManager;
 	@Autowired private LocalService localService;
 	@Autowired private SimpMessagingTemplate messagingTemplate;
-	@Autowired private EtcHostsService hosts;
 	
 	private final String COMPONENT_NAME = "dataexchange";
 	
@@ -72,7 +71,6 @@ public class DataExchangeService implements IFireFlyComponent {
 		this.pemKey = this.componentDataFolder + "/key.pem";
 		new File( this.peersFolder ).mkdirs();
 		logger.info("init " + this.componentDataFolder );
-		hosts.register( this );
 	}
 
 	public boolean certAndKeysExists() {
@@ -125,7 +123,6 @@ public class DataExchangeService implements IFireFlyComponent {
 		JSONArray volumes = new JSONArray();
 		volumes.put("/etc/localtime:/etc/localtime:ro");
 		volumes.put(  this.componentDataFolder + ":/data");
-		volumes.put(  this.componentDataFolder + "/hosts:/etc/hosts");		
 		
 		JSONObject containerDef = new JSONObject();
 		containerDef.put("name", COMPONENT_NAME);

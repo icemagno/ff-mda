@@ -39,7 +39,6 @@ public class BESUService implements IFireFlyComponent  {
 	@Autowired private ImageManager imageManager;
 	@Autowired private ContainerManager containerManager;
 	@Autowired private LocalService localService;
-	@Autowired private EtcHostsService hosts;
 	
 	private final String COMPONENT_NAME = "besu";
 	
@@ -51,7 +50,6 @@ public class BESUService implements IFireFlyComponent  {
 	private String dataFolder;
 	private String keysFolder;
 	private String imageName;
-
 	private String configFile;
 	private String genesisFile;
 	private String validatorsFile;
@@ -59,11 +57,8 @@ public class BESUService implements IFireFlyComponent  {
 	private String keyPubFile;
 	private String staticNodesFile;
 	private String permissionsFile;
-	
 	private JSONArray validatorsData;
-	
 	private RestTemplate rt;
-
 	private JSONObject blockchainData = new JSONObject(); 
 	
 	@PostConstruct
@@ -93,7 +88,6 @@ public class BESUService implements IFireFlyComponent  {
 		loadValidatorsData();
 		getConfig();
 		copyDefaultData();
-		hosts.register( this );
 	}
 	
 	private String requestData( String endpoint, JSONObject payload ) throws Exception {
@@ -165,7 +159,6 @@ public class BESUService implements IFireFlyComponent  {
 		volumes.put("/etc/localtime:/etc/localtime:ro");
 		volumes.put(  this.pluginsFolder + ":/besu/plugins");
 		volumes.put(  this.dataFolder + ":/data");
-		volumes.put(  this.componentDataFolder + "/hosts:/etc/hosts");
 		
 		JSONObject containerDef = new JSONObject();
 		containerDef.put("name", COMPONENT_NAME);

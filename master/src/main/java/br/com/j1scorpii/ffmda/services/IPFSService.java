@@ -30,7 +30,6 @@ public class IPFSService implements IFireFlyComponent {
 	@Autowired private ImageManager imageManager;
 	@Autowired private ContainerManager containerManager;
 	@Autowired private LocalService localService;
-	@Autowired private EtcHostsService hosts;
 	
 	private final String COMPONENT_NAME = "ipfs";
 	
@@ -64,7 +63,6 @@ public class IPFSService implements IFireFlyComponent {
 		new File( this.dataFolder ).mkdirs();
 		new File( this.stagingFolder ).mkdirs();
 		if( ! new File( this.swarmKeyFile ).exists() ) this.createSwarmKeyFile();
-		hosts.register( this );
 	}
 	
 	public JSONObject getIdentity() {
@@ -172,7 +170,6 @@ public class IPFSService implements IFireFlyComponent {
 		volumes.put("/etc/localtime:/etc/localtime:ro");
 		volumes.put(  this.stagingFolder + ":/export");
 		volumes.put(  this.dataFolder + ":/data/ipfs");
-		volumes.put(  this.componentDataFolder + "/hosts:/etc/hosts");		
 		
 		JSONObject containerDef = new JSONObject();
 		containerDef.put("name", COMPONENT_NAME);

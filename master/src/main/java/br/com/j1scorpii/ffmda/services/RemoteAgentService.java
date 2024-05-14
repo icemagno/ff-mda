@@ -35,9 +35,8 @@ public class RemoteAgentService {
 	private Logger logger = LoggerFactory.getLogger( RemoteAgentService.class );
 	
 	@Autowired private SimpMessagingTemplate messagingTemplate;
-	// @Autowired private BESUService besuService;
+	@Autowired private BESUService besuService;
 	@Autowired private LocalService localService;
-	@Autowired private EtcHostsService hosts;
 	
 	@Value("${ffmda.local.data.folder}")
 	private String localDataFolder;	
@@ -156,7 +155,6 @@ public class RemoteAgentService {
 				case NODE_DATA: {
 					// The agent response about itself. Here I'll receive the actual
 					// host name, FF Node name and FF Org name. Let's update its internal registry
-					// and update my /etc/hosts, besu and IPFS peers
 					assignNodeData( payload );
 					break;
 				}
@@ -192,10 +190,6 @@ public class RemoteAgentService {
 				
 				// Duh
 				saveConfig();
-				
-				// Save the agent host name to the /etc/hosts file 
-				// so we can find them by using names instead IP
-				hosts.addIfNotExists( agent.getIpAddress(), agent.getHostName() );
 			}
 		}
 	}

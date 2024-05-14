@@ -24,7 +24,6 @@ public class CommService {
 	
 	@Autowired private BESUService besuService;
 	@Autowired private SimpMessagingTemplate messagingTemplate;
-	@Autowired private EtcHostsService hosts;
 	
 	@Value("${ffmda.data.folder}")
 	private String localDataFolder;
@@ -110,12 +109,10 @@ public class CommService {
 	
 	// The Master is telling me about a brother Agent found on network. 
 	// Let's know how glorious is my brother!
-	// I must register its host name on my /etc/hosts ....
 	private void processAgentInfo(JSONObject payload) {
 		System.out.println("A brother Agent...");
 		System.out.println("--- Don't forget to register it's BESU enode as a static peer");
 		System.out.println( payload.toString(5) );
-		hosts.addIfNotExists( payload.getString("ipAddress"), payload.getString("hostName") );
 	}
 
 	// The Master is asking me about who am I.

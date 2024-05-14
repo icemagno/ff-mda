@@ -26,8 +26,7 @@ public class BESUService implements IFireFlyComponent {
 	private String imageName;
 	
 	@Autowired private ImageManager imageManager;
-	//@Autowired private ContainerManager containerManager;	
-	@Autowired private EtcHostsService hosts;
+	@Autowired private ContainerManager containerManager;	
 	
 	@Value("${ffmda.local.data.folder}")
 	private String localDataFolder;
@@ -40,7 +39,6 @@ public class BESUService implements IFireFlyComponent {
 		new File( this.componentDataFolder ).mkdirs();
 		this.rt = new RestTemplate();
 		logger.info("init");
-		hosts.register(this);
 	}
 	
 
