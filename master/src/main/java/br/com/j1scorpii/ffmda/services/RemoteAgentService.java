@@ -192,7 +192,7 @@ public class RemoteAgentService {
 				agent.setOrgName( payload.getString("orgName") );
 				agent.setNodeName( payload.getString("nodeName") );
 				agent.setHostName( payload.getString("hostName") );
-				agent.setBesuEnode( payload.getJSONObject("besuEnode") );
+				agent.setBesuData( payload.getJSONObject("besu") );
 				
 				System.out.println( payload.toString(5) );
 				

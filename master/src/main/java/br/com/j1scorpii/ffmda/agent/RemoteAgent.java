@@ -32,7 +32,7 @@ public class RemoteAgent implements StompSessionHandler {
 	private String orgName;
 	private String nodeName;
 	private String hostName;
-	private JSONObject besuEnode = new JSONObject();
+	private JSONObject besuData = new JSONObject();
 	private RemoteAgentService owner;
 	
 	public RemoteAgent( JSONObject agent, RemoteAgentService owner ) throws Exception {
@@ -62,8 +62,8 @@ public class RemoteAgent implements StompSessionHandler {
 		return nodeName;
 	}
 	
-	public JSONObject getBesuEnode() {
-		return besuEnode;
+	public JSONObject getBesuData() {
+		return besuData;
 	}
 	
 	public String getIpAddress() {
@@ -147,8 +147,8 @@ public class RemoteAgent implements StompSessionHandler {
 		this.hostName = hostName;
 	}
 
-	public void setBesuEnode(JSONObject enode) {
-		this.besuEnode = enode;
+	public void setBesuData(JSONObject data) {
+		this.besuData = data;
 	}
 	
 }
