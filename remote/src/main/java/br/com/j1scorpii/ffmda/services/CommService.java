@@ -82,16 +82,19 @@ public class CommService {
 			commandError(payload, "No BESU image name was given");
 			return;
 		}
-		
-		// Check if we already have all files needed by the BESU
-		// to start...
-		// if( no files here) commandError() ... 
-		
-		System.out.println("Must deploy a BESU node....");
-		System.out.println( payload.toString(5) );
+		String result = besuService.deploy( payload.getString("imageName"), this );
+		sendResult( payload, result );
 	}
 
 	
+	private void sendResult(JSONObject payload, String result) {
+		this.sendToMaster( new JSONObject(  )
+			.put("protocol", FFMDAProtocol.RESULT.toString() )
+			.put("command", payload.getString("protocol") )
+			.put("result", result )
+		);
+	}
+
 	// I can't understand or execute the command from master.
 	// Throw it back to inform the error
 	private void commandError( JSONObject command, String reason ) {
@@ -103,9 +106,7 @@ public class CommService {
 	}
 	
 	// Send messages to Master thru main channel
-	private void sendToMaster( JSONObject payload ) {
-		System.out.println("SEND TO MASTER");
-		System.out.println( payload.toString(5) );
+	public void sendToMaster( JSONObject payload ) {
 		messagingTemplate.convertAndSend( "/agent_master", payload.toString() );
 	}
 	
@@ -126,7 +127,7 @@ public class CommService {
 			.put("nodeName", this.nodeName )
 			.put("hostName", this.hostName )
 			.put("orgName", this.orgName )
-			.put("besuEnode", besuService.getNodeID() )
+			.put("besu", besuService.getConfig() )
 		);
 	}
 	

@@ -132,7 +132,7 @@ public class BESUService implements IFireFlyComponent  {
 		return blockchainData.toString();
 	}	
 	
-	// Start the container. Duh.
+	// Start the container. 
 	public String startContainer() {
 		JSONObject container = getContainer();
 		if( container.has("State") ) {
@@ -272,6 +272,7 @@ public class BESUService implements IFireFlyComponent  {
 		}
 	}
 
+	// Load the validators key pool
 	private void loadValidatorsData() {
 		try {
 			this.validatorsData = new JSONArray( loadFile( this.validatorsFile ) );
@@ -413,8 +414,6 @@ public class BESUService implements IFireFlyComponent  {
 		return -1;
 	}
 
-	// *******************************************************************************
-	
 	private void saveFile( String file, String data ) throws Exception {
 		BufferedWriter writer = new BufferedWriter( new FileWriter( file ) );
 		writer.write( data );
