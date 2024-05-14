@@ -78,8 +78,8 @@ public class CommService {
 	private void deployBesu( JSONObject payload ) {
 		// check if master is telling me to deploy a besu node but give 
 		// no information about it
-		if( !payload.getJSONObject("besuData").has("Status") ) {
-			commandError(payload, "No BESU data was given");
+		if( !payload.has("imageName") ) {
+			commandError(payload, "No BESU image name was given");
 			return;
 		}
 		
