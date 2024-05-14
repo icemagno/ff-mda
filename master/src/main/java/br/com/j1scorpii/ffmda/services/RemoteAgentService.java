@@ -186,6 +186,9 @@ public class RemoteAgentService {
 
 	// An agent sent his information data. I must take some actions
 	private void assignNodeData(JSONObject payload) {
+		
+		System.out.println( payload.toString(5) );
+
 		String uuid = payload.getString("uuid");
 		for( RemoteAgent agent : this.agents ) {
 			if( agent.getId().equals(uuid) ) {
@@ -193,8 +196,6 @@ public class RemoteAgentService {
 				agent.setNodeName( payload.getString("nodeName") );
 				agent.setHostName( payload.getString("hostName") );
 				agent.setBesuData( payload.getJSONObject("besu") );
-				
-				System.out.println( payload.toString(5) );
 				
 				logger.info("DON'T FORGET TO RECEIVE THE BESU ENODE FROM AGENT ");
 				// besuService.
