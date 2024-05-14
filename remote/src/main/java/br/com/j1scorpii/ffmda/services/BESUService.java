@@ -46,12 +46,12 @@ public class BESUService implements IFireFlyComponent {
 		this.getConfig();
 	}
 	
-	public String getConfig( ) {
+	public JSONObject getConfig( ) {
 		JSONObject generalConfig = new JSONObject();
 		generalConfig.put("image", imagePulled() );
 		generalConfig.put("container", getContainer() );
-		generalConfig.put("nodeId", getNodeID() );
-		return generalConfig.toString();
+		generalConfig.put("enode", getEnode() );
+		return generalConfig;
 	}
 	
 	public String deploy( String imageName, CommService commService ) {
@@ -130,7 +130,7 @@ public class BESUService implements IFireFlyComponent {
 		return result;
 	}
 	
-	public JSONObject getNodeID( ) {
+	public JSONObject getEnode( ) {
 		JSONObject res = new JSONObject ();
 		if( !imagePulled().getBoolean("exists") ) return res;
 		try {
