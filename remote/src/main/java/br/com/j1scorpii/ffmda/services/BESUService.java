@@ -28,7 +28,7 @@ public class BESUService implements IFireFlyComponent {
 	@Autowired private ImageManager imageManager;
 	@Autowired private ContainerManager containerManager;	
 	
-	@Value("${ffmda.local.data.folder}")
+	@Value("${ffmda.data.folder}")
 	private String localDataFolder;
 	
 	private String componentDataFolder;

@@ -185,6 +185,8 @@ public class RemoteAgentService {
 				agent.setHostName( payload.getString("hostName") );
 				agent.setBesuEnode( payload.getJSONObject("besuEnode") );
 				
+				System.out.println( payload.toString(5) );
+				
 				logger.info("DON'T FORGET TO RECEIVE THE BESU ENODE FROM AGENT ");
 				// besuService.
 				
