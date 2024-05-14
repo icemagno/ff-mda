@@ -69,8 +69,7 @@ public class ImageManager {
 		dockerService.pullImage( imageName, callbackChannel );
 		return "requested";
 	}
-	public String pullImage( String componentName, boolean evenIfExists ) {
-		String callbackChannel = "/docker/"+componentName+"/pull";
+	public String pullImage( String componentName, boolean evenIfExists, String callbackChannel ) {
 		String imageName = getImageForComponent( componentName );
 		if( imageName == null ) {
 			return new JSONObject().put("response", "Component '" + componentName + "' has no image entry in manifest file.").toString();

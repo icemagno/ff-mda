@@ -37,6 +37,8 @@ public class CommService {
 	@Value("${ffmda.host.name}")
 	private String hostName;
 	
+	private String commChannel = "/agent_master";
+	
 	@PostConstruct
 	private void init() {
 		logger.info("init " + localDataFolder);
@@ -82,7 +84,7 @@ public class CommService {
 			commandError(payload, "No BESU image name was given");
 			return;
 		}
-		String result = besuService.deploy( payload.getString("imageName"), this );
+		String result = besuService.deploy( payload.getString("imageName"), this, commChannel );
 		sendResult( payload, result );
 	}
 
@@ -107,7 +109,7 @@ public class CommService {
 	
 	// Send messages to Master thru main channel
 	public void sendToMaster( JSONObject payload ) {
-		messagingTemplate.convertAndSend( "/agent_master", payload.toString() );
+		messagingTemplate.convertAndSend( commChannel, payload.toString() );
 	}
 	
 	// The Master is telling me about a brother Agent found on network. 

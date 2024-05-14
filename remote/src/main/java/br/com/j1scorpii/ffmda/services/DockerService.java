@@ -37,6 +37,7 @@ import com.github.dockerjava.transport.DockerHttpClient.Request.Builder;
 import com.github.dockerjava.transport.DockerHttpClient.Request.Method;
 import com.github.dockerjava.transport.DockerHttpClient.Response;
 
+import br.com.j1scorpii.ffmda.util.FFMDAProtocol;
 import jakarta.annotation.PostConstruct;
 
 @Service
@@ -115,6 +116,11 @@ public class DockerService {
 			logger.info("Docker Service Status: " + pingDockerService());
 		}
 	}
+	
+	private void send( String channel, JSONObject payload ) {
+		payload.put("protocol", FFMDAProtocol.LOG );
+		messagingTemplate.convertAndSend( channel, payload.toString() );
+	}
 
 	public void pullImage(String imageName, String callBackChannel	) {
 		
@@ -122,25 +128,25 @@ public class DockerService {
 			
 			@Override
 			public void onNext(PullResponseItem item) {
-				messagingTemplate.convertAndSend( callBackChannel, new JSONObject( item ).put("imageName", imageName).toString() );
+				send( callBackChannel, new JSONObject( item ).put("imageName", imageName) );
 				super.onNext(item);
 			}
 			
 			@Override
 			public void onComplete() {
-				messagingTemplate.convertAndSend( callBackChannel, new JSONObject( ).put("status", "Pull Complete.").put("imageName", imageName).toString() );
+				send( callBackChannel, new JSONObject( ).put("status", "Pull Complete.").put("imageName", imageName) );
 				super.onComplete();
 			}
 			
 			@Override
 			public void onStart(Closeable stream) {
-				messagingTemplate.convertAndSend( callBackChannel, new JSONObject( ).put("status", "Pull Start").put("imageName", imageName).toString() );
+				send( callBackChannel, new JSONObject( ).put("status", "Pull Start").put("imageName", imageName) );
 				super.onStart(stream);
 			}
 			
 			@Override
 			public void onError(Throwable throwable) {
-				messagingTemplate.convertAndSend( callBackChannel, new JSONObject( ).put("status", "Error: " + throwable.getMessage() ).put("imageName", imageName).toString() );
+				send( callBackChannel, new JSONObject( ).put("status", "Error: " + throwable.getMessage() ).put("imageName", imageName) );
 				super.onError(throwable);
 			}
 			

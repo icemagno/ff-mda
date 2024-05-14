@@ -158,6 +158,9 @@ public class RemoteAgentService {
 					assignNodeData( payload );
 					break;
 				}
+				case LOG: {
+					processLog( payload );
+				}
 				case RESULT: {
 					processCommandResult( payload );
 				}
@@ -173,6 +176,12 @@ public class RemoteAgentService {
 		}
 	}
 	
+	private void processLog(JSONObject payload) {
+		String uuid = payload.getString("uuid");
+		logger.info( "LOG: " + uuid );
+		logger.info( payload.toString() );
+	}
+
 	private void processCommandResult(JSONObject payload) {
 		String uuid = payload.getString("uuid");
 		logger.info( "RESULT: " + uuid + " " + payload.getJSONObject("command").getString("protocol") );

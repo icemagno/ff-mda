@@ -54,13 +54,13 @@ public class BESUService implements IFireFlyComponent {
 		return generalConfig;
 	}
 	
-	public String deploy( String imageName, CommService commService ) {
+	public String deploy( String imageName, CommService commService, String callbackChannel ) {
 		// Check if we already have all files needed by the BESU
 		// to start...
 		// if( no files here) commandError() ... 
 		System.out.println("Must deploy a BESU node.... " + imageName );
 		imageManager.addToManifest( "besu", imageName );
-		return startContainer();
+		return startContainer( callbackChannel );
 	}
 	
 	private JSONObject getContainer() {
@@ -68,12 +68,12 @@ public class BESUService implements IFireFlyComponent {
 		return container;
 	}	
 	
-	public String pullImage() {
-		return imageManager.pullImage(COMPONENT_NAME, true );
+	public String pullImage( String callbackChannel ) {
+		return imageManager.pullImage(COMPONENT_NAME, true, callbackChannel );
 	}
 	
 	// Start the container. 
-	public String startContainer() {
+	public String startContainer(String callbackChannel) {
 		JSONObject container = getContainer();
 		if( container.has("State") ) {
 			String state = container.getString("State");
@@ -83,7 +83,7 @@ public class BESUService implements IFireFlyComponent {
 		
 		// We don't have any image yet. Pull it now
 		if( this.imageName == null ) {
-			this.pullImage();
+			this.pullImage(callbackChannel);
 			this.getConfig();
 		}
 		
@@ -140,7 +140,7 @@ public class BESUService implements IFireFlyComponent {
 					.put("params", new JSONArray() )
 					.put("method", "net_enode");
 			res = new JSONObject ( this.requestData( "http://besu:8545", requestData) );
-		} catch (Exception e) { e.printStackTrace(); }
+		} catch (Exception e) {  }
 		return res; 
 	}
 	

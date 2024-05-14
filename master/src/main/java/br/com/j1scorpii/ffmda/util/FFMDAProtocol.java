@@ -6,5 +6,6 @@ public enum FFMDAProtocol {
 	AGENT_INFO,
 	DEPLOY_BESU,
 	COMMAND_ERROR,
-	RESULT
+	RESULT,
+	LOG
 }
