@@ -188,7 +188,7 @@ public class RemoteAgentService {
 	private void processCommandResult(JSONObject payload) {
 		System.out.println( payload.toString(5) );
 		String uuid = payload.getString("uuid");
-		logger.info( "RESULT: " + uuid + " " + payload.getJSONObject("command").getString("protocol") );
+		logger.info( "RESULT: " + uuid + " " + payload.getString("command") );
 		logger.info( payload.getJSONObject("result").toString() );
 	}
 

@@ -54,7 +54,7 @@ public class BESUService implements IFireFlyComponent {
 		return generalConfig;
 	}
 	
-	public String deploy( String imageName, CommService commService, String callbackChannel ) {
+	public JSONObject deploy( String imageName, CommService commService, String callbackChannel ) {
 		// Check if we already have all files needed by the BESU
 		// to start...
 		// if( no files here) commandError() ... 
@@ -73,12 +73,12 @@ public class BESUService implements IFireFlyComponent {
 	}
 	
 	// Start the container. 
-	public String startContainer(String callbackChannel) {
+	public JSONObject startContainer(String callbackChannel) {
 		JSONObject container = getContainer();
 		if( container.has("State") ) {
 			String state = container.getString("State");
-			if( state.equals("running") ) return new JSONObject().put("result", "Already Running").toString();
-			return new JSONObject().put("result", containerManager.startContainer( COMPONENT_NAME ) ).toString();
+			if( state.equals("running") ) return new JSONObject().put("result", "Already Running");
+			return new JSONObject().put("result", containerManager.startContainer( COMPONENT_NAME ) );
 		}
 		
 		// We don't have any image yet. Pull it now
@@ -114,7 +114,7 @@ public class BESUService implements IFireFlyComponent {
 		String result = this.containerManager.create( containerDef );
 		containerDef.put("result", new JSONObject( result ) );
 		containerManager.startContainer(COMPONENT_NAME);
-		return containerDef.toString();
+		return containerDef;
 	}
 	
 

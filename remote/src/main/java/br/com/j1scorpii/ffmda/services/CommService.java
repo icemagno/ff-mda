@@ -84,12 +84,12 @@ public class CommService {
 			commandError(payload, "No BESU image name was given");
 			return;
 		}
-		String result = besuService.deploy( payload.getString("imageName"), this, commChannel );
+		JSONObject result = besuService.deploy( payload.getString("imageName"), this, commChannel );
 		sendResult( payload, result );
 	}
 
 	
-	private void sendResult(JSONObject payload, String result) {
+	private void sendResult(JSONObject payload, JSONObject result) {
 		this.sendToMaster( new JSONObject(  )
 			.put("protocol", FFMDAProtocol.RESULT.toString() )
 			.put("command", payload.getString("protocol") )
