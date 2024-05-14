@@ -160,12 +160,15 @@ public class RemoteAgentService {
 				}
 				case LOG: {
 					processLog( payload );
+					break;
 				}
 				case RESULT: {
 					processCommandResult( payload );
+					break;
 				}
 				case COMMAND_ERROR: {
 					processCommandError( payload );
+					break;
 				}
 				default:
 					break;
