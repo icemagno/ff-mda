@@ -82,7 +82,7 @@ function getAgentCard( agent ){
             '<span class="mailbox-attachment-size">' +
               agent.ipAddress + ":" + agent.port + 
             '</span>' +
-   			'<a href="#" class="btn btn-default btn-xs pull-right"><i class="fa fa-external-link"></i></a>' +
+   			'<a href="/remote/'+ agent.id + '" class="btn btn-default btn-xs pull-right"><i class="fa fa-external-link"></i></a>' +
             '<a href="#" onClick="deleteAgent(\''+ agent.id + '\')" class="btn btn-default btn-xs"><i class="fa fa-trash-o text-red"></i></a>' +
       '</div>' +
     '</li>';
