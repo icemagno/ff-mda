@@ -28,9 +28,13 @@ $( document ).ready(function() {
 
 	});		
 	
+	// trigger the delete button from modal
 	$("#btnDeleteAgent").click( ()=>{
 		let id = $("#agentUuid").text();
 		console.log("delete " + id );
+		$.get("/v1/agent/delete/" + id, function(data, status) {
+			console.log( data );
+		});		
 	});
 
 	$("#btnRegisterAgent").click( ()=>{
@@ -61,11 +65,14 @@ function processAgent( agent ){
 		$("#sts_" + agent.id).text( agent.hostName );
 		$("#nn_" + agent.id).text( agent.nodeName );
 		$("#on_" + agent.id).text( agent.orgName );
+		// Only allow to manage connected (online) agents
+		if( agent.status == 'CONNECTED') $("#lk_" + agent.id).show(); else $("#lk_" + agent.id).hide(); 
 	} else {
 		$("#agentContainer").append( getAgentCard(agent) );
 	}
 }
 
+// Show a modal dialog asking to be sure
 function deleteAgent( id ){
 	$("#agentUuid").text( id );
 	$('#delete-agent').modal('show');
@@ -82,7 +89,7 @@ function getAgentCard( agent ){
             '<span class="mailbox-attachment-size">' +
               agent.ipAddress + ":" + agent.port + 
             '</span>' +
-   			'<a href="/remote/'+ agent.id + '" class="btn btn-default btn-xs pull-right"><i class="fa fa-external-link"></i></a>' +
+   			'<a id="lk_'+agent.id+'" href="/remote/'+ agent.id + '" class="btn btn-default btn-xs pull-right"><i class="fa fa-external-link"></i></a>' +
             '<a href="#" onClick="deleteAgent(\''+ agent.id + '\')" class="btn btn-default btn-xs"><i class="fa fa-trash-o text-red"></i></a>' +
       '</div>' +
     '</li>';

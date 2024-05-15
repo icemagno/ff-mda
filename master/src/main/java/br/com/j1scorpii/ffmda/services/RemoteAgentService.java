@@ -58,6 +58,13 @@ public class RemoteAgentService {
 		}
 		return new JSONObject();
 	}
+	public RemoteAgent getAgentById( String agentId ) {
+		for( RemoteAgent agent : this.agents ) {
+			if( agent.getId().equals(agentId) ) return agent ;			
+		}
+		return null;
+	}
+
 	
 	public JSONObject addAgent( String data ) {
 		JSONObject ag = new JSONObject( data ).getJSONObject("data");

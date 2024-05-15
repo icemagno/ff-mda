@@ -11,9 +11,10 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 
+import br.com.j1scorpii.ffmda.agent.RemoteAgent;
 import br.com.j1scorpii.ffmda.services.LocalService;
+import br.com.j1scorpii.ffmda.services.RemoteAgentService;
 import jakarta.annotation.PostConstruct;
-import jakarta.websocket.server.PathParam;
 
 @Controller
 public class WEBRouteController {
@@ -24,7 +25,7 @@ public class WEBRouteController {
     private Map<String,String> componentNames = new HashMap<String,String>();
     
     @Autowired private LocalService localService;
-
+    @Autowired private RemoteAgentService remoteAgentService;
     
     @PostConstruct
     private void init() {
@@ -79,6 +80,10 @@ public class WEBRouteController {
     @GetMapping("/remote/{agentId}")
     public String manageAgent( @PathVariable String agentId, Model model) {
     	model.addAttribute("agentId", agentId );
+    	
+    	RemoteAgent agent = this.remoteAgentService.getAgentById( agentId );
+    	model.addAttribute("agent", agent );
+    	
     	this.setGenericModel( model );
         return "remote/manage";
     }
