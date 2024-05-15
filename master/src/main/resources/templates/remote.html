@@ -27,6 +27,26 @@
           </div>
         </div>
 
+		
+		<div class="modal modal-danger fade" id="delete-agent">
+		  <div class="modal-dialog">
+		    <div class="modal-content">
+		      <div class="modal-header">
+		        <h4 class="modal-title">Delete Agent</h4>
+		      </div>
+		      <div class="modal-body">
+				<span id="agentUuid" style="display:none"></span>
+		        <p>Are you sure?</p>
+		      </div>
+		      <div class="modal-footer">
+		        <button type="button" class="btn btn-outline pull-left" data-dismiss="modal">Cancel</button>
+		        <button id="btnDeleteAgent" data-dismiss="modal" type="button" class="btn btn-outline">Delete</button>
+		      </div>
+		    </div>
+		  </div>
+		</div>		
+		
+		
 		<header class="main-header" th:insert="~{navbar}" ></header>
 		<aside class="main-sidebar" th:insert="~{sidebar}"></aside>
 

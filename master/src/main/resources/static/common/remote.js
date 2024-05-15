@@ -61,19 +61,24 @@ $( document ).ready(function() {
 function processAgent( agent ){
 	let statusColor = getStatusColor( agent.status );
 	if ( $( "#" + agent.id ).length ) {
+		// Already have this agent card. Update...
 		addStatusColor("#ico_" + agent.id, statusColor );
 		$("#sts_" + agent.id).text( agent.hostName );
 		$("#nn_" + agent.id).text( agent.nodeName );
 		$("#on_" + agent.id).text( agent.orgName );
 		// Only allow to manage connected (online) agents
-		// if( agent.status == 'CONNECTED') $("#lk_" + agent.id).show(); else $("#lk_" + agent.id).hide(); 
+		if( agent.status == 'CONNECTED') $("#lk_" + agent.id).show(); else $("#lk_" + agent.id).hide(); 
 	} else {
+		// Its a new agent.. add the card
 		$("#agentContainer").append( getAgentCard(agent) );
+		// Hide the "Manage" button since we don't know its status yet
+		$("#lk_" + agent.id).hide();
 	}
 }
 
 // Show a modal dialog asking to be sure
 function deleteAgent( id ){
+	console.log( id );
 	$("#agentUuid").text( id );
 	$('#delete-agent').modal('show');
 }
