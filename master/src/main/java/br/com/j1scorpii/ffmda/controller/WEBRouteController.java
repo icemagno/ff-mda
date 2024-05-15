@@ -68,17 +68,28 @@ public class WEBRouteController {
     	return "local";
     }
     
+    // All remote Agents / Register and delete an Agent
     @GetMapping("/remote")
     public String remote(Model model) {
     	this.setGenericModel( model );
         return "remote";
     }
 
-    @GetMapping("/remote/{name}")
-    public String remoteComponent( @PathVariable String name, Model model) {
+    // Remote Agent control panel
+    @GetMapping("/remote/{agentId}")
+    public String manageAgent( @PathVariable String agentId, Model model) {
+    	model.addAttribute("agentId", agentId );
+    	this.setGenericModel( model );
+        return "remote/manage";
+    }
+
+    // Manage a remote component from an Agent
+    @GetMapping("/remote/{agentId}/{name}")
+    public String manageAgentComponent( @PathVariable String agentId, @PathVariable String name, Model model) {
     	this.setGenericModel( model );
     	model.addAttribute("componentName", this.componentNames.get(name) );
     	model.addAttribute("componentShortName", name );
+    	model.addAttribute("agentId", agentId );
    		return "remote/" + name ;
     }
     
