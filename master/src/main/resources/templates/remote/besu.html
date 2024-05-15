@@ -1,0 +1,235 @@
+<!DOCTYPE HTML>
+<html manifest="">
+
+<head th:insert="~{head}">
+</head>
+
+<body class="skin-black layout-top-nav sidebar-collapse"
+	style="height: auto; min-height: 100%;">
+
+	<div class="wrapper" style="height: auto; min-height: 100%;">
+
+		<header class="main-header" th:insert="~{navbar}" ></header>
+		<aside class="main-sidebar" th:insert="~{sidebar}"></aside>
+
+		<div class="content-wrapper"
+			style="position: relative; min-height: 600px;">
+
+			<section class="content-header">
+				<h1>
+					<span th:text="${componentName}"></span> | <small>Blockchain Node</small> <span style="display:none" id="componentShortName" th:text="${componentShortName}"></span>
+				</h1>
+				<ol class="breadcrumb">
+					<li><a href="/local"><i class="fa fa-dashboard"></i> Local Node</a></li>
+					<li class="active" th:text="${componentName}" ></li>
+				</ol>
+			</section>
+
+			<section class="content container-fluid">
+				<div class="row">
+					<section class="col-lg-3">
+
+						<div class="box box-primary">
+							<div class="box-header ui-sortable-handle">
+								<i class="fa fa-gears"></i>
+								<h3 class="box-title">Container Execution</h3>
+							</div>
+							<div class="box-body ">
+								<span id="componentTips" ></span>
+							</div>
+							<div class="box-footer clearfix">
+
+								<div class="btn-group pull-right">
+
+									<button type="button" class="btn btn-default" id="startCont" style="margin-right:5px">
+										<i class="fa fa-play"></i>  
+									</button>
+	
+									<button type="button" class="btn btn-default" id="stopCont" style="margin-right:5px">
+										<i class="fa fa-stop"></i>  
+									</button>							
+															
+									<button type="button" class="btn btn-default" id="restartCont" style="margin-right:5px">
+										<i class="fa fa-refresh"></i>  
+									</button>							
+
+									<button type="button" class="btn btn-default" id="pullImage" style="margin-right:5px">
+										<i class="fa fa-download"></i>  
+									</button>	
+
+								</div>							
+							</div>
+						</div>
+
+						<div class="box box-primary">
+							<div class="box-header with-border">
+								<i class="fa fa-edit"></i>
+								<h3 class="box-title">Component Configuration</h3>
+							</div>
+							<div class="box-body">
+								<form method="POST" id="uploadForm" action="/v1/besu/config/file" enctype="multipart/form-data">
+									<input id="uploadFile" type="file" style="display:none;" />
+								</form>
+								
+								<table class="table borderless" style="width:100%">
+									<tbody>
+										<tr>
+											<td style="width:100%">Genesis File</td> 
+											<td >
+												<button type="button" class="pull-right btn btn-xs btn-primary" id="dlGenesis"><i class="fa fa-download"></i></button>
+											</td>
+											<td >
+												<button type="button" class="pull-right btn btn-xs btn-danger" id="upGenesis"><i class="fa fa-upload"></i></button>
+											</td>
+										</tr>
+										<tr>
+											<td style="width:100%">Startup Parameters</td> 
+											<td >
+												<button type="button" class="pull-right btn btn-xs btn-primary" id="dlConfig"><i class="fa fa-download"></i></button>
+											</td>
+											<td >
+												<button type="button" class="pull-right btn btn-xs btn-danger" id="upConfig"><i class="fa fa-upload"></i></button>
+											</td>
+										</tr>
+										<tr>
+											<td style="width:100%">Private Key</td> 
+											<td >
+												<button type="button" class="pull-right btn btn-xs btn-primary" id="dlKey"><i class="fa fa-download"></i></button>
+											</td>
+											<td >
+												<button type="button" class="pull-right btn btn-xs btn-danger" id="upKey"><i class="fa fa-upload"></i></button>
+											</td>
+										</tr>
+										<tr>
+											<td style="width:100%">Public Key</td> 
+											<td >
+												<button type="button" class="pull-right btn btn-xs btn-primary" id="dlPubKey"><i class="fa fa-download"></i></button>
+											</td>
+											<td >
+												<button type="button" class="pull-right btn btn-xs btn-danger" id="upPubKey"><i class="fa fa-upload"></i></button>
+											</td>
+										</tr>
+										<tr>
+											<td style="width:100%">Static Nodes File</td> 
+											<td >
+												<button type="button" class="pull-right btn btn-xs btn-primary" id="dlStaticNodes"><i class="fa fa-download"></i></button>
+											</td>
+											<td >
+												<button type="button" class="pull-right btn btn-xs btn-danger" id="upStaticNodes"><i class="fa fa-upload"></i></button>
+											</td>
+										</tr>
+										<tr>
+											<td style="width:100%">Permissions File</td> 
+											<td >
+												<button type="button" class="pull-right btn btn-xs btn-primary" id="dlPermissions"><i class="fa fa-download"></i></button>
+											</td>
+											<td >
+												<button type="button" class="pull-right btn btn-xs btn-danger" id="upPermissions"><i class="fa fa-upload"></i></button>
+											</td>
+										</tr>
+										<tr>
+											<td style="width:100%">Validators Repository</td> 
+											<td >
+												<button type="button" class="pull-right btn btn-xs btn-primary" id="dlValidators"><i class="fa fa-download"></i></button>
+											</td>
+											<td >
+												<button type="button" class="pull-right btn btn-xs btn-danger" id="upValidators"><i class="fa fa-upload"></i></button>
+											</td>
+										</tr>
+									</tbody>
+								</table>
+							</div>
+							
+							<div class="box-footer">
+								<small>Be warned that uploading these files will overwrite the current configuration and it will be necessary to restart the component. 
+								Be sure what you're doing. </small><small class="text-red">I won't ask you to confirm anything!</small><small> Keep your own backups.</small>
+							</div>
+							
+						</div>						
+						
+						
+						<div class="box box-primary">
+							<div class="box-header with-border">
+								<i class="fa fa-chain"></i>
+								<h3 class="box-title">Blockchain Data</h3>
+							</div>
+							<div class="box-body">
+								<span id="blockchainData" ></span>
+							</div>						
+							<div class="box-footer">
+								&nbsp;
+							</div>
+							
+						</div>	
+												
+						
+					</section>
+					<section class="col-lg-9">
+						<div class="box box-primary">
+							<div class="box-header with-border">
+								<i class="fa fa-file-text-o"></i>
+								<h3 class="box-title">Log</h3>
+								<div class="pull-right box-tools">
+									<i class="fa fa-refresh fa-spin"></i>
+								</div>
+							</div>
+							<div class="box-body">
+								<span style="font-family:Courier New" id="containerLog"></span>
+								<span style="font-family:Courier New" id="containerLogFixed"></span>
+							</div>
+							<div class="box-footer clearfix">
+								<h4><span id="imageName">&nbsp;</span></h4>
+							</div>
+						</div>
+
+					</section>
+
+				</div>
+			</section>
+		</div>
+
+		<aside class="control-sidebar control-sidebar-light"
+			th:insert="~{controlsidebar}"></aside>
+		<div class="control-sidebar-bg"></div>
+
+
+		<!-- Main Footer -->
+
+		<footer class="main-footer"
+			style="height: 44px; padding: 0px 10px 0px 10px; background-color: #222d32;">
+
+			<table id="tableFooter" style="width: 100%; cursor: pointer">
+				<tr>
+					<td>by Carlos Magno Abreu</td>
+
+					<td style="width: 40px">Foo</td>
+					<td style="width: 70px"></td>
+					<td style="width: 70px"></td>
+				</tr>
+				<tr>
+					<td>magno.mabreu@gmail.com</td>
+					<td style="width: 40px">Bar</td>
+					<td style="width: 70px"></td>
+					<td style="width: 70px"></td>
+				</tr>
+			</table>
+		</footer>
+
+
+	</div>
+
+	<!-- jQuery 3 -->
+	<script src="adminlte/bower_components/jquery/dist/jquery.min.js"></script>
+	<!-- Bootstrap 3.3.7 -->
+	<script	src="adminlte/bower_components/bootstrap/dist/js/bootstrap.min.js"></script>
+	<!-- AdminLTE App -->
+	<script src="adminlte/dist/js/adminlte.min.js"></script>
+	
+	<script src="common/websocket/sockjs.min.js"></script>
+	<script src="common/websocket/stomp.min.js"></script>
+	<script src="common/components/common.js"></script>
+	<script src="common/components/besu.js"></script>
+</body>
+
+</html>
+

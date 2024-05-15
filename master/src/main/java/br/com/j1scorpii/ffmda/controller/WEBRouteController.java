@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 import br.com.j1scorpii.ffmda.services.LocalService;
 import jakarta.annotation.PostConstruct;
+import jakarta.websocket.server.PathParam;
 
 @Controller
 public class WEBRouteController {
@@ -50,8 +51,8 @@ public class WEBRouteController {
         return "local";
     }
 
-    @GetMapping("/component")
-    public String component( @RequestParam(value = "name", required = true) String name, Model model) {
+    @GetMapping("/local/{name}")
+    public String localComponent( @PathParam(value = "name") String name, Model model) {
     	this.setGenericModel( model );
     	model.addAttribute("componentName", this.componentNames.get(name) );
     	model.addAttribute("componentShortName", name );
@@ -60,13 +61,11 @@ public class WEBRouteController {
     	try {
     		// In case of succes ( already have configured ) go to component page
     		String configured = localService.getMainConfig().getString("nodeName");
-    		if( configured.length() > 1 ) return "components/" + name ;
+    		if( configured.length() > 1 ) return "local/" + name ;
     	} catch ( Exception e ) {	}
     	
     	// Failure. Go back to main page
     	return "local";
-    	
-        
     }
     
     @GetMapping("/remote")
@@ -75,6 +74,14 @@ public class WEBRouteController {
         return "remote";
     }
 
+    @GetMapping("/remote/{name}")
+    public String remoteComponent( @PathParam(value = "name") String name, Model model) {
+    	this.setGenericModel( model );
+    	model.addAttribute("componentName", this.componentNames.get(name) );
+    	model.addAttribute("componentShortName", name );
+   		return "remote/" + name ;
+    }
+    
     private void setGenericModel( Model model ) {
    	
         model.addAttribute("appName", appName);
