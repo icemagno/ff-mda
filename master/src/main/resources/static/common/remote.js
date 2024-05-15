@@ -66,7 +66,7 @@ function processAgent( agent ){
 		$("#nn_" + agent.id).text( agent.nodeName );
 		$("#on_" + agent.id).text( agent.orgName );
 		// Only allow to manage connected (online) agents
-		if( agent.status == 'CONNECTED') $("#lk_" + agent.id).show(); else $("#lk_" + agent.id).hide(); 
+		// if( agent.status == 'CONNECTED') $("#lk_" + agent.id).show(); else $("#lk_" + agent.id).hide(); 
 	} else {
 		$("#agentContainer").append( getAgentCard(agent) );
 	}
@@ -90,7 +90,7 @@ function getAgentCard( agent ){
               agent.ipAddress + ":" + agent.port + 
             '</span>' +
    			'<a id="lk_'+agent.id+'" href="/remote/'+ agent.id + '" class="btn btn-default btn-xs pull-right"><i class="fa fa-external-link"></i></a>' +
-            '<a href="#" onClick="deleteAgent(\''+ agent.id + '\')" class="btn btn-default btn-xs"><i class="fa fa-trash-o text-red"></i></a>' +
+            '<button onClick="deleteAgent(\''+ agent.id + '\')" class="btn btn-default btn-xs"><i class="fa fa-trash-o text-red"></i></button>' +
       '</div>' +
     '</li>';
 	return ac;
