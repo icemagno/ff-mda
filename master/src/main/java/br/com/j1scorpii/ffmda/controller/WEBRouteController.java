@@ -9,7 +9,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.PathVariable;
 
 import br.com.j1scorpii.ffmda.services.LocalService;
 import jakarta.annotation.PostConstruct;
@@ -52,7 +52,7 @@ public class WEBRouteController {
     }
 
     @GetMapping("/local/{name}")
-    public String localComponent( @PathParam(value = "name") String name, Model model) {
+    public String localComponent( @PathVariable String name, Model model) {
     	this.setGenericModel( model );
     	model.addAttribute("componentName", this.componentNames.get(name) );
     	model.addAttribute("componentShortName", name );
@@ -75,7 +75,7 @@ public class WEBRouteController {
     }
 
     @GetMapping("/remote/{name}")
-    public String remoteComponent( @PathParam(value = "name") String name, Model model) {
+    public String remoteComponent( @PathVariable String name, Model model) {
     	this.setGenericModel( model );
     	model.addAttribute("componentName", this.componentNames.get(name) );
     	model.addAttribute("componentShortName", name );
