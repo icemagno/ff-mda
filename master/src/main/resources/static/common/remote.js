@@ -78,7 +78,6 @@ function processAgent( agent ){
 
 // Show a modal dialog asking to be sure
 function deleteAgent( id ){
-	console.log( id );
 	$("#agentUuid").text( id );
 	$('#delete-agent').modal('show');
 }
