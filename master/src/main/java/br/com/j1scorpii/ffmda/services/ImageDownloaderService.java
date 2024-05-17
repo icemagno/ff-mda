@@ -8,11 +8,12 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import br.com.j1scorpii.ffmda.util.IObservable;
 import br.com.j1scorpii.ffmda.util.ImageDownloader;
 import jakarta.annotation.PostConstruct;
 
 @Service
-public class ImageDownloaderService {
+public class ImageDownloaderService implements IObservable{
 	private Logger logger = LoggerFactory.getLogger( ImageDownloaderService.class );
 	
 	@Autowired private ImageManager imageManager;
@@ -48,10 +49,15 @@ public class ImageDownloaderService {
 		    
 		    if( !found ) {
 				logger.info("  > image " + imageName + " for " + componentName + " not found. Pulling... ");
-			    ImageDownloader id = new ImageDownloader( componentName, imageName, imageManager );
+			    ImageDownloader id = new ImageDownloader( componentName, imageName, imageManager, this );
 			    new Thread( id ).start();
 		    }
 		}
 			
+	}
+
+	@Override
+	public void notitfy() {
+		// TODO Auto-generated method stub
 	}
 }

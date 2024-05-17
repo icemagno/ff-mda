@@ -12,11 +12,13 @@ public class ImageDownloader implements Runnable {
 	private String imageName;
 	private String componentName;
 	private boolean working = false;
+	private IObservable observable;
 	
-	public ImageDownloader( String componentName, String imageName, ImageManager imageManager ) {
+	public ImageDownloader( String componentName, String imageName, ImageManager imageManager, IObservable observable ) {
 		this.imageManager = imageManager;
 		this.componentName = componentName;
 		this.imageName = imageName;
+		this.observable = observable;
 	}
 	
 	public boolean isWorking() {
@@ -30,6 +32,7 @@ public class ImageDownloader implements Runnable {
 		imageManager.pullImage( componentName, true );
 		logger.info( "  > [ DONE ]  downloading " + imageName + " for " + componentName );
 		working = false;
+		if( this.observable != null ) this.observable.notify();
 	}
 
 }

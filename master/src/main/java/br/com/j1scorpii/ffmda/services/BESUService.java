@@ -31,12 +31,14 @@ import org.springframework.web.client.RestTemplate;
 import org.springframework.web.multipart.MultipartFile;
 
 import br.com.j1scorpii.ffmda.util.IFireFlyComponent;
+import br.com.j1scorpii.ffmda.util.IObservable;
+import br.com.j1scorpii.ffmda.util.ImageDownloader;
 import jakarta.annotation.PostConstruct;
 import jakarta.servlet.http.HttpServletResponse;
 
 @Service
 @Order( Ordered.LOWEST_PRECEDENCE )
-public class BESUService implements IFireFlyComponent  {
+public class BESUService implements IFireFlyComponent, IObservable  {
 	private Logger logger = LoggerFactory.getLogger( BESUService.class );
 
 	@Autowired private ImageManager imageManager;
@@ -87,13 +89,26 @@ public class BESUService implements IFireFlyComponent  {
 		
 		logger.info("init " + this.componentDataFolder );
 		new File( this.dataFolder ).mkdirs();
+
+		// Fire the image downloader...
+		// The method 'notify()' will be triggered when done. 
 		
-		// Need the image right now to allow the validadors generation 
-		if( !imageExists() ) pullImage();
+		String imageName = imageManager.getImageForComponent( COMPONENT_NAME );
+		if( imageName != null ) {
+		    ImageDownloader id = new ImageDownloader( COMPONENT_NAME, imageName, imageManager, this );
+		    new Thread( id ).start();
+		} else {		
+			logger.error("No image found on manifest to component " + COMPONENT_NAME );
+		}
 		
+	}
+
+	// This method will be called when ImageDownloader downloads the image
+	@Override
+	public void notitfy() {
+		// Continue to configuration
 		loadValidatorsData();
 		getConfig();
-		
 		copyDefaultData();
 	}
 	
