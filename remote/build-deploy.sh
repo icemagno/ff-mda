@@ -1,7 +1,10 @@
 #! /bin/sh
 
 
-mvn clean package
+docker run --rm -it \
+-v ~/.m2:/root/.m2 \
+-v ${PWD}:/home/builder \
+magnoabreu/ffmda-builder:java17 mvn clean package
 
 docker network create ffmda
 

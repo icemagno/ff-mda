@@ -56,7 +56,7 @@ public class LocalService {
 		myPasswordFile 		= localDataFolder + "/.password.txt";
 		myConfigFile		= localDataFolder + "/config.json";		
 		
-		logger.info("init");
+		logger.info("init 0");
 		
 		File f = new File( localWalletFolder );
 		

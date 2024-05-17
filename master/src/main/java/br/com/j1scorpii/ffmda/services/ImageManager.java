@@ -12,6 +12,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Service;
 
 import com.github.dockerjava.transport.DockerHttpClient.Request;
@@ -19,6 +20,7 @@ import com.github.dockerjava.transport.DockerHttpClient.Request;
 import jakarta.annotation.PostConstruct;
 
 @Service
+@Order(value = 1)
 public class ImageManager {
 	private Logger logger = LoggerFactory.getLogger( ImageManager.class );
 	private JSONArray images;
@@ -35,9 +37,13 @@ public class ImageManager {
 	
 	@PostConstruct
 	private void init() {
-		logger.info("init");
+		logger.info("init 1");
 		updateImageCache();
 		readManifest();
+	}
+	
+	public JSONObject getManifest() {
+		return this.manifest;
 	}
 	
 	public String getImageForComponent( String componentName ) {
@@ -48,18 +54,27 @@ public class ImageManager {
 	// Search docker images to see if the image from the component exists
 	// I will get the image name for that component from the manifest file
 	public boolean exists( String componentName ) {
-		updateImageCache();
-		String imageAndTag = getImageForComponent(componentName);
-		if( imageAndTag == null ) return false;
-		String imageName = imageAndTag.split(":")[0];
-		for( String image : this.listAvailableImages() ) {
-			if( image.toUpperCase().contains( imageName.toUpperCase() ) ) return true;
-		}
+		logger.info("checking if I have an image for " + componentName );
+		try {
+			updateImageCache();
+			String imageAndTag = getImageForComponent(componentName);
+			if( imageAndTag == null ) return false;
+			String imageName = imageAndTag.split(":")[0];
+			for( String image : this.listAvailableImages() ) {
+				if( image.toUpperCase().contains( imageName.toUpperCase() ) ) {
+					logger.info("found image " + image + " for " + componentName );
+					return true;
+				}
+			}
+		} catch ( Exception e ) { }
+		logger.info("no image found for "  + componentName );
 		return false;
 	}
 	
 	public void updateImageCache() {
+		logger.info("updating image cache ... " );
 		this.images = new JSONArray( this.getImages() );
+		logger.info("found " + this.images.length() + " images ");
 	}
 	
 	

@@ -1,7 +1,10 @@
 #! /bin/sh
 
 
-mvn clean package
+docker run --rm -it \
+-v ~/.m2:/root/.m2 \
+-v ${PWD}:/home/builder \
+magnoabreu/ffmda-builder:java17 mvn clean package
 
 docker network create ffmda
 
@@ -10,6 +13,7 @@ cp manifest.json /srv/ffmda
 
 docker rmi magnoabreu/ffmda-master:0.1
 docker build --tag=magnoabreu/ffmda-master:0.1 --rm=true .
+
 
 docker stop ffmda-master && docker rm ffmda-master
 
@@ -26,4 +30,3 @@ docker run --name ffmda-master --network=ffmda --hostname=ffmda-master \
 magnoabreu/ffmda-master:0.1
 
 # docker push magnoabreu/ffmda-master:0.1
-

@@ -87,7 +87,8 @@ public class BESUService implements IFireFlyComponent  {
 		
 		loadValidatorsData();
 		getConfig();
-		copyDefaultData();
+		
+		if( imageExists() ) copyDefaultData();
 	}
 	
 	private String requestData( String endpoint, JSONObject payload ) throws Exception {
@@ -177,10 +178,14 @@ public class BESUService implements IFireFlyComponent  {
 		return containerDef.toString();
 	}
 	
+	private boolean imageExists() {
+		return imageManager.exists(COMPONENT_NAME);
+	}
+	
 	// Get the image data
 	public JSONObject imagePulled() {
 		JSONObject result = new JSONObject();
-		boolean exists = imageManager.exists(COMPONENT_NAME);
+		boolean exists = imageExists();
 		result.put("exists", exists);
 		if( exists ) {
 			this.imageName = imageManager.getImageForComponent(COMPONENT_NAME);
@@ -208,6 +213,9 @@ public class BESUService implements IFireFlyComponent  {
 		// Plus the local node config ( I need this server's IP and host )
 		generalConfig.put("localAgentConfig", localAgentConfig );
 		generalConfig.put("validators", this.validatorsData );
+		
+		System.out.println( generalConfig.toString( 5 ));
+		
 		return generalConfig.toString();
 	}
 
@@ -287,7 +295,6 @@ public class BESUService implements IFireFlyComponent  {
 	// Will copy the blockchain default data to the data folder
 	// The user must download from web interface, change as it needs and then upload again. 
 	private void copyDefaultData() {
-
 		// Do it just once
 		// It will prevent override the files every time the container restarts
 		if( new File( this.genesisFile ).exists() ) {
@@ -315,6 +322,9 @@ public class BESUService implements IFireFlyComponent  {
 	// determine if I must do this. See 'copyDefaultData()'
 	// This container will be removed.
 	private void createValidatorNodes() {
+		// We don't have any BESU image yet ... go away from here now.
+		if( !imageExists() ) return;
+		
 		this.validatorsData = new JSONArray();
 		logger.info("creating validators keys and Genesis file");
 		String[] command = { 
