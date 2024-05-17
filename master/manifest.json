@@ -7,6 +7,6 @@
 	"tokens":"ghcr.io/hyperledger/firefly-tokens-erc20-erc721:latest",
 	"postgresql":"postgres:latest",
 	"core":"ghcr.io/hyperledger/firefly:latest",
-	"sandbox":"ghcr.io/hyperledger/firefly-sandbox:latest",
+	"sandbox":"ghcr.io/hyperledger/firefly-sandbox:latest", 
 	"prometheus":"prom/prometheus:latest"
-}
+} 
