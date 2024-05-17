@@ -8,5 +8,5 @@
 	"postgresql":"postgres:latest",
 	"core":"ghcr.io/hyperledger/firefly:latest",
 	"sandbox":"ghcr.io/hyperledger/firefly-sandbox:latest",
-	"prometheus":"prom/prometheus"
+	"prometheus":"prom/prometheus:latest"
 }
