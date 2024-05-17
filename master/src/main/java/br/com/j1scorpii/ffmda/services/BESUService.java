@@ -92,8 +92,8 @@ public class BESUService implements IFireFlyComponent, IObservable  {
 
 		// Fire the image downloader...
 		// The method 'notify()' will be triggered when done. 
-		
 		String imageName = imageManager.getImageForComponent( COMPONENT_NAME );
+		logger.info("will pull BESU image...");
 		if( imageName != null ) {
 		    ImageDownloader id = new ImageDownloader( COMPONENT_NAME, imageName, imageManager, this );
 		    new Thread( id ).start();
@@ -105,8 +105,9 @@ public class BESUService implements IFireFlyComponent, IObservable  {
 
 	// This method will be called when ImageDownloader downloads the image
 	@Override
-	public void notitfy() {
+	public synchronized void notitfy() {
 		// Continue to configuration
+		logger.info("image pull done");
 		loadValidatorsData();
 		getConfig();
 		copyDefaultData();

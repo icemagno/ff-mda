@@ -57,7 +57,7 @@ public class ImageDownloaderService implements IObservable{
 	}
 
 	@Override
-	public void notitfy() {
+	public synchronized void notitfy() {
 		// TODO Auto-generated method stub
 	}
 }

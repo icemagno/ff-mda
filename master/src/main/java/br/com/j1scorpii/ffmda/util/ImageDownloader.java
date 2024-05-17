@@ -32,7 +32,9 @@ public class ImageDownloader implements Runnable {
 		imageManager.pullImage( componentName, true );
 		logger.info( "  > [ DONE ]  downloading " + imageName + " for " + componentName );
 		working = false;
-		if( this.observable != null ) this.observable.notify();
+		if( this.observable != null ) {
+			synchronized(observable) { this.observable.notify(); }
+		}
 	}
 
 }
