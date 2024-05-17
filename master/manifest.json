@@ -6,7 +6,7 @@
 	"evmconnect":"ghcr.io/hyperledger/firefly-evmconnect:latest",
 	"tokens":"ghcr.io/hyperledger/firefly-tokens-erc20-erc721:latest",
 	"postgresql":"postgres:latest",
-	"core":"ghcr.io/hyperledger/firefly",
+	"core":"ghcr.io/hyperledger/firefly:latest",
 	"sandbox":"ghcr.io/hyperledger/firefly-sandbox:latest",
 	"prometheus":"prom/prometheus"
 }

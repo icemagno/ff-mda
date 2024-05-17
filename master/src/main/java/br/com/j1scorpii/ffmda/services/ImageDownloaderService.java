@@ -6,14 +6,12 @@ import org.json.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Service;
 
 import br.com.j1scorpii.ffmda.util.ImageDownloader;
 import jakarta.annotation.PostConstruct;
 
 @Service
-@Order(value = 3)
 public class ImageDownloaderService {
 	private Logger logger = LoggerFactory.getLogger( ImageDownloaderService.class );
 	
@@ -21,7 +19,7 @@ public class ImageDownloaderService {
 	
 	@PostConstruct
 	private void init() {
-		logger.info("init 3");
+		logger.info("init");
 		JSONObject manifest = imageManager.getManifest();
 
 		logger.info("will pull all images from manifest file...");
@@ -41,7 +39,7 @@ public class ImageDownloaderService {
 				}
 			}		    
 		    
-		    if( found ) {
+		    if( !found ) {
 				logger.info("  > image " + imageName + " for " + componentName + " not found. Pulling... ");
 			    ImageDownloader id = new ImageDownloader( componentName, imageName, imageManager );
 			    new Thread( id ).start();

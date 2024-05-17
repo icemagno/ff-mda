@@ -12,7 +12,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Service;
 
 import com.github.dockerjava.transport.DockerHttpClient.Request;
@@ -20,7 +19,6 @@ import com.github.dockerjava.transport.DockerHttpClient.Request;
 import jakarta.annotation.PostConstruct;
 
 @Service
-@Order(value = 1)
 public class ImageManager {
 	private Logger logger = LoggerFactory.getLogger( ImageManager.class );
 	private JSONArray images;
@@ -37,7 +35,7 @@ public class ImageManager {
 	
 	@PostConstruct
 	private void init() {
-		logger.info("init 1");
+		logger.info("init");
 		updateImageCache();
 		readManifest();
 	}
