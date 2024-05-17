@@ -26,11 +26,26 @@ public class ImageDownloaderService {
 
 		logger.info("will pull all images from manifest file...");
 		Iterator<String> components = manifest.keys();
+		
+		// For all images on manifest file...
 		while( components.hasNext()) {
-		    String component = components.next();
-		    String imageName = manifest.getString(component);
-		    ImageDownloader id = new ImageDownloader( component, imageName, imageManager );
-		    new Thread( id ).start();
+		    String componentName = components.next();
+		    String imageName = manifest.getString(componentName);
+		    
+		    // Already here?
+		    boolean found = false;
+			for( String image : imageManager.listAvailableImages() ) {
+				if( image.toUpperCase().contains( imageName.toUpperCase() ) ) {
+					logger.info("  > found image " + image + " for " + componentName + ". Skip. " );
+					found = true;
+				}
+			}		    
+		    
+		    if( found ) {
+				logger.info("  > image " + imageName + " for " + componentName + " not found. Pulling... ");
+			    ImageDownloader id = new ImageDownloader( componentName, imageName, imageManager );
+			    new Thread( id ).start();
+		    }
 		}
 		
 	}
