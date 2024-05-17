@@ -17,9 +17,16 @@ public class ImageDownloaderService {
 	
 	@Autowired private ImageManager imageManager;
 	
+	// This will start a thread to pull every image on manifest
+	// in parallel.
+	
 	@PostConstruct
 	private void init() {
 		logger.info("init");
+		pullAll();
+	}
+
+	private void pullAll() {
 		JSONObject manifest = imageManager.getManifest();
 
 		logger.info("will pull all images from manifest file...");
@@ -45,7 +52,6 @@ public class ImageDownloaderService {
 			    new Thread( id ).start();
 		    }
 		}
-		
+			
 	}
-	
 }

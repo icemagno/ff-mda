@@ -88,10 +88,13 @@ public class BESUService implements IFireFlyComponent  {
 		logger.info("init " + this.componentDataFolder );
 		new File( this.dataFolder ).mkdirs();
 		
+		// Need the image right now to allow the validadors generation 
+		if( !imageExists() ) pullImage();
+		
 		loadValidatorsData();
 		getConfig();
 		
-		if( imageExists() ) copyDefaultData();
+		copyDefaultData();
 	}
 	
 	private String requestData( String endpoint, JSONObject payload ) throws Exception {

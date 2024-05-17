@@ -77,7 +77,9 @@ public class ImageManager {
 	
 	
 	private String doPull( String imageName, String callbackChannel ) {
+		logger.info("pulling image " + imageName + "... " );
 		dockerService.pullImage( imageName, callbackChannel );
+		logger.info( imageName + " pull done. " );
 		return "requested";
 	}
 	public String pullImage( String componentName, boolean evenIfExists ) {
