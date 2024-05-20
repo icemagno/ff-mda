@@ -149,7 +149,8 @@ public class DockerService {
 		try {
 			this.dockerClient.pullImageCmd( imageName ).exec( callback ).awaitCompletion();
 		} catch (InterruptedException e) {
-			e.printStackTrace();
+			logger.error("Error pulling image '" + imageName + "'. Reason: " + e.getMessage());
+			// e.printStackTrace();
 		}
 		
 	}

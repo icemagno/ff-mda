@@ -4,7 +4,9 @@ import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -23,6 +25,7 @@ public class ImageManager {
 	private Logger logger = LoggerFactory.getLogger( ImageManager.class );
 	private JSONArray images;
 	private JSONObject manifest;
+	private Map<String,Boolean> inProcessPulling = new HashMap<String,Boolean>();
 	
 	@Value("${ffmda.local.data.folder}")
 	private String localDataFolder;		
@@ -76,21 +79,44 @@ public class ImageManager {
 	}
 	
 	
-	private String doPull( String imageName, String callbackChannel ) {
+	private String doPull( String imageName, String callbackChannel, String componentName ) {
+		
 		logger.info("pulling image " + imageName + "... " );
+
+		inProcessPulling.put(componentName, true);
+		System.out.println("X_SET " + componentName + " to TRUE");
+		
 		dockerService.pullImage( imageName, callbackChannel );
 		logger.info( imageName + " pull done. " );
-		return "requested";
+
+		System.out.println("X_SET " + componentName + " to FALSE");
+		inProcessPulling.put(componentName, false);		
+		
+		return new JSONObject().put("response", "Done.").toString();
 	}
+	
+	private boolean isPulling( String componentName ) {
+		boolean containsKey = this.inProcessPulling.containsKey(componentName);
+		boolean inProcessPulling = false;
+		if( containsKey ) {
+			inProcessPulling = this.inProcessPulling.get( componentName );
+		} else {
+			//
+		}
+		System.out.println("QUERY 2 " + componentName + " =  CK: " + containsKey + "    IPP: " + inProcessPulling );
+		return ( containsKey && inProcessPulling );
+	}
+	
 	public String pullImage( String componentName, boolean evenIfExists ) {
 		String callbackChannel = "/docker/"+componentName+"/pull";
 		String imageName = getImageForComponent( componentName );
+		if ( isPulling(componentName) ) return new JSONObject().put("response", "Image '" + imageName + "' already pulling.").toString();
 		if( imageName == null ) {
 			return new JSONObject().put("response", "Component '" + componentName + "' has no image entry in manifest file.").toString();
 		}
 		if( evenIfExists ) {
-			return doPull( imageName, callbackChannel );
-		} else if( !exists(imageName) ) return doPull( imageName, callbackChannel );
+			return doPull( imageName, callbackChannel, componentName );
+		} else if( !exists(imageName) ) return doPull( imageName, callbackChannel, componentName );
 		return new JSONObject().put("response", "Image '" + imageName + "' already exists.").toString();
 	}
 	
@@ -115,16 +141,19 @@ public class ImageManager {
 	
 	public List<String> listAvailableImages() {
 		List<String> result = new ArrayList<String>();
+		updateImageCache();
 		for( int x=0; x < images.length(); x++ ) {
 			JSONObject img = images.getJSONObject(x);
-			JSONArray nameList = img.getJSONArray("RepoTags");
-			
-			if( nameList.length() > 0 ) {
-				result.add( nameList.getString(0) );
-			} else {
-				nameList = img.getJSONArray("RepoDigests");
+
+			JSONArray nameList = img.optJSONArray("RepoTags");
+			if( nameList != null ) {
 				if( nameList.length() > 0 ) {
-					result.add( nameList.getString(0).split("@")[0] );
+					result.add( nameList.getString(0) );
+				} else {
+					nameList = img.getJSONArray("RepoDigests");
+					if( nameList.length() > 0 ) {
+						result.add( nameList.getString(0).split("@")[0] );
+					}
 				}
 			}
 			

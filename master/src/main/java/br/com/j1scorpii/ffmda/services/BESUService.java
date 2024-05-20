@@ -32,7 +32,6 @@ import org.springframework.web.multipart.MultipartFile;
 
 import br.com.j1scorpii.ffmda.util.IFireFlyComponent;
 import br.com.j1scorpii.ffmda.util.IObservable;
-import br.com.j1scorpii.ffmda.util.ImageDownloader;
 import jakarta.annotation.PostConstruct;
 import jakarta.servlet.http.HttpServletResponse;
 
@@ -44,6 +43,7 @@ public class BESUService implements IFireFlyComponent, IObservable  {
 	@Autowired private ImageManager imageManager;
 	@Autowired private ContainerManager containerManager;
 	@Autowired private LocalService localService;
+	@Autowired ImageDownloaderService downloaderService;
 	
 	private final String COMPONENT_NAME = "besu";
 	
@@ -91,7 +91,10 @@ public class BESUService implements IFireFlyComponent, IObservable  {
 		new File( this.dataFolder ).mkdirs();
 
 		// Fire the image downloader...
-		// The method 'notify()' will be triggered when done. 
+		// The method 'notify()' will be triggered when done.
+		// This must be done in synch because the start process must not block
+		downloaderService.pull(COMPONENT_NAME, this);
+		/*
 		String imageName = imageManager.getImageForComponent( COMPONENT_NAME );
 		logger.info("will pull BESU image...");
 		if( imageName != null ) {
@@ -100,14 +103,15 @@ public class BESUService implements IFireFlyComponent, IObservable  {
 		} else {		
 			logger.error("No image found on manifest to component " + COMPONENT_NAME );
 		}
+		*/
 		
 	}
 
 	// This method will be called when ImageDownloader downloads the image
 	@Override
-	public synchronized void notitfy() {
+	public synchronized void notify( String componentName ) {
 		// Continue to configuration
-		logger.info("image pull done");
+		logger.info("notified pull done for " + componentName );
 		loadValidatorsData();
 		getConfig();
 		copyDefaultData();
@@ -222,6 +226,8 @@ public class BESUService implements IFireFlyComponent, IObservable  {
 	}
 
 	public String pullImage() {
+		// This must be blocking (synch) because startContainer() must wait until the image
+		// was downloaded before try to start it. This is why I'll not use "DownloaderService"
 		return imageManager.pullImage(COMPONENT_NAME, true );
 	}
 	
