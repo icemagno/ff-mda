@@ -232,6 +232,7 @@ public class BESUService implements IFireFlyComponent, IObservable  {
 	}
 	
 	public String getConfig( ) {
+		logger.info("loading config");
 		JSONObject localAgentConfig = localService.getMainConfig();
 		// Use a object wrapper to send component configuration 
 		// plus some relevant configuration to the UI.
@@ -241,6 +242,7 @@ public class BESUService implements IFireFlyComponent, IObservable  {
 		// Plus the local node config ( I need this server's IP and host )
 		generalConfig.put("localAgentConfig", localAgentConfig );
 		generalConfig.put("validators", this.validatorsData );
+		logger.info("config loaded.");
 		return generalConfig.toString();
 	}
 
@@ -314,6 +316,7 @@ public class BESUService implements IFireFlyComponent, IObservable  {
 	}
 	
 	private void saveValidatorsData() throws Exception {
+		logger.info("saving validadors storage repository with " + this.validatorsData.length() + " keys" );
 		saveFile( this.validatorsFile, this.validatorsData.toString() );
 	}
 	

@@ -57,7 +57,7 @@ public class ImageManager {
 	public boolean exists( String componentName ) {
 		logger.info("checking if I have an image for " + componentName );
 		try {
-			updateImageCache();
+			// updateImageCache();
 			String imageAndTag = getImageForComponent(componentName);
 			if( imageAndTag == null ) return false;
 			String imageName = imageAndTag.split(":")[0];
@@ -73,25 +73,18 @@ public class ImageManager {
 	}
 	
 	public void updateImageCache() {
-		logger.info("updating image cache ... " );
+		logger.info("[ CACHE ] updating image cache ... " );
 		this.images = new JSONArray( this.getImages() );
-		logger.info("found " + this.images.length() + " images ");
+		logger.info("[ CACHE ] found " + this.images.length() + " images ");
 	}
 	
 	
 	private String doPull( String imageName, String callbackChannel, String componentName ) {
-		
 		logger.info("pulling image " + imageName + "... " );
-
 		inProcessPulling.put(componentName, true);
-		System.out.println("X_SET " + componentName + " to TRUE");
-		
 		dockerService.pullImage( imageName, callbackChannel );
 		logger.info( imageName + " pull done. " );
-
-		System.out.println("X_SET " + componentName + " to FALSE");
 		inProcessPulling.put(componentName, false);		
-		
 		return new JSONObject().put("response", "Done.").toString();
 	}
 	
@@ -103,7 +96,6 @@ public class ImageManager {
 		} else {
 			//
 		}
-		System.out.println("QUERY 2 " + componentName + " =  CK: " + containsKey + "    IPP: " + inProcessPulling );
 		return ( containsKey && inProcessPulling );
 	}
 	
