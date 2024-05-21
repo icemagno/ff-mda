@@ -73,6 +73,9 @@ public class WEBRouteController {
     @GetMapping("/remote")
     public String remote(Model model) {
     	this.setGenericModel( model );
+    	
+    	if( model.getAttribute("orgName") == null ) return "local"; 
+    	
         return "remote";
     }
 
