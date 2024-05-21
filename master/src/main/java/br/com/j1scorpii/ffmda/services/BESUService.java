@@ -353,12 +353,6 @@ public class BESUService implements IFireFlyComponent, IObservable  {
 			"--private-key-file-name=key"
 		};
 		// Run a temp BESU container to create the Genesis file and the validators keys
-		// TODO: Edit the chain ID, wallets and balances
-		
-		System.out.println("-------------------- BESUService --------------------");
-		System.out.println(" What about allow some Genesis customization?        ");
-		System.out.println("-----------------------------------------------------");
-		
 		this.containerManager.executeAndRemoveContainer( "besu_create_genesis", this.imageName, command, this.dataFolder, "/data" );
 		File genesisFile = new File( this.dataFolder + "/nodefiles/genesis.json");
 		
@@ -427,6 +421,10 @@ public class BESUService implements IFireFlyComponent, IObservable  {
 			saveValidatorsData();
 			// Remove the original genesis config file. No need to keep it
 			new File(this.dataFolder + "/bc_config.json").delete();
+			// Remove the original nodefiles folder because we have this information
+			// on the validators repository
+			FileUtils.deleteDirectory( new File( this.dataFolder + "/nodefiles" ) );			
+			
 		} catch ( Exception e ) { e.printStackTrace(); }		
 		
 	}
