@@ -76,6 +76,8 @@ public class WEBRouteController {
     	
     	if( model.getAttribute("orgName") == null ) return "local"; 
     	
+    	System.out.println( "Org Name " + model.getAttribute("orgName") );
+    	
         return "remote";
     }
 
