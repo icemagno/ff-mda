@@ -94,17 +94,6 @@ public class BESUService implements IFireFlyComponent, IObservable  {
 		// The method 'notify()' will be triggered when done.
 		// This must be done in synch because the start process must not block
 		downloaderService.pull(COMPONENT_NAME, this);
-		/*
-		String imageName = imageManager.getImageForComponent( COMPONENT_NAME );
-		logger.info("will pull BESU image...");
-		if( imageName != null ) {
-		    ImageDownloader id = new ImageDownloader( COMPONENT_NAME, imageName, imageManager, this );
-		    new Thread( id ).start();
-		} else {		
-			logger.error("No image found on manifest to component " + COMPONENT_NAME );
-		}
-		*/
-		
 	}
 
 	// This method will be called when ImageDownloader downloads the image

@@ -39,6 +39,8 @@ public class ImageDownloaderService implements IObservable {
 		for( String image : imageManager.listAvailableImages() ) {
 			if( image.toUpperCase().contains( imageName.toUpperCase() ) ) {
 				logger.info("  > found image " + image + " for " + componentName + ". Skip. " );
+				// Will notify the task owner anyway even if we already have the image here
+				taskOwner.notify(componentName);
 				found = true;
 			}
 		}		    
