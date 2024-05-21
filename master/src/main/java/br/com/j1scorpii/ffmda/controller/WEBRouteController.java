@@ -75,9 +75,9 @@ public class WEBRouteController {
     	this.setGenericModel( model );
 
     	String orgName = (String)model.getAttribute("orgName");
-    	System.out.println( "Org Name " + orgName );
+    	System.out.println( "Org Name " + orgName.length() );
 
-    	if( orgName == null ) return "local"; 
+    	//if( orgName == null ) return "local"; 
     	
         return "remote";
     }
