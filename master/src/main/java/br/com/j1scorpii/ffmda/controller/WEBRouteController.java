@@ -73,12 +73,9 @@ public class WEBRouteController {
     @GetMapping("/remote")
     public String remote(Model model) {
     	this.setGenericModel( model );
-
+    	// Prevent to use remote nodes without configure local node first
     	String orgName = (String)model.getAttribute("orgName");
-    	System.out.println( "Org Name " + orgName.length() );
-
-    	//if( orgName == null ) return "local"; 
-    	
+    	if( orgName.length() == 0 ) return "local"; 
         return "remote";
     }
 
