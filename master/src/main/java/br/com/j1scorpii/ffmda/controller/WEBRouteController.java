@@ -83,10 +83,8 @@ public class WEBRouteController {
     @GetMapping("/remote/{agentId}")
     public String manageAgent( @PathVariable String agentId, Model model) {
     	model.addAttribute("agentId", agentId );
-    	
     	RemoteAgent agent = this.remoteAgentService.getAgentById( agentId );
     	model.addAttribute("agent", agent );
-    	
     	this.setGenericModel( model );
         return "remote/manage";
     }
