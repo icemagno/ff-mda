@@ -4,16 +4,14 @@
 <head th:insert="~{head}">
 </head>
 
-<body class="skin-black layout-top-nav sidebar-collapse"
-	style="height: auto; min-height: 100%;">
+<body class="skin-black layout-top-nav sidebar-collapse" style="height: auto; min-height: 100%;">
 
 	<div class="wrapper" style="height: auto; min-height: 100%;">
 
-		<header class="main-header" th:insert="~{navbar}" ></header>
+		<header class="main-header" th:insert="~{navbar}"></header>
 		<aside class="main-sidebar" th:insert="~{sidebar}"></aside>
 
-		<div class="content-wrapper"
-			style="position: relative; min-height: 600px;">
+		<div class="content-wrapper" style="position: relative; min-height: 600px;">
 
 			<section class="content-header">
 				<h1>
@@ -27,43 +25,79 @@
 			</section>
 
 			<section class="content container-fluid">
+
+
 				<div class="row">
-					<section class="col-lg-3">
+					<div class="col-xs-12">
+						<div class="box">
+							<div class="box-header">
+								<h3 class="box-title">Responsive Hover Table</h3>
 
-						<div class="box box-primary">
-							<div class="box-header ui-sortable-handle">
-								<i class="fa fa-gears"></i>
-								<h3 class="box-title">Container Execution</h3>
+								<div class="box-tools">
+									<div class="input-group input-group-sm hidden-xs" style="width: 150px;">
+										<input type="text" name="table_search" class="form-control pull-right"
+											placeholder="Search">
+
+										<div class="input-group-btn">
+											<button type="submit" class="btn btn-default"><i
+													class="fa fa-search"></i></button>
+										</div>
+									</div>
+								</div>
 							</div>
-							<div class="box-body ">
-								<span id="componentTips" ></span>
-							</div>
-							<div class="box-footer clearfix">
-
-								<div class="btn-group pull-right">
-
-									<button type="button" class="btn btn-default" id="startCont" style="margin-right:5px">
-										<i class="fa fa-play"></i>  
-									</button>
-	
-									<button type="button" class="btn btn-default" id="stopCont" style="margin-right:5px">
-										<i class="fa fa-stop"></i>  
-									</button>							
-															
-									<button type="button" class="btn btn-default" id="restartCont" style="margin-right:5px">
-										<i class="fa fa-refresh"></i>  
-									</button>							
-
-									<button type="button" class="btn btn-default" id="pullImage" style="margin-right:5px">
-										<i class="fa fa-download"></i>  
-									</button>	
-	
-								</div>							
+							<!-- /.box-header -->
+							<div class="box-body table-responsive no-padding">
+								<table class="table table-hover">
+									<tbody>
+										<tr>
+											<th>ID</th>
+											<th>User</th>
+											<th>Date</th>
+											<th>Status</th>
+											<th>Reason</th>
+										</tr>
+										<tr>
+											<td>183</td>
+											<td>John Doe</td>
+											<td>11-7-2014</td>
+											<td><span class="label label-success">Approved</span></td>
+											<td>Bacon ipsum dolor sit amet salami venison chicken flank fatback doner.
+											</td>
+										</tr>
+										<tr>
+											<td>219</td>
+											<td>Alexander Pierce</td>
+											<td>11-7-2014</td>
+											<td><span class="label label-warning">Pending</span></td>
+											<td>Bacon ipsum dolor sit amet salami venison chicken flank fatback doner.
+											</td>
+										</tr>
+										<tr>
+											<td>657</td>
+											<td>Bob Doe</td>
+											<td>11-7-2014</td>
+											<td><span class="label label-primary">Approved</span></td>
+											<td>Bacon ipsum dolor sit amet salami venison chicken flank fatback doner.
+											</td>
+										</tr>
+										<tr>
+											<td>175</td>
+											<td>Mike Doe</td>
+											<td>11-7-2014</td>
+											<td><span class="label label-danger">Denied</span></td>
+											<td>Bacon ipsum dolor sit amet salami venison chicken flank fatback doner.
+											</td>
+										</tr>
+									</tbody>
+								</table>
 							</div>
 						</div>
+					</div>
+				</div>
 
-					</section>
-					<section class="col-lg-9">
+
+				<div class="row">
+					<section class="col-lg-12">
 						<div class="box box-primary">
 							<div class="box-header with-border">
 								<i class="fa fa-file-text-o"></i>
@@ -87,15 +121,13 @@
 			</section>
 		</div>
 
-		<aside class="control-sidebar control-sidebar-light"
-			th:insert="~{controlsidebar}"></aside>
+		<aside class="control-sidebar control-sidebar-light" th:insert="~{controlsidebar}"></aside>
 		<div class="control-sidebar-bg"></div>
 
 
 		<!-- Main Footer -->
 
-		<footer class="main-footer"
-			style="height: 44px; padding: 0px 10px 0px 10px; background-color: #222d32;">
+		<footer class="main-footer" style="height: 44px; padding: 0px 10px 0px 10px; background-color: #222d32;">
 
 			<table id="tableFooter" style="width: 100%; cursor: pointer">
 				<tr>
@@ -120,10 +152,10 @@
 	<!-- jQuery 3 -->
 	<script src="/adminlte/bower_components/jquery/dist/jquery.min.js"></script>
 	<!-- Bootstrap 3.3.7 -->
-	<script	src="/adminlte/bower_components/bootstrap/dist/js/bootstrap.min.js"></script>
+	<script src="/adminlte/bower_components/bootstrap/dist/js/bootstrap.min.js"></script>
 	<!-- AdminLTE App -->
 	<script src="/adminlte/dist/js/adminlte.min.js"></script>
-	
+
 	<script src="/common/websocket/sockjs.min.js"></script>
 	<script src="/common/websocket/stomp.min.js"></script>
 	<script src="/common/components/common.js"></script>
@@ -131,4 +163,3 @@
 </body>
 
 </html>
-
