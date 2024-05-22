@@ -32,10 +32,46 @@ $( document ).ready(function() {
 	
 });	
 
-function processData( data ){
-	console.log( data );
+// This will set the components tag at right side
+// to show the containers state
+function setButtonState( state, button ){
+	// set to default / undefined state first
+	$(button).removeClass("label-success");
+	$(button).removeClass("label-danger");
+	$(button).addClass("label-default");
+	$(button).text("ABSENT");
+	
+
+	// Then set to the actual state. I made this way because 
+	if( state == 'running' ) {
+		$(button).removeClass("label-default");
+		$(button).addClass("label-success");
+		$(button).text("RUNNING");
+	}
+	if( state == 'exited' ) {
+		$(button).removeClass("label-default");
+		$(button).addClass("label-danger");
+		$(button).text("EXITED");
+	}
+	
 }
 
-function doSomething( what ){
-	console.log( what );
+function processData( data ){
+	console.log( data );
+	if( data.besu && data.besu.container ){
+		var container = data.besu.container;
+		var state = data.besu.container.State.toUpperCase();
+		$("#imageBesu").text( container.Image );
+		
+		setButtonState( state, "#stateBesu" );
+
+	}
+}
+
+function start( what ){
+	console.log( "Start" + what );
+}
+
+function stop( what ){
+	console.log( "Stop" + what );
 }

@@ -58,7 +58,8 @@
 										<tr>
 											<td>Data Exchange</td>
 											<td>
-												<button onclick="doSomething('dx')" class="btn btn-default btn-xs"><i class="fa fa-trash-o text-red"></i></button>
+												<button onclick="start('dx')" class="btn btn-default btn-xs"><i class="fa fa-play"></i></button>
+												<button onclick="stop('dx')" class="btn btn-default btn-xs"><i class="fa fa-stop"></i></button>
 											</td>
 											<td><span class="label label-success">Absent</span></td>
 											<td id="imageDx"></td>
@@ -77,8 +78,11 @@
 										</tr>
 										<tr>
 											<td>BESU Node</td>
-											<td>11-7-2014</td>
-											<td><span class="label label-default">Absent</span></td>
+											<td>
+												<button onclick="start('besu')" class="btn btn-default btn-xs"><i class="fa fa-play"></i></button>
+												<button onclick="stop('besu')" class="btn btn-default btn-xs"><i class="fa fa-stop"></i></button>
+											</td>
+											<td><span id="stateBesu" class="label label-default">Absent</span></td>
 											<td id="imageBesu"></td>
 										</tr>
 										<tr>
