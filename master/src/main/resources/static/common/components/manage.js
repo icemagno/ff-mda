@@ -22,7 +22,6 @@ $( document ).ready(function() {
 	};
 	
 	var agentId = $("#agentId").text();
-	console.log( agentId )
 	
 	stompClient.connect( thisheaders , (frame) => {
 		console.log('WebSocket Conected.');  
