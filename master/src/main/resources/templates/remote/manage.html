@@ -29,10 +29,6 @@
 
 				<div class="row">
 					
-					<div class="col-xs-3">
-						&nbsp;
-					</div>
-					
 					<div class="col-xs-9">
 						<div class="box">
 							<div class="box-header">
@@ -55,9 +51,9 @@
 												<button onclick="start('dx')" class="btn btn-default btn-xs"><i class="fa fa-play"></i></button>
 												<button onclick="stop('dx')" class="btn btn-default btn-xs"><i class="fa fa-stop"></i></button>
 											</td>
-											<td id="statusDx"></td>
+											<td id="statusDx">&nbsp;</td>
 											<td><span id="stateDx" class="label label-success">Absent</span></td>
-											<td id="imageDx"></td>
+											<td id="imageDx">&nbsp;</td>
 										</tr>
 										<tr>
 											<td>PostgreSQL</td>
@@ -65,9 +61,9 @@
 												<button onclick="start('psql')" class="btn btn-default btn-xs"><i class="fa fa-play"></i></button>
 												<button onclick="stop('psql')" class="btn btn-default btn-xs"><i class="fa fa-stop"></i></button>
 											</td>
-											<td id="statusPsql"></td>
+											<td id="statusPsql">&nbsp;</td>
 											<td><span id="statePsql" class="label label-default">Absent</span></td>
-											<td id="imagePsql"></td>
+											<td id="imagePsql">&nbsp;</td>
 										</tr>
 										<tr>
 											<td>IPFS Peer</td>
@@ -75,9 +71,9 @@
 												<button onclick="start('ipfs')" class="btn btn-default btn-xs"><i class="fa fa-play"></i></button>
 												<button onclick="stop('ipfs')" class="btn btn-default btn-xs"><i class="fa fa-stop"></i></button>
 											</td>
-											<td id="statusIpfs"></td>
+											<td id="statusIpfs">&nbsp;</td>
 											<td><span id="stateIpfs" class="label label-default">Absent</span></td>
-											<td id="imageIpfs"></td>
+											<td id="imageIpfs">&nbsp;</td>
 										</tr>
 										<tr>
 											<td>BESU Node</td>
@@ -85,9 +81,9 @@
 												<button onclick="start('besu')" class="btn btn-default btn-xs"><i class="fa fa-play"></i></button>
 												<button onclick="stop('besu')" class="btn btn-default btn-xs"><i class="fa fa-stop"></i></button>
 											</td>
-											<td id="statusBesu"></td>
+											<td id="statusBesu">&nbsp;</td>
 											<td><span id="stateBesu" class="label label-default">Absent</span></td>
-											<td id="imageBesu"></td>
+											<td id="imageBesu">&nbsp;</td>
 										</tr>
 										<tr>
 											<td>ERC20 / ERC721 Tokens Connector</td>
@@ -95,9 +91,9 @@
 												<button onclick="start('tokens')" class="btn btn-default btn-xs"><i class="fa fa-play"></i></button>
 												<button onclick="stop('tokens')" class="btn btn-default btn-xs"><i class="fa fa-stop"></i></button>
 											</td>
-											<td id="statusTokens"></td>
+											<td id="statusTokens">&nbsp;</td>
 											<td><span id="stateTokens" class="label label-default">Absent</span></td>
-											<td id="imageTokens"></td>
+											<td id="imageTokens">&nbsp;</td>
 										</tr>									
 										<tr>
 											<td>FireFly Signer</td>
@@ -105,9 +101,9 @@
 												<button onclick="start('signer')" class="btn btn-default btn-xs"><i class="fa fa-play"></i></button>
 												<button onclick="stop('signer')" class="btn btn-default btn-xs"><i class="fa fa-stop"></i></button>
 											</td>
-											<td id="statusSigner"></td>
+											<td id="statusSigner">&nbsp;</td>
 											<td><span id="stateSigner" class="label label-default">Absent</span></td>
-											<td id="imageSigner"></td>
+											<td id="imageSigner">&nbsp;</td>
 										</tr>					
 										<tr>
 											<td>FireFly EVM Connector</td>
@@ -115,9 +111,9 @@
 												<button onclick="start('evm')" class="btn btn-default btn-xs"><i class="fa fa-play"></i></button>
 												<button onclick="stop('evm')" class="btn btn-default btn-xs"><i class="fa fa-stop"></i></button>
 											</td>
-											<td id="statusEvm"></td>
+											<td id="statusEvm">&nbsp;</td>
 											<td><span id="stateEvm" class="label label-default">Absent</span></td>
-											<td id="imageEvm"></td>
+											<td id="imageEvm">&nbsp;</td>
 										</tr>					
 										<tr>
 											<td>FireFly Sandbox</td>
@@ -125,9 +121,9 @@
 												<button onclick="start('sandbox')" class="btn btn-default btn-xs"><i class="fa fa-play"></i></button>
 												<button onclick="stop('sandbox')" class="btn btn-default btn-xs"><i class="fa fa-stop"></i></button>
 											</td>
-											<td id="statusSandbox"></td>
+											<td id="statusSandbox">&nbsp;</td>
 											<td><span id="stateSandbox" class="label label-default">Absent</span></td>
-											<td id="imageSandbox"></td>
+											<td id="imageSandbox">&nbsp;</td>
 										</tr>					
 										<tr>
 											<td>FireFly Core</td>
@@ -135,15 +131,22 @@
 												<button onclick="start('core')" class="btn btn-default btn-xs"><i class="fa fa-play"></i></button>
 												<button onclick="stop('core')" class="btn btn-default btn-xs"><i class="fa fa-stop"></i></button>
 											</td>
-											<td id="statusCore"></td>
+											<td id="statusCore">&nbsp;</td>
 											<td><span id="stateCore" class="label label-default">Absent</span></td>
-											<td id="imageCore"></td>
+											<td id="imageCore">&nbsp;</td>
 										</tr>					
 									</tbody>
 								</table>
 							</div>
 						</div>
 					</div>
+				
+				
+					<div class="col-xs-3">
+						&nbsp;
+					</div>				
+				
+				
 				</div>
 
 
@@ -185,14 +188,14 @@
 					<td>by Carlos Magno Abreu</td>
 
 					<td style="width: 40px">Foo</td>
-					<td style="width: 70px"></td>
-					<td style="width: 70px"></td>
+					<td style="width: 70px">&nbsp;</td>
+					<td style="width: 70px">&nbsp;</td>
 				</tr>
 				<tr>
 					<td>magno.mabreu@gmail.com</td>
 					<td style="width: 40px">Bar</td>
-					<td style="width: 70px"></td>
-					<td style="width: 70px"></td>
+					<td style="width: 70px">&nbsp;</td>
+					<td style="width: 70px">&nbsp;</td>
 				</tr>
 			</table>
 		</footer>
