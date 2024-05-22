@@ -19,7 +19,7 @@ $( document ).ready(function() {
 
 		stompClient.subscribe('/agent/data/' + agentId, (message) => {
 			let payload = JSON.parse( message.body );
-			console.log( payload );
+			processData( payload );
 		});
 		
 		stompClient.subscribe('/agent/log/' + agentId, (message) => {
@@ -31,3 +31,11 @@ $( document ).ready(function() {
 	});
 	
 });	
+
+function processData( data ){
+	console.log( data );
+}
+
+function doSomething( what ){
+	console.log( what );
+}
