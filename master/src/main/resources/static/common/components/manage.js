@@ -2,6 +2,16 @@
 
 $( document ).ready(function() {
 
+	setButtonState( 'absent', "#stateBesu" );
+	setButtonState( 'absent', "#stateDx" );
+	setButtonState( 'absent', "#statePsql" );
+	setButtonState( 'absent', "#stateIpfs" );
+	setButtonState( 'absent', "#stateTokens" );
+	setButtonState( 'absent', "#stateSigner" );
+	setButtonState( 'absent', "#stateEvm" );
+	setButtonState( 'absent', "#stateSandbox" );
+	setButtonState( 'absent', "#stateCore" );
+
 	const ws = new SockJS( "/ws" );
 	var stompClient = Stomp.over(ws);
 	stompClient.debug = null;
@@ -58,19 +68,19 @@ function setButtonState( state, button ){
 
 function processData( data ){
 	console.log( data );
-
 	if( data.besu && data.besu.container ){
 		var container = data.besu.container;
 		var state = data.besu.container.State;
 		$("#imageBesu").text( container.Image );
+		$("#statusBesu").text( container.Status );
 		setButtonState( state, "#stateBesu" );
 	}
 }
 
 function start( what ){
-	console.log( "Start" + what );
+	console.log( "Start " + what );
 }
 
 function stop( what ){
-	console.log( "Stop" + what );
+	console.log( "Stop " + what );
 }
