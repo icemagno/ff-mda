@@ -58,13 +58,12 @@ function setButtonState( state, button ){
 
 function processData( data ){
 	console.log( data );
+
 	if( data.besu && data.besu.container ){
 		var container = data.besu.container;
-		var state = data.besu.container.State.toUpperCase();
+		var state = data.besu.container.State;
 		$("#imageBesu").text( container.Image );
-		
 		setButtonState( state, "#stateBesu" );
-
 	}
 }
 
