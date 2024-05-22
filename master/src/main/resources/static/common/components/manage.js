@@ -77,6 +77,10 @@ function processData( data ){
 	}
 }
 
+function log( what ){
+	console.log( "Log " + what );
+}
+
 function start( what ){
 	console.log( "Start " + what );
 }
