@@ -191,7 +191,7 @@ public class LocalService {
 	}
 	
 	
-	// Save Organization name and NOde name to configuration
+	// Save Organization name and Node name to configuration
 	public JSONObject saveOrgData(String data) throws Exception {
 		// Will only save Org config if it is open
 		if ( this.mainConfig.getJSONObject("stackStatus").getBoolean("locked") == false ) {

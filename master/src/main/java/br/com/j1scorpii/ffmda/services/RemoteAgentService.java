@@ -190,10 +190,12 @@ public class RemoteAgentService {
 		String uuid = payload.getString("uuid");
 		logger.info( "LOG: " + uuid );
 		logger.info( payload.toString() );
+
+		// Send this log to the Agent Control Panel page on Agent ID channel
+		messagingTemplate.convertAndSend( "/agent/log/" + uuid , payload.toString() );
 	}
 
 	private void processCommandResult(JSONObject payload) {
-		System.out.println( payload.toString(5) );
 		String uuid = payload.getString("uuid");
 		logger.info( "RESULT: " + uuid + " " + payload.getString("command") );
 		logger.info( payload.getJSONObject("result").toString() );
@@ -222,6 +224,10 @@ public class RemoteAgentService {
 				
 				// Duh
 				saveConfig();
+
+				// Send this data to the Agent Control Panel page on Agent ID channel
+				messagingTemplate.convertAndSend( "/agent/data/" + agent.getId() , payload.toString() );
+
 			}
 		}
 	}

@@ -17,11 +17,12 @@
 
 			<section class="content-header">
 				<h1>
-					<span th:text="${agent.nodeName}"></span> | <small>Control Panel</small> <span style="display:none" id="componentShortName" th:text="${componentShortName}"></span>
+					<span th:text="${agent.nodeName}"></span> | <small>Control Panel</small>
+					<div id="agentId" th:text="${agent.id}" style="display:none"></div>
 				</h1>
 				<ol class="breadcrumb">
 					<li><a href="/remote"><i class="fa fa-dashboard"></i> Remote Agent</a></li>
-					<li class="active" th:text="${componentName}" ></li>
+					<li class="active"> Control Panel</li>
 				</ol>
 			</section>
 
@@ -57,11 +58,6 @@
 										<i class="fa fa-download"></i>  
 									</button>	
 	
-									<!--
-									<button type="button" class="btn btn-danger" id="removeCont">
-										<i class="fa fa-trash-o"></i>  
-									</button>
-									-->
 								</div>							
 							</div>
 						</div>
@@ -131,7 +127,7 @@
 	<script src="/common/websocket/sockjs.min.js"></script>
 	<script src="/common/websocket/stomp.min.js"></script>
 	<script src="/common/components/common.js"></script>
-
+	<script src="/common/components/manage.js"></script>
 </body>
 
 </html>
