@@ -24,6 +24,7 @@ public class CommService {
 	
 	@Autowired private BESUService besuService;
 	@Autowired private SimpMessagingTemplate messagingTemplate;
+	@Autowired private SecureChannelService secChannel;
 	
 	@Value("${ffmda.data.folder}")
 	private String localDataFolder;
@@ -47,8 +48,9 @@ public class CommService {
 	
 	// This is the entry point of all messages sent by the Master to me.
 	// The Master must obey the protocol otherwise the message will be discarded
+	// This method is called by CommController which register the WS channel listener
 	public void receive(String message, MessageHeaders messageHeaders) {
-		JSONObject payload = new JSONObject( message );
+		JSONObject payload = new JSONObject( secChannel.decrypt( message ) );
 		if( !payload.has("protocol") ) return;
 		try {
 			String protocolType = payload.getString("protocol");
@@ -109,7 +111,7 @@ public class CommService {
 	
 	// Send messages to Master thru main channel
 	public void sendToMaster( JSONObject payload ) {
-		messagingTemplate.convertAndSend( commChannel, payload.toString() );
+		messagingTemplate.convertAndSend( commChannel, secChannel.encrypt( payload.toString() ) );
 	}
 	
 	// The Master is telling me about a brother Agent found on network. 

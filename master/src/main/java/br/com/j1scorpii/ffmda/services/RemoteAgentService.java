@@ -37,6 +37,7 @@ public class RemoteAgentService {
 	@Autowired private SimpMessagingTemplate messagingTemplate;
 	@Autowired private BESUService besuService;
 	@Autowired private LocalService localService;
+	@Autowired private SecureChannelService secChannel;
 	
 	@Value("${ffmda.local.data.folder}")
 	private String localDataFolder;	
@@ -152,7 +153,10 @@ public class RemoteAgentService {
 	
 	// Triggered when a message arrive from the Remote Agent
 	// This is the entry point of the messages sent by agents
-	public void receive( JSONObject payload, StompHeaders headers ) {
+	// TODO: Decrypt message
+	public void receive( JSONObject payloadEnc, StompHeaders headers ) {
+		// Decrypt the message
+		JSONObject payload = secChannel.decrypt( payloadEnc );
 		// The Agent must obey the protocol otherwise the message will be discarded
 		if( !payload.has("protocol") ) return;
 		try {
@@ -208,9 +212,6 @@ public class RemoteAgentService {
 
 	// An agent sent his information data. I must take some actions
 	private void assignNodeData(JSONObject payload) {
-		
-		System.out.println( payload.toString(5) );
-
 		String uuid = payload.getString("uuid");
 		for( RemoteAgent agent : this.agents ) {
 			if( agent.getId().equals(uuid) ) {
@@ -243,7 +244,7 @@ public class RemoteAgentService {
 		
 		// Send to all for instance ( I'm lazy to search for an UUID now )
 		this.agents.forEach( ( agent ) -> {
-			if( agent.isConnected() ) this.send( agent.getId(), new JSONObject()
+			if( agent.isConnected() ) this.sendToAgent( agent.getId(), new JSONObject()
 				.put("protocol", FFMDAProtocol.DEPLOY_BESU.toString() )
 				.put("imageName", besuData.getString("Image") )
 			);
@@ -253,9 +254,9 @@ public class RemoteAgentService {
 	}
 
 	// Send a message to an agent
-	public void send( String uuid, JSONObject payload ) {
+	public void sendToAgent( String uuid, JSONObject payload ) {
 		this.agents.forEach( ( agent ) -> {
-			if( agent.getId().equals(uuid) ) agent.send(payload);
+			if( agent.getId().equals(uuid) ) agent.send( secChannel.encrypt( payload ) );
 		}); 
 	}
 
@@ -263,14 +264,14 @@ public class RemoteAgentService {
 	public void broadcast( JSONObject payload ) {
 		this.agents.forEach( ( agent ) -> {
 			// Do not send to myself
-			if( !agent.getId().equals( payload.getString("id") ) ) agent.send(payload);
+			if( !agent.getId().equals( payload.getString("id") ) ) agent.send( secChannel.encrypt( payload ) );
 		}); 
 	}
 
 	// Triggered right after an agent is connected.
 	// Let's ask it for its information ( containers and images info, host name, FF node name and FF org name ) 
 	public void afterConnected(RemoteAgent remoteAgent, StompSession session, StompHeaders connectedHeaders) {
-		remoteAgent.send( new JSONObject().put("protocol", FFMDAProtocol.QUERY_DATA.toString() ) );
+		sendToAgent( remoteAgent.getId(), new JSONObject().put("protocol", FFMDAProtocol.QUERY_DATA.toString() ) );
 	}
 
 	

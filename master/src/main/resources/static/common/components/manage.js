@@ -76,6 +76,10 @@ function processData( data ){
 	}
 }
 
+function reconfig( what ){
+	console.log( "Log " + what );
+}
+
 function log( what ){
 	console.log( "Log " + what );
 }
