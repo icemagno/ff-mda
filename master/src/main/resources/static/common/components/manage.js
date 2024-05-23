@@ -86,6 +86,7 @@ function log( what ){
 
 function start( what ){
 	console.log( "Start " + what );
+	// /v1/agent/deploy
 }
 
 function stop( what ){

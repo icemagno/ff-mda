@@ -1,6 +1,8 @@
 package br.com.j1scorpii.ffmda.services;
 
+import java.io.BufferedWriter;
 import java.io.File;
+import java.io.FileWriter;
 
 import org.json.JSONObject;
 import org.slf4j.Logger;
@@ -84,18 +86,20 @@ public class CommService {
 	// The Master sent a file. Save it.
 	private void receiveFileFromMaster(JSONObject payload) {
 		JSONObject filePayload = secChannel.decrypt(payload);
-		System.out.println( filePayload.toString(5) );
-		
-		/*
-		try {
-			BufferedWriter writer = new BufferedWriter( new FileWriter( this.configFile ) );
-			writer.write( this.getAgents().toString() );
-			writer.close();
-		} catch ( Exception e ) { 
-			e.printStackTrace();
+		if( filePayload.has("fileContent") ) {
+			try {
+				String fileContent = filePayload.getString("fileContent").replaceAll("\\\\n", "").replaceAll("\\\\\"", "\"");
+				String filePath = filePayload.getString("fileName");
+				File f = new File( filePath );
+				String fileAbsolutePath = f.getAbsolutePath();
+				new File( fileAbsolutePath ).mkdirs();
+				BufferedWriter writer = new BufferedWriter( new FileWriter( filePath ) );
+				writer.write( fileContent );
+				writer.close();
+			} catch ( Exception e ) { 
+				e.printStackTrace();
+			}			
 		}
-		*/
-		
 	}
 
 	// The Master is commanding me to start a BESU node.
