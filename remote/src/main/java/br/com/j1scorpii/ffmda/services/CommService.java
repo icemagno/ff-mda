@@ -56,6 +56,10 @@ public class CommService {
 			String protocolType = payload.getString("protocol");
 			FFMDAProtocol protocol = FFMDAProtocol.valueOf(protocolType);
 			switch (protocol) {
+				case FILE: {
+					receiveFileFromMaster( payload );
+					break;
+				}
 				case QUERY_DATA: {
 					respondQueryData( );
 					break;
@@ -77,6 +81,23 @@ public class CommService {
 		}
 	}
 	
+	// The Master sent a file. Save it.
+	private void receiveFileFromMaster(JSONObject payload) {
+		JSONObject filePayload = secChannel.decrypt(payload);
+		System.out.println( filePayload.toString(5) );
+		
+		/*
+		try {
+			BufferedWriter writer = new BufferedWriter( new FileWriter( this.configFile ) );
+			writer.write( this.getAgents().toString() );
+			writer.close();
+		} catch ( Exception e ) { 
+			e.printStackTrace();
+		}
+		*/
+		
+	}
+
 	// The Master is commanding me to start a BESU node.
 	// Let's deploy one based on the Master instructions
 	private void deployBesu( JSONObject payload ) {

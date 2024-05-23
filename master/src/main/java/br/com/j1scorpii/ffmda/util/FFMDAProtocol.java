@@ -7,5 +7,6 @@ public enum FFMDAProtocol {
 	DEPLOY_BESU,
 	COMMAND_ERROR,
 	RESULT,
-	LOG
+	LOG,
+	FILE
 }

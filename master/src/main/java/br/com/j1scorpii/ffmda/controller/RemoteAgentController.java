@@ -24,7 +24,6 @@ public class RemoteAgentController {
     	return new ResponseEntity<String>( this.remoteAgentService.getAgents().toString() , HttpStatus.OK);
     }  	
 
-    
     @GetMapping( value="/deploy", produces= MediaType.APPLICATION_JSON_VALUE )
     public ResponseEntity<String> deploy( ) throws Exception {
     	return new ResponseEntity<String>( this.remoteAgentService.deployBesuNode() , HttpStatus.OK);
@@ -40,5 +39,13 @@ public class RemoteAgentController {
     	String result = this.remoteAgentService.addAgent(data).toString();
     	return new ResponseEntity<String>( result , HttpStatus.OK);
     }  	
+
+    
+    // Delete me
+    @GetMapping( value="/test", produces= MediaType.APPLICATION_JSON_VALUE )
+    public ResponseEntity<String> test( ) throws Exception {
+    	return new ResponseEntity<String>( this.remoteAgentService.sendFile() , HttpStatus.OK);
+    }  	
+    
     
 }

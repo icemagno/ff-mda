@@ -4,7 +4,6 @@ import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Paths;
@@ -38,6 +37,7 @@ public class RemoteAgentService {
 	@Autowired private BESUService besuService;
 	@Autowired private LocalService localService;
 	@Autowired private SecureChannelService secChannel;
+	@Autowired private FileSenderService fileSender;
 	
 	@Value("${ffmda.local.data.folder}")
 	private String localDataFolder;	
@@ -111,7 +111,7 @@ public class RemoteAgentService {
 		if( !new File( this.configFile ).exists() ) return;
 		// Try to load. We may not have any file if no agent was created yet.
 		try {
-			String content = readFile( configFile , StandardCharsets.UTF_8);
+			String content = readFile( configFile );
 			JSONArray agentsConfig = new JSONArray(content);
 			for( int x=0; x < agentsConfig.length(); x++ ) {
 				JSONObject agent = agentsConfig.getJSONObject(x);
@@ -124,9 +124,9 @@ public class RemoteAgentService {
 		}
 	}
 	
-	private String readFile(String path, Charset encoding)  throws IOException {
+	private String readFile(String path)  throws IOException {
 		byte[] encoded = Files.readAllBytes(Paths.get(path));
-		return new String(encoded, encoding);
+		return new String(encoded, StandardCharsets.UTF_8 );
 	}
 	
 	@Scheduled( fixedRate = 5000 )
@@ -272,6 +272,15 @@ public class RemoteAgentService {
 	// Let's ask it for its information ( containers and images info, host name, FF node name and FF org name ) 
 	public void afterConnected(RemoteAgent remoteAgent, StompSession session, StompHeaders connectedHeaders) {
 		sendToAgent( remoteAgent.getId(), new JSONObject().put("protocol", FFMDAProtocol.QUERY_DATA.toString() ) );
+	}
+
+	// Send a file to an agent
+	public String sendFile() {
+		// No one to send. Get out.
+		if( this.agents.size() == 0 ) return "NO_AGENT_CONNECTED";
+		// Just a test ...
+		fileSender.sendFile( this.agents.get(0), besuService.getGenesisFile() );
+		return "ok";
 	}
 
 	

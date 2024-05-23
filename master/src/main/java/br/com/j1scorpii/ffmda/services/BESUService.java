@@ -95,6 +95,10 @@ public class BESUService implements IFireFlyComponent, IObservable  {
 		// This must be done in synch because the start process must not block
 		downloaderService.pull(COMPONENT_NAME, this);
 	}
+	
+	public String getGenesisFile() {
+		return genesisFile;
+	}
 
 	// This method will be called when ImageDownloader downloads the image
 	@Override
