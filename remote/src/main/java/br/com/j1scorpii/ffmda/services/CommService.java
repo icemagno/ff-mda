@@ -91,7 +91,8 @@ public class CommService {
 				String fileContent = filePayload.getString("fileContent").replaceAll("\\\\n", "").replaceAll("\\\\\"", "\"");
 				String filePath = filePayload.getString("fileName");
 				File f = new File( filePath );
-				String fileAbsolutePath = f.getAbsolutePath();
+				String fileAbsolutePath = f.getParentFile().getAbsolutePath();
+				System.out.println( fileAbsolutePath );
 				new File( fileAbsolutePath ).mkdirs();
 				BufferedWriter writer = new BufferedWriter( new FileWriter( filePath ) );
 				writer.write( fileContent );
