@@ -408,7 +408,7 @@ public class BESUService implements IFireFlyComponent, IObservable  {
 			
 			// Reserve a key pair to this node
 			logger.info("reserving keys to this node");
-			generateValidatorKeyPair( this.dataFolder );
+			generateValidatorKeyPair( this.dataFolder, "local" );
 					
 			// Remove the original genesis config file. No need to keep it
 			new File(this.dataFolder + "/bc_config.json").delete();
@@ -431,7 +431,7 @@ public class BESUService implements IFireFlyComponent, IObservable  {
 		return -1;
 	}
 	
-	public void generateValidatorKeyPair( String toFolder ) throws Exception{
+	public void generateValidatorKeyPair( String toFolder, String nodeName ) throws Exception{
 		int av = getNextAvailableValidator();
 		// Yes I know.. I call the object 'this.validatorsData' every time to make sure the global array
 		// will reflect the changes so I can save it to disk. Not sure if it will be called by reference 
@@ -446,8 +446,8 @@ public class BESUService implements IFireFlyComponent, IObservable  {
 		w2.close();
 		// Mark the entry as used by this node so no one can take it again
 		this.validatorsData.getJSONObject(av).put("available", false);
-		this.validatorsData.getJSONObject(av).put("usedByNode", "local");
-		logger.info("this BESU node will use address " + address);
+		this.validatorsData.getJSONObject(av).put("usedByNode", nodeName);
+		logger.info("BESU node '" + nodeName + "' will use address " + address + " of entry " + av );
 		// Update the validators repository to disk
 		saveValidatorsData();
 	}

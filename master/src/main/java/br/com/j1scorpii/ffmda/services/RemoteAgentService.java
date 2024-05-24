@@ -136,7 +136,7 @@ public class RemoteAgentService {
 			}
 			
 			// Override the keys 
-			this.besuService.generateValidatorKeyPair( besuAgentFolder );
+			this.besuService.generateValidatorKeyPair( besuAgentFolder, ag.getNodeName() );
 			
 		} catch (Exception e) {
 			e.printStackTrace();
