@@ -17,13 +17,14 @@ public class FileSenderService {
 	
 	@Autowired private SecureChannelService secChannel;
 
-	public void sendFile( RemoteAgent target, String fileName ) {
+	public void sendFile( String component, RemoteAgent target, String fileName ) {
 		try {
 			String fileContent = readFile( fileName );
 			
 			JSONObject payload = new JSONObject()
 					.put("protocol", FFMDAProtocol.FILE.toString() )
 					.put("fileContent", fileContent )
+					.put("component", component)
 					.put("fileName", fileName );
 			target.send( secChannel.encrypt( payload ) );
 			

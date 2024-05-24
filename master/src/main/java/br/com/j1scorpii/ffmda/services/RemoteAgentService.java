@@ -343,8 +343,7 @@ public class RemoteAgentService {
 		if( besuFiles != null) {
 			for (int i = 0; i < besuFiles.length; i++) {
 				if ( besuFiles[i].isFile() ) {
-					// fileSender.sendFile( ag, besuFiles[i].getAbsolutePath() );
-					System.out.println( "  > " + besuFiles[i].getAbsolutePath() );
+					fileSender.sendFile( "besu", ag, besuFiles[i].getAbsolutePath() );
 				}
 			}
 		}
@@ -355,8 +354,7 @@ public class RemoteAgentService {
 		if( dxFiles != null) {
 			for (int i = 0; i < dxFiles.length; i++) {
 				if ( dxFiles[i].isFile() ) {
-					// fileSender.sendFile( ag, dxFiles[i].getAbsolutePath() ) );
-					System.out.println( "  > " + dxFiles[i].getAbsolutePath() );
+					fileSender.sendFile( "dataexchange", ag, dxFiles[i].getAbsolutePath() );
 				}
 			}
 		}
