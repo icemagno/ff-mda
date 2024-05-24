@@ -96,6 +96,10 @@ public class BESUService implements IFireFlyComponent, IObservable  {
 		downloaderService.pull(COMPONENT_NAME, this);
 	}
 	
+	public String getDataFolder() {
+		return dataFolder;
+	}
+	
 	public String getGenesisFile() {
 		return genesisFile;
 	}
@@ -402,27 +406,10 @@ public class BESUService implements IFireFlyComponent, IObservable  {
 			    s2.close();
 			}
 			
-			// Reserve the first key pair to this node
+			// Reserve a key pair to this node
 			logger.info("reserving keys to this node");
-			// Since it is the first time I call this function, it will take the 
-			// index zero (the first entry)
-			int av = getNextAvailableValidator();
-			// Yes I know.. I call the object every time to make sure the global array
-			// will reflect the changes so I can save it to disk. Need to improve this later.
-			String address = this.validatorsData.getJSONObject(av).getString("address");
-			// Save keys to disk
-			FileWriter w1 = new FileWriter( this.dataFolder + "/key" );
-			FileWriter w2 = new FileWriter( this.dataFolder + "/key.pub" );
-			w1.write( this.validatorsData.getJSONObject(av).getString("privKey") );
-			w2.write( this.validatorsData.getJSONObject(av).getString("pubKey") );
-			w1.close();
-			w2.close();
-			// Mark the entry as used by this node so no one can take it again
-			this.validatorsData.getJSONObject(av).put("available", false);
-			this.validatorsData.getJSONObject(av).put("usedByNode", "local");
-			logger.info("this BESU node will use address " + address);
-			// Update the validators repository to disk
-			saveValidatorsData();
+			generateValidatorKeyPair( this.dataFolder );
+					
 			// Remove the original genesis config file. No need to keep it
 			new File(this.dataFolder + "/bc_config.json").delete();
 			// Remove the original nodefiles folder because we have this information
@@ -441,6 +428,27 @@ public class BESUService implements IFireFlyComponent, IObservable  {
 			if ( this.validatorsData.getJSONObject(0).getBoolean("available") == true ) return x;
 		}
 		return -1;
+	}
+	
+	public void generateValidatorKeyPair( String toFolder ) throws Exception{
+		int av = getNextAvailableValidator();
+		// Yes I know.. I call the object 'this.validatorsData' every time to make sure the global array
+		// will reflect the changes so I can save it to disk. Not sure if it will be called by reference 
+		// Need to believe in Java ... 
+		String address = this.validatorsData.getJSONObject(av).getString("address");
+		// Save keys to disk
+		FileWriter w1 = new FileWriter( toFolder + "/key" );
+		FileWriter w2 = new FileWriter( toFolder + "/key.pub" );
+		w1.write( this.validatorsData.getJSONObject(av).getString("privKey") );
+		w2.write( this.validatorsData.getJSONObject(av).getString("pubKey") );
+		w1.close();
+		w2.close();
+		// Mark the entry as used by this node so no one can take it again
+		this.validatorsData.getJSONObject(av).put("available", false);
+		this.validatorsData.getJSONObject(av).put("usedByNode", "local");
+		logger.info("this BESU node will use address " + address);
+		// Update the validators repository to disk
+		saveValidatorsData();
 	}
 
 	private void saveFile( String file, String data ) throws Exception {

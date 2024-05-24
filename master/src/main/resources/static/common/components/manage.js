@@ -1,4 +1,7 @@
 
+// "/files/send/{agentId}"
+// "/files/recreate/{agentId}"  ( will send too )
+
 
 $( document ).ready(function() {
 
@@ -36,6 +39,10 @@ $( document ).ready(function() {
 			console.log( payload );
 		});
 		
+		stompClient.subscribe('/shell/' + agentId + "/dataexchange", (message) => {
+			let payload = JSON.parse( message.body );
+			console.log( payload );
+		});
 		
 	});
 	

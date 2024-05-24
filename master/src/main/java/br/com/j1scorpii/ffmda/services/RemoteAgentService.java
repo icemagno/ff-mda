@@ -11,6 +11,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
+import org.apache.commons.io.FileUtils;
 import org.json.JSONArray;
 import org.json.JSONObject;
 import org.slf4j.Logger;
@@ -41,6 +42,8 @@ public class RemoteAgentService {
 	
 	@Value("${ffmda.local.data.folder}")
 	private String localDataFolder;	
+	
+	private String agentFilesFolder;
 
 	private String configFile;
 	private List<RemoteAgent> agents;
@@ -48,8 +51,10 @@ public class RemoteAgentService {
 	@PostConstruct
 	private void init() {
 		this.configFile	= localDataFolder + "/remote-agents.json";
+		this.agentFilesFolder = localDataFolder + "/agents";
 		this.agents = new ArrayList<RemoteAgent>();
 		this.loadConfig();
+		new File( this.agentFilesFolder ).mkdirs();
 		logger.info("init " + agents.size() + " agents.");
 	}
 	
@@ -66,20 +71,20 @@ public class RemoteAgentService {
 		return null;
 	}
 
-	
+	// Called by the front end
 	public JSONObject addAgent( String data ) {
+		
+		// Insert an empty object to be filled by the agent when connect  
 		JSONObject ag = new JSONObject( data ).getJSONObject("data");
 		ag.put("orgName", "Undefined");
 		ag.put("nodeName", "Undefined");
 		ag.put("hostName", "Undefined");
-		return addAgent( ag );
-	}
-	
-	public JSONObject addAgent( JSONObject ag ) {
+		
 		// Check if it already exist ( the 'nodeName' attribute is present)
-		JSONObject test = getAgent( ag.getString("ipAddress") ); 
 		// If so then return it without do anything else.
+		JSONObject test = getAgent( ag.getString("ipAddress") ); 
 		if( test.has("nodeName") ) return test;
+
 		// We don't have this one. Register and wait for connect.
 		// After connect the Remote Agent will send the rest of data that we started as 'Undefined'.
 		try {
@@ -89,11 +94,54 @@ public class RemoteAgentService {
 			this.agents.add( ra );
 			JSONObject newAgent = new JSONObject( ra );
 			saveConfig();
+			
+			// Create a folder to store all this agent config files
+			new File( this.agentFilesFolder + "/" + uuid ).mkdirs();
+			
+			// Create certificates and other files for this new agent
+			configureFiles( ra );
+			
 			return newAgent;
 		} catch ( Exception e ) {
 			e.printStackTrace(); 
 		}
 		return new JSONObject();
+	}
+	
+	// Create certificates and initial files for an agent
+	private void configureFiles( RemoteAgent ag ) {
+		try {
+			String agentFolder = this.agentFilesFolder + "/" + ag.getId();
+			String dxAgentFolder = agentFolder + "/dx";
+			String besuAgentFolder = agentFolder + "/besu";
+			//String pemCer = dxAgentFolder + "/cert.pem";
+			//String pemKey = dxAgentFolder + "/key.pem";
+			
+			File besuFolderF = new File( besuAgentFolder ); 
+			besuFolderF.mkdirs();
+			new File( dxAgentFolder ).mkdirs();
+			
+		    String hostCn = "/CN="+ag.getHostName()+"/O="+ag.getNodeName()+"/OU=FireFly/OU=Multiparty Deployer Agent";
+			this.localService.getPkiManager().createAndSignKeysAndCert( ag.getId() + "/dataexchange", hostCn , dxAgentFolder );
+			
+			// Copy all local besu files to the agent's folder ( including local keys. It will be override below )
+			FileUtils.copyDirectory ( new File( besuService.getDataFolder() ), besuFolderF );
+			// Override the keys 
+			this.besuService.generateValidatorKeyPair( besuAgentFolder );
+			
+		} catch (Exception e) {
+			e.printStackTrace();
+		} 		
+	}
+
+	// Called by the front to recreate agent files...
+	// We'll need to send all again to the agent's host
+	public String recreateFiles( String agentId ) {
+		RemoteAgent ag = getAgentById(agentId);
+		if( ag == null  ) return "NO_AGENT_FOUND";
+		configureFiles( ag );
+		sendFiles( agentId );
+		return "OK";
 	}
 	
 	private void saveConfig() {
@@ -274,12 +322,12 @@ public class RemoteAgentService {
 		sendToAgent( remoteAgent.getId(), new JSONObject().put("protocol", FFMDAProtocol.QUERY_DATA.toString() ) );
 	}
 
-	// Send a file to an agent
-	public String sendFile() {
-		// No one to send. Get out.
-		if( this.agents.size() == 0 ) return "NO_AGENT_CONNECTED";
-		// Just a test ...
-		fileSender.sendFile( this.agents.get(0), besuService.getGenesisFile() );
+	// Send config files to an agent
+	public String sendFiles( String agentId ) {
+		RemoteAgent ag = getAgentById(agentId);
+		if( ag == null ) return "NO_AGENT_CONNECTED";
+
+		fileSender.sendFile( ag, besuService.getGenesisFile() );
 		return "ok";
 	}
 
