@@ -431,7 +431,10 @@ public class BESUService implements IFireFlyComponent, IObservable  {
 				String usedBy = this.validatorsData.getJSONObject(x).getString( "usedByNode" );
 				logger.info("  > index " + x + " used by " + usedBy );
 				// This is my own key pair ( someone asked to regenerate files ) 
-				if ( usedBy.equals( nodeName ) ) return x;
+				if ( usedBy.equals( nodeName ) ) {
+					logger.info("  > it is my own key pair (" + nodeName + ")" );
+					return x;
+				}
 			} catch (Exception e) {
 				// This slot are available ( we have getString( "usedByNode" ) failure because it is null ) 
 				logger.info("  > index " + x + " available " );
