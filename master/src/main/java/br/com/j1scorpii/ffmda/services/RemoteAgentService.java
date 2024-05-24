@@ -125,7 +125,16 @@ public class RemoteAgentService {
 			this.localService.getPkiManager().createAndSignKeysAndCert( ag.getId() + "/dataexchange", hostCn , dxAgentFolder );
 			
 			// Copy all local besu files to the agent's folder ( including local keys. It will be override below )
-			FileUtils.copyDirectory ( new File( besuService.getDataFolder() ), besuFolderF );
+			File besuLocalDataFolder = new File( besuService.getDataFolder() );
+			File[] listOfFiles = besuLocalDataFolder.listFiles();
+			if( listOfFiles != null) {
+				for (int i = 0; i < listOfFiles.length; i++) {
+					if ( listOfFiles[i].isFile() ) {
+						FileUtils.copyFileToDirectory( listOfFiles[i], besuLocalDataFolder );				  
+					}
+				}
+			}
+			
 			// Override the keys 
 			this.besuService.generateValidatorKeyPair( besuAgentFolder );
 			
@@ -282,21 +291,20 @@ public class RemoteAgentService {
 	}
 	
 	// Command an agent to deploy a besu node there
-	public String deployBesuNode() {
+	public String deployBesuNode( String agentId ) {
+		RemoteAgent ag = getAgentById(agentId);
+		if( ag == null ) return "NO_AGENT_FOUND";
+		
 		JSONObject localAgentConfig = localService.getMainConfig();
 		JSONObject besuData = localAgentConfig.getJSONObject("stackStatus").getJSONObject("besu");
 		
-		// ***************************************************
-		// 		DON'T FORGET TO SEND THE BESU FILES FIRST !!!
-		// ***************************************************
-		
-		// Send to all for instance ( I'm lazy to search for an UUID now )
-		this.agents.forEach( ( agent ) -> {
-			if( agent.isConnected() ) this.sendToAgent( agent.getId(), new JSONObject()
-				.put("protocol", FFMDAProtocol.DEPLOY_BESU.toString() )
-				.put("imageName", besuData.getString("Image") )
-			);
-		});
+		// Send all files to agent
+		sendFiles( agentId );
+
+		this.sendToAgent( ag.getId(), new JSONObject()
+			.put("protocol", FFMDAProtocol.DEPLOY_BESU.toString() )
+			.put("imageName", besuData.getString("Image") )
+		);
 		return localAgentConfig.toString(5);
 		
 	}
@@ -326,7 +334,20 @@ public class RemoteAgentService {
 	public String sendFiles( String agentId ) {
 		RemoteAgent ag = getAgentById(agentId);
 		if( ag == null ) return "NO_AGENT_CONNECTED";
-
+		/*
+		File besuLocalDataFolder = new File( besuService.getDataFolder() );
+		File[] listOfFiles = besuLocalDataFolder.listFiles();
+		if( listOfFiles != null) {
+			for (int i = 0; i < listOfFiles.length; i++) {
+				if ( listOfFiles[i].isFile() ) {
+					FileUtils.copyFileToDirectory( listOfFiles[i], besuLocalDataFolder );				  
+				}
+			}
+		}
+		*/
+		
+		
+		
 		fileSender.sendFile( ag, besuService.getGenesisFile() );
 		return "ok";
 	}

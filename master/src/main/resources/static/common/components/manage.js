@@ -1,7 +1,7 @@
 
 // "/files/send/{agentId}"
 // "/files/recreate/{agentId}"  ( will send too )
-
+// "/deploy/{agentId}"  ( will send too )
 
 $( document ).ready(function() {
 
