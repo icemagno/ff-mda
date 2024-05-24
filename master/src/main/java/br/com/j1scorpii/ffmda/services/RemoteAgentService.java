@@ -114,8 +114,6 @@ public class RemoteAgentService {
 			String agentFolder = this.agentFilesFolder + "/" + ag.getId();
 			String dxAgentFolder = agentFolder + "/dx";
 			String besuAgentFolder = agentFolder + "/besu";
-			//String pemCer = dxAgentFolder + "/cert.pem";
-			//String pemKey = dxAgentFolder + "/key.pem";
 			
 			File besuFolderF = new File( besuAgentFolder ); 
 			besuFolderF.mkdirs();
@@ -332,23 +330,38 @@ public class RemoteAgentService {
 
 	// Send config files to an agent
 	public String sendFiles( String agentId ) {
+		String agentFolder = this.agentFilesFolder + "/" + agentId;
+
+		File dxAgentFolder = new File( agentFolder + "/dx" );
+		File besuAgentFolder = new File( agentFolder + "/besu" );
+		
 		RemoteAgent ag = getAgentById(agentId);
 		if( ag == null ) return "NO_AGENT_CONNECTED";
-		/*
-		File besuLocalDataFolder = new File( besuService.getDataFolder() );
-		File[] listOfFiles = besuLocalDataFolder.listFiles();
-		if( listOfFiles != null) {
-			for (int i = 0; i < listOfFiles.length; i++) {
-				if ( listOfFiles[i].isFile() ) {
-					FileUtils.copyFileToDirectory( listOfFiles[i], besuLocalDataFolder );				  
+		
+		System.out.println( "Besu Files: " );
+		File[] besuFiles = besuAgentFolder.listFiles();
+		if( besuFiles != null) {
+			for (int i = 0; i < besuFiles.length; i++) {
+				if ( besuFiles[i].isFile() ) {
+					// fileSender.sendFile( ag, besuFiles[i].getAbsolutePath() );
+					System.out.println( "  > " + besuFiles[i].getAbsolutePath() );
 				}
 			}
 		}
-		*/
+
+		
+		System.out.println( "DX Files: " );
+		File[] dxFiles = dxAgentFolder.listFiles();
+		if( dxFiles != null) {
+			for (int i = 0; i < dxFiles.length; i++) {
+				if ( dxFiles[i].isFile() ) {
+					// fileSender.sendFile( ag, dxFiles[i].getAbsolutePath() ) );
+					System.out.println( "  > " + dxFiles[i].getAbsolutePath() );
+				}
+			}
+		}
 		
 		
-		
-		fileSender.sendFile( ag, besuService.getGenesisFile() );
 		return "ok";
 	}
 
