@@ -423,16 +423,27 @@ public class BESUService implements IFireFlyComponent, IObservable  {
 	// Every time you register a new node, I need to send a key pair to it.
 	// So it will become a BESU validator (don't forget it was already registered into genesis file.
 	// no need to register again)
-	private int getNextAvailableValidator() {
+	private int getNextAvailableValidator( String nodeName ) {
+		logger.info("searching for next available validator key...");
 		for( int x=0; x < this.validatorsData.length(); x++ ) {
 			System.out.println( this.validatorsData.getJSONObject(x).toString(5) );
-			if ( this.validatorsData.getJSONObject(x).getBoolean("available") == true ) return x;
+			try {
+				String usedBy = this.validatorsData.getJSONObject(x).getString( "usedByNode" );
+				logger.info("  > index " + x + " used by " + usedBy );
+				// This is my own key pair ( someone asked to regenerate files ) 
+				if ( usedBy.equals( nodeName ) ) return x;
+			} catch (Exception e) {
+				// This slot are available ( we have getString( "usedByNode" ) failure because it is null ) 
+				logger.info("  > index " + x + " available " );
+				return x;
+			}
+			
 		}
 		return -1;
 	}
 	
 	public void generateValidatorKeyPair( String toFolder, String nodeName ) throws Exception{
-		int av = getNextAvailableValidator();
+		int av = getNextAvailableValidator( nodeName );
 		// Yes I know.. I call the object 'this.validatorsData' every time to make sure the global array
 		// will reflect the changes so I can save it to disk. Not sure if it will be called by reference 
 		// Need to believe in Java ... 
