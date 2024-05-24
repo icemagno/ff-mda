@@ -130,7 +130,7 @@ public class RemoteAgentService {
 			if( listOfFiles != null) {
 				for (int i = 0; i < listOfFiles.length; i++) {
 					if ( listOfFiles[i].isFile() ) {
-						FileUtils.copyFileToDirectory( listOfFiles[i], besuLocalDataFolder );				  
+						FileUtils.copyFileToDirectory( listOfFiles[i], besuFolderF );				  
 					}
 				}
 			}
