@@ -425,7 +425,8 @@ public class BESUService implements IFireFlyComponent, IObservable  {
 	// no need to register again)
 	private int getNextAvailableValidator() {
 		for( int x=0; x < this.validatorsData.length(); x++ ) {
-			if ( this.validatorsData.getJSONObject(0).getBoolean("available") == true ) return x;
+			System.out.println( this.validatorsData.getJSONObject(x).toString(5) );
+			if ( this.validatorsData.getJSONObject(x).getBoolean("available") == true ) return x;
 		}
 		return -1;
 	}
