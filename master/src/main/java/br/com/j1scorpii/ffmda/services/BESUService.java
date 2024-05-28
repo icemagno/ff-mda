@@ -124,7 +124,7 @@ public class BESUService implements IFireFlyComponent, IObservable  {
 		return rt.exchange(requestEntity, String.class ).getBody();		
 	}
 
-	public String getBlockchainData() {
+	public String getBlockchainData( ) {
 		// blockchainData is global because this is a kind of asynchronous call.
 		// The frontend will request the data and will not wait for all calls to the BESU node to finish.
 		// So I'll respond ASAP with the global variable and fill it as I finish each call to the node.
@@ -153,7 +153,7 @@ public class BESUService implements IFireFlyComponent, IObservable  {
 			// Get peer enode
 			requestData.put("method", "net_enode");
 			res = new JSONObject ( this.requestData("http://besu:8545", requestData) );
-			blockchainData.put("enode", res.getJSONArray("result") );
+			blockchainData.put("enode", res.getJSONObject("result") );
 			
 			
 		} catch ( Exception e ) {  }
