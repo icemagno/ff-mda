@@ -156,7 +156,9 @@ public class BESUService implements IFireFlyComponent, IObservable  {
 			blockchainData.put("enode", res.getJSONObject("result") );
 			
 			
-		} catch ( Exception e ) {  }
+		} catch ( Exception e ) { 
+			e.printStackTrace();
+		}
 		
 		
 		return blockchainData.toString();
