@@ -1,9 +1,14 @@
+var Toast = Swal.mixin({
+	toast: true,
+	position: 'top-end',
+	showConfirmButton: false,
+	timer: 3000
+});
+
+
 function alertOk( title, body ){
-	Swal.fire({
-		position: "top-end",
-		toast: true,
+	Toast.fire({
 	  	title: title,
-	  	text: body,
 	  	icon: "success"
 	});	
 }

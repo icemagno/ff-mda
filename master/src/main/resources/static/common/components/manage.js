@@ -87,7 +87,7 @@ function processData( data ){
 
 function reconfig( what ){
 	console.log( "Reconfig " + what );
-	$.get("/v1/files/send/" + what + "/" + getAgentId(), function( data, status) {
+	$.get("/v1/agent/files/send/" + what + "/" + getAgentId(), function( data, status) {
 		console.log( data );
 		alertOk( "Done!", "Config files sent again" );
 	});	
