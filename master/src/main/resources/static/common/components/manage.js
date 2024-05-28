@@ -85,32 +85,26 @@ function processData( data ){
 	}
 }
 
-function alertOk(){
-	Swal.fire({
-	  title: "Good job!",
-	  text: "You clicked the button!",
-	  icon: "success"
-	});	
-}
-
 function reconfig( what ){
 	console.log( "Reconfig " + what );
 	$.get("/v1/files/send/" + what + "/" + getAgentId(), function( data, status) {
 		console.log( data );
+		alertOk( "Done!", "Config files sent again" );
 	});	
 }
 
 function log( what ){
 	console.log( "Log " + what );
-	alertOk();
 }
 
 function start( what ){
 	$.get("/v1/agent/deploy/" + what + "/" + getAgentId(), function( data, status) {
 		console.log( data );
+		alertOk( "Done!", "Component started (pull may be necessary)." );
 	});	
 }
 
 function stop( what ){
 	console.log( "Stop " + what );
+	alertOk( "Done!", "Component stopped." );
 }

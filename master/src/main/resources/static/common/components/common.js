@@ -1,3 +1,14 @@
+function alertOk( title, body ){
+	Swal.fire({
+		position: "top-end",
+		toast: true,
+	  	title: title,
+	  	text: body,
+	  	icon: "success"
+	});	
+}
+
+
 function setButtons( what ){
 	
 	if( what == 'play' ){
