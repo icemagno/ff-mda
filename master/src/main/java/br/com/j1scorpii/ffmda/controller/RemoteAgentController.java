@@ -40,14 +40,14 @@ public class RemoteAgentController {
     	return new ResponseEntity<String>( result , HttpStatus.OK);
     }  	
 
-    @GetMapping( value="/files/send/{agentId}", produces= MediaType.APPLICATION_JSON_VALUE )
-    public ResponseEntity<String> sendFiles( @PathVariable String agentId ) throws Exception {
-    	return new ResponseEntity<String>( this.remoteAgentService.sendFiles( agentId ) , HttpStatus.OK);
+    @GetMapping( value="/files/send/{what}/{agentId}", produces= MediaType.APPLICATION_JSON_VALUE )
+    public ResponseEntity<String> sendFiles( @PathVariable String what, @PathVariable String agentId ) throws Exception {
+    	return new ResponseEntity<String>( this.remoteAgentService.sendFiles( what, agentId ) , HttpStatus.OK);
     }  	
     
-    @GetMapping( value="/files/recreate/{agentId}", produces= MediaType.APPLICATION_JSON_VALUE )
-    public ResponseEntity<String> recreateFiles( @PathVariable String agentId ) throws Exception {
-    	return new ResponseEntity<String>( this.remoteAgentService.recreateFiles( agentId ) , HttpStatus.OK);
+    @GetMapping( value="/files/recreate/{what}/{agentId}", produces= MediaType.APPLICATION_JSON_VALUE )
+    public ResponseEntity<String> recreateFiles(  @PathVariable String what, @PathVariable String agentId ) throws Exception {
+    	return new ResponseEntity<String>( this.remoteAgentService.recreateFiles( what, agentId ) , HttpStatus.OK);
     }  	
     
 }

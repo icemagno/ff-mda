@@ -1,7 +1,5 @@
 
-// "/files/send/{agentId}"
 // "/files/recreate/{agentId}"  ( will send too )
-// "/deploy/{agentId}"  ( will send too )
 
 function getAgentId(){
 	return $("#agentId").text();
@@ -87,17 +85,27 @@ function processData( data ){
 	}
 }
 
+function alertOk(){
+	Swal.fire({
+	  title: "Good job!",
+	  text: "You clicked the button!",
+	  icon: "success"
+	});	
+}
+
 function reconfig( what ){
-	console.log( "Log " + what );
+	console.log( "Reconfig " + what );
+	$.get("/v1/files/send/" + what + "/" + getAgentId(), function( data, status) {
+		console.log( data );
+	});	
 }
 
 function log( what ){
 	console.log( "Log " + what );
+	alertOk();
 }
 
 function start( what ){
-	console.log( "Start " + what );
-	
 	$.get("/v1/agent/deploy/" + what + "/" + getAgentId(), function( data, status) {
 		console.log( data );
 	});	

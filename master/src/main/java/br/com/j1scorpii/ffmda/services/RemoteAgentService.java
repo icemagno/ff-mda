@@ -144,11 +144,11 @@ public class RemoteAgentService {
 
 	// Called by the front to recreate agent files...
 	// We'll need to send all again to the agent's host
-	public String recreateFiles( String agentId ) {
+	public String recreateFiles( String what, String agentId ) {
 		RemoteAgent ag = getAgentById(agentId);
 		if( ag == null  ) return "NO_AGENT_FOUND";
 		configureFiles( ag );
-		sendFiles( agentId );
+		sendFiles( what, agentId );
 		return "OK";
 	}
 	
@@ -329,7 +329,7 @@ public class RemoteAgentService {
 		JSONObject besuData = localAgentConfig.getJSONObject("stackStatus").getJSONObject("besu");
 		
 		// Send all files to agent
-		sendFiles( agentId );
+		sendFiles( "besu", agentId );
 
 		this.sendToAgent( ag.getId(), new JSONObject()
 			.put("protocol", FFMDAProtocol.DEPLOY_BESU.toString() )
@@ -361,7 +361,7 @@ public class RemoteAgentService {
 	}
 
 	// Send config files to an agent
-	public String sendFiles( String agentId ) {
+	public String sendFiles( String what, String agentId ) {
 		String agentFolder = this.agentFilesFolder + "/" + agentId;
 
 		File dxAgentFolder = new File( agentFolder + "/dx" );
