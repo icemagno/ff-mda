@@ -26,6 +26,7 @@ import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
 import br.com.j1scorpii.ffmda.agent.RemoteAgent;
+import br.com.j1scorpii.ffmda.enums.AgentKind;
 import br.com.j1scorpii.ffmda.util.FFMDAProtocol;
 import jakarta.annotation.PostConstruct;
 
@@ -288,8 +289,39 @@ public class RemoteAgentService {
 		}
 	}
 	
+	public String deployStart( String what, String agentId ) {
+		AgentKind agentKind = AgentKind.valueOf(what);
+		switch( agentKind ) {
+		case besu: 
+			return deployBesuNode( agentId );
+		case core:
+			return deployCoreNode( agentId );
+		case dx:
+			break;
+		case evm:
+			break;
+		case ipfs:
+			break;
+		case psql:
+			break;
+		case sandbox:
+			break;
+		case signer:
+			break;
+		case tokens:
+			break;
+		}
+		logger.error("Unknown agent " + what );
+		return null;
+	}
+	
+	private String deployCoreNode( String agentId ) {
+		return "";
+	}
+	
+	
 	// Command an agent to deploy a besu node there
-	public String deployBesuNode( String agentId ) {
+	private String deployBesuNode( String agentId ) {
 		RemoteAgent ag = getAgentById(agentId);
 		if( ag == null ) return "NO_AGENT_FOUND";
 		
@@ -314,7 +346,7 @@ public class RemoteAgentService {
 		}); 
 	}
 
-	// Send agent data to all agents
+	// Send agent data to all other agents
 	public void broadcast( JSONObject payload ) {
 		this.agents.forEach( ( agent ) -> {
 			// Do not send to myself
@@ -339,6 +371,13 @@ public class RemoteAgentService {
 		if( ag == null ) return "NO_AGENT_CONNECTED";
 		
 		System.out.println( "Besu Files: " );
+		
+		JSONObject thisNodeBlockChainData = new JSONObject( besuService.getBlockchainData() );
+		System.out.println( thisNodeBlockChainData );
+		
+	    // "enode://f6f0628abeced644e5549cc4fe8463202058271eef3b4ea0f4ddec898ea369744940eac0503e7f3f8f652919eef8dd5d94786370832c4ed295e21016a1f9f268@node-01:30303",
+
+		
 		File[] besuFiles = besuAgentFolder.listFiles();
 		if( besuFiles != null) {
 			for (int i = 0; i < besuFiles.length; i++) {

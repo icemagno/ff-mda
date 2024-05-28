@@ -24,9 +24,9 @@ public class RemoteAgentController {
     	return new ResponseEntity<String>( this.remoteAgentService.getAgents().toString() , HttpStatus.OK);
     }  	
 
-    @GetMapping( value="/deploy/{agentId}", produces= MediaType.APPLICATION_JSON_VALUE )
-    public ResponseEntity<String> deploy( @PathVariable String agentId ) throws Exception {
-    	return new ResponseEntity<String>( this.remoteAgentService.deployBesuNode( agentId ) , HttpStatus.OK);
+    @GetMapping( value="/deploy/{what}/{agentId}", produces= MediaType.APPLICATION_JSON_VALUE )
+    public ResponseEntity<String> deploy( @PathVariable String what, @PathVariable String agentId ) throws Exception {
+    	return new ResponseEntity<String>( this.remoteAgentService.deployStart( what, agentId ) , HttpStatus.OK);
     }  	
     
     @GetMapping( value="/delete/{agentId}", produces= MediaType.APPLICATION_JSON_VALUE )

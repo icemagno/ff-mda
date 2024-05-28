@@ -3,6 +3,10 @@
 // "/files/recreate/{agentId}"  ( will send too )
 // "/deploy/{agentId}"  ( will send too )
 
+function getAgentId(){
+	return $("#agentId").text();
+}
+
 $( document ).ready(function() {
 
 	setButtonState( 'absent', "#stateBesu" );
@@ -24,7 +28,7 @@ $( document ).ready(function() {
         "withCredentials": 'false',
 	};
 	
-	var agentId = $("#agentId").text();
+	var agentId = getAgentId();
 	
 	stompClient.connect( thisheaders , (frame) => {
 		console.log('WebSocket Conected.');  
@@ -93,7 +97,10 @@ function log( what ){
 
 function start( what ){
 	console.log( "Start " + what );
-	// /v1/agent/deploy
+	
+	$.get("/v1/agent/deploy/" + what + "/" + getAgentId(), function( data, status) {
+		console.log( data );
+	});	
 }
 
 function stop( what ){
