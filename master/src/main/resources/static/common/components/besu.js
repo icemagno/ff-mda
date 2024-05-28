@@ -101,6 +101,7 @@ function updateBlockchainData(){
 	$.get("/v1/besu/blockchain", function(data, status) {
 		console.log( data )
 		if( data.blockNumber ) {
+			$("#enodeAddress").text( data.enode );
 			$("#blockchainData").html(
 				'<table style="width:100%">' + 
 				'<tr><td>Block Number</td><td>'+data.blockNumber+'</td></tr>' +
