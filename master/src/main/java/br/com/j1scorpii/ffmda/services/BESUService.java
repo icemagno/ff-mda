@@ -153,10 +153,14 @@ public class BESUService implements IFireFlyComponent, IObservable  {
 			// Get peer enode
 			requestData.put("method", "net_enode");
 			res = new JSONObject ( this.requestData("http://besu:8545", requestData) );
+			String enode = res.getString("result");
 			
-			System.out.println( res.toString(5) );
+			JSONObject localAgentConfig = localService.getMainConfig();
+			System.out.println( localAgentConfig.toString(5) );
 			
-			blockchainData.put("enode", res.getString("result") );
+			System.out.println( enode );
+			
+			blockchainData.put("enode", enode );
 			
 		} catch ( Exception e ) {
 			//
