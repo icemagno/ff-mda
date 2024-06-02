@@ -7,6 +7,7 @@ import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Paths;
+import java.nio.file.StandardOpenOption;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
@@ -277,9 +278,6 @@ public class RemoteAgentService {
 				agent.setHostName( payload.getString("hostName") );
 				agent.setBesuData( payload.getJSONObject("besu") );
 				
-				logger.info("DON'T FORGET TO RECEIVE THE BESU ENODE FROM AGENT ");
-				// System.out.println( payload.toString(5) );
-				
 				// Duh
 				saveConfig();
 
@@ -383,19 +381,26 @@ public class RemoteAgentService {
 			return makeResult("Can't connect to the local BESU node to take ENODE address. Is it running?", ResultType.ERROR );
 		}
 		
-		System.out.println( thisNodeBlockChainData.getString("enode") );
-		
-	    // "enode://f6f0628abeced644e5549cc4fe8463202058271eef3b4ea0f4ddec898ea369744940eac0503e7f3f8f652919eef8dd5d94786370832c4ed295e21016a1f9f268@node-01:30303",
+		// Prepare the Bootnodes option to append to the remote agent BESU config.toml file
+		String localEnode = thisNodeBlockChainData.getString("enode");
+		String bootNodeOption = "bootnodes=[\"" + localEnode + "\"]";
 
-		
 		System.out.println( "Besu Files: " );
 		File[] besuFiles = besuAgentFolder.listFiles();
 		if( besuFiles != null) {
 			for (int i = 0; i < besuFiles.length; i++) {
 				if ( besuFiles[i].isFile() ) {
-					// fileSender.sendFile( "besu", ag, besuFiles[i].getAbsolutePath() );
-					System.out.println( " > " + besuFiles[i].getAbsolutePath() );
-					System.out.println( "   > " + besuFiles[i].getName() );
+					String fileName = besuFiles[i].getName();
+					if( fileName.equals("config.toml") ) {
+						// Append this local BESU enode to the remote BESU startup config
+						// as the Bootnode
+						try {
+						    Files.write( Paths.get( besuFiles[i].getAbsolutePath() ), bootNodeOption.getBytes(), StandardOpenOption.APPEND );
+						} catch (IOException e) {
+							e.printStackTrace();
+						}						
+					}
+					fileSender.sendFile( "besu", ag, fileName );
 				}
 			}
 		}
