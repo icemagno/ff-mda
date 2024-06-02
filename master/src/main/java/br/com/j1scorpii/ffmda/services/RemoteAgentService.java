@@ -385,7 +385,7 @@ public class RemoteAgentService {
 			
 			// Prepare the Bootnodes option to append to the remote agent BESU config.toml file
 			String localEnode = thisNodeBlockChainData.getString("enode");
-			String bootNodeOption = System.lineSeparator() + "bootnodes=[\"" + localEnode + "\"]";
+			String bootNodeOption = "bootnodes=[\"" + localEnode + "\"]";
 
 			// Send BESU configuration
 			File[] besuFiles = besuAgentFolder.listFiles();
