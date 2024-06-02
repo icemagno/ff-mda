@@ -27,6 +27,7 @@ import org.springframework.stereotype.Service;
 
 import br.com.j1scorpii.ffmda.agent.RemoteAgent;
 import br.com.j1scorpii.ffmda.enums.AgentKind;
+import br.com.j1scorpii.ffmda.enums.ResultType;
 import br.com.j1scorpii.ffmda.util.FFMDAProtocol;
 import jakarta.annotation.PostConstruct;
 
@@ -360,8 +361,11 @@ public class RemoteAgentService {
 		sendToAgent( remoteAgent.getId(), new JSONObject().put("protocol", FFMDAProtocol.QUERY_DATA.toString() ) );
 	}
 	
-	private String makeResult( String text ) {
-		return new JSONObject().put("result", text).toString();
+	private String makeResult( String text, ResultType type ) {
+		return new JSONObject()
+				.put("result", text)
+				.put("type", type.toString() )
+				.toString();
 	}
 
 	// Send config files to an agent
@@ -371,12 +375,12 @@ public class RemoteAgentService {
 		File besuAgentFolder = new File( agentFolder + "/besu" );
 		
 		RemoteAgent ag = getAgentById(agentId);
-		if( ag == null ) return makeResult("No Agent Connected");
+		if( ag == null ) return makeResult("No Agent Connected", ResultType.ERROR );
 		
 		JSONObject thisNodeBlockChainData = new JSONObject( besuService.getBlockchainData() );
 
 		if( ! thisNodeBlockChainData.has("enode")  ) {
-			return makeResult("Can't connect to the local BESU node to take ENODE address. Is it running?");
+			return makeResult("Can't connect to the local BESU node to take ENODE address. Is it running?", ResultType.ERROR );
 		}
 		
 		System.out.println( thisNodeBlockChainData.getString("enode") );

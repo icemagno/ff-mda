@@ -89,22 +89,27 @@ function reconfig( what ){
 	console.log( "Reconfig " + what );
 	$.get("/v1/agent/files/send/" + what + "/" + getAgentId(), function( data, status) {
 		console.log( data );
-		alertOk( "Done!", "Config files sent again" );
+		if( data.type == 'ERROR'){
+			alertToast( "Error", data.result, 'error');
+		} else {
+			alertToast( "Done!", "Config files sent again" );	
+		}
+		
 	});	
 }
 
 function log( what ){
-	alertOk( what, "Config files sent again" );
+	alertToast( what, "Config files sent again" );
 }
 
 function start( what ){
 	$.get("/v1/agent/deploy/" + what + "/" + getAgentId(), function( data, status) {
 		console.log( data );
-		alertOk( "Done!", "Component started (pull may be necessary)." );
+		alertToast( "Done!", "Component started (pull may be necessary)." );
 	});	
 }
 
 function stop( what ){
 	console.log( "Stop " + what );
-	alertOk( "Done!", "Component stopped." );
+	alertToast( "Done!", "Component stopped." );
 }
