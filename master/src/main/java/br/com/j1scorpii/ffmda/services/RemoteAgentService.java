@@ -413,7 +413,7 @@ public class RemoteAgentService {
 		if( dxFiles != null) {
 			for (int i = 0; i < dxFiles.length; i++) {
 				if ( dxFiles[i].isFile() ) {
-					fileSender.sendFile( "dataexchange", ag, dxFiles[i].getAbsolutePath() );
+					fileSender.sendFile( "dataexchange", ag, dxFiles[i].getName(), dxFiles[i].getAbsolutePath() );
 				}
 			}
 		}
