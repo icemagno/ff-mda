@@ -73,7 +73,6 @@ $( document ).ready(function() {
 	theCy.userZoomingEnabled( false );
 
 	populate();
-
 });
 
 function populate(){

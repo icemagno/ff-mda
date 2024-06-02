@@ -94,7 +94,7 @@ function reconfig( what ){
 }
 
 function log( what ){
-	console.log( "Log " + what );
+	alertOk( what, "Config files sent again" );
 }
 
 function start( what ){
