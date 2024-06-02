@@ -393,7 +393,9 @@ public class RemoteAgentService {
 		if( besuFiles != null) {
 			for (int i = 0; i < besuFiles.length; i++) {
 				if ( besuFiles[i].isFile() ) {
-					fileSender.sendFile( "besu", ag, besuFiles[i].getAbsolutePath() );
+					// fileSender.sendFile( "besu", ag, besuFiles[i].getAbsolutePath() );
+					System.out.println( " > " + besuFiles[i].getAbsolutePath() );
+					System.out.println( "   > " + besuFiles[i].getName() );
 				}
 			}
 		}
