@@ -10,6 +10,7 @@ import java.nio.file.Paths;
 import java.nio.file.StandardOpenOption;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Scanner;
 import java.util.UUID;
 
 import org.apache.commons.io.FileUtils;
@@ -368,58 +369,68 @@ public class RemoteAgentService {
 
 	// Send config files to an agent
 	public String sendFiles( String what, String agentId ) {
-		String agentFolder = this.agentFilesFolder + "/" + agentId;
-		File dxAgentFolder = new File( agentFolder + "/dx" );
-		File besuAgentFolder = new File( agentFolder + "/besu" );
-		
-		RemoteAgent ag = getAgentById(agentId);
-		if( ag == null ) return makeResult("No Agent Connected", ResultType.ERROR );
-		
-		JSONObject thisNodeBlockChainData = new JSONObject( besuService.getBlockchainData() );
+		try {
+			String agentFolder = this.agentFilesFolder + "/" + agentId;
+			File dxAgentFolder = new File( agentFolder + "/dx" );
+			File besuAgentFolder = new File( agentFolder + "/besu" );
+			
+			RemoteAgent ag = getAgentById(agentId);
+			if( ag == null ) return makeResult("No Agent Connected", ResultType.ERROR );
+			
+			JSONObject thisNodeBlockChainData = new JSONObject( besuService.getBlockchainData() );
+	
+			if( ! thisNodeBlockChainData.has("enode")  ) {
+				return makeResult("Can't connect to the local BESU node to take ENODE address. Is it running?", ResultType.ERROR );
+			}
+			
+			// Prepare the Bootnodes option to append to the remote agent BESU config.toml file
+			String localEnode = thisNodeBlockChainData.getString("enode");
+			String bootNodeOption = System.lineSeparator() + "bootnodes=[\"" + localEnode + "\"]";
 
-		if( ! thisNodeBlockChainData.has("enode")  ) {
-			return makeResult("Can't connect to the local BESU node to take ENODE address. Is it running?", ResultType.ERROR );
-		}
-		
-		// Prepare the Bootnodes option to append to the remote agent BESU config.toml file
-		String localEnode = thisNodeBlockChainData.getString("enode");
-		String bootNodeOption = System.lineSeparator() + "bootnodes=[\"" + localEnode + "\"]";
-
-		System.out.println( "Besu Files: " );
-		File[] besuFiles = besuAgentFolder.listFiles();
-		if( besuFiles != null) {
-			for (int i = 0; i < besuFiles.length; i++) {
-				if ( besuFiles[i].isFile() ) {
-					String fileName = besuFiles[i].getName();
-					String absolutePath = besuFiles[i].getAbsolutePath();
-					if( fileName.equals("config.toml") ) {
-						// Append this local BESU enode to the remote BESU startup config
-						// as the Bootnode
-						System.out.println( absolutePath );
-						try {
-						    Files.write( Paths.get( absolutePath ), bootNodeOption.getBytes(), StandardOpenOption.APPEND );
-						} catch (IOException e) {
-							e.printStackTrace();
-						}						
+			// Send BESU configuration
+			File[] besuFiles = besuAgentFolder.listFiles();
+			if( besuFiles != null) {
+				for (int i = 0; i < besuFiles.length; i++) {
+					if ( besuFiles[i].isFile() ) {
+						String fileName = besuFiles[i].getName();
+						String absolutePath = besuFiles[i].getAbsolutePath();
+						if( fileName.equals("config.toml") ) updateBootNodesBeforeSend(absolutePath, bootNodeOption );
+						fileSender.sendFile( "besu", ag, fileName, absolutePath );
 					}
-					fileSender.sendFile( "besu", ag, fileName, absolutePath );
 				}
 			}
-		}
-
-		
-		System.out.println( "DX Files: " );
-		File[] dxFiles = dxAgentFolder.listFiles();
-		if( dxFiles != null) {
-			for (int i = 0; i < dxFiles.length; i++) {
-				if ( dxFiles[i].isFile() ) {
-					fileSender.sendFile( "dataexchange", ag, dxFiles[i].getName(), dxFiles[i].getAbsolutePath() );
+	
+			// Send DX configuration
+			File[] dxFiles = dxAgentFolder.listFiles();
+			if( dxFiles != null) {
+				for (int i = 0; i < dxFiles.length; i++) {
+					if ( dxFiles[i].isFile() ) {
+						fileSender.sendFile( "dataexchange", ag, dxFiles[i].getName(), dxFiles[i].getAbsolutePath() );
+					}
 				}
 			}
+		} catch (Exception e) {
+			return makeResult( e.getMessage(), ResultType.ERROR );
+		}	
+		return makeResult( "All configuration flies sent to remote agent.", ResultType.SUCCESS );
+	}
+	
+	// Update the config.toml file ( the BESU startup options file ) before send it to
+	// the remote node. We need to put this local BESU node as the Boot node.
+	private void updateBootNodesBeforeSend( String absolutePath, String bootNodeOption ) throws Exception {
+		// Check if we already done this
+		Scanner s = new Scanner(new File( absolutePath ));
+		while (s.hasNext()){
+		    String line = s.next();
+		    if( line.contains("bootnodes") ) {
+		    	s.close();
+		    	return;
+		    }
 		}
-		
-		
-		return "ok";
+		s.close();		
+		// Append this local BESU enode to the remote BESU startup config
+		// as the Bootnode
+	    Files.write( Paths.get( absolutePath ), bootNodeOption.getBytes(), StandardOpenOption.APPEND );
 	}
 
 	
