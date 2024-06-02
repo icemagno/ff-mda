@@ -370,14 +370,14 @@ public class RemoteAgentService {
 		RemoteAgent ag = getAgentById(agentId);
 		if( ag == null ) return "NO_AGENT_CONNECTED";
 		
-		System.out.println( "Besu Files: " );
-		
 		JSONObject thisNodeBlockChainData = new JSONObject( besuService.getBlockchainData() );
+		System.out.println( thisNodeBlockChainData.toString(5) );
 		System.out.println( thisNodeBlockChainData.getString("enode") );
 		
 	    // "enode://f6f0628abeced644e5549cc4fe8463202058271eef3b4ea0f4ddec898ea369744940eac0503e7f3f8f652919eef8dd5d94786370832c4ed295e21016a1f9f268@node-01:30303",
 
 		
+		System.out.println( "Besu Files: " );
 		File[] besuFiles = besuAgentFolder.listFiles();
 		if( besuFiles != null) {
 			for (int i = 0; i < besuFiles.length; i++) {

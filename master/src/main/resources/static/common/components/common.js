@@ -8,9 +8,10 @@ var Toast = Swal.mixin({
 
 console.log( Toast );
 
-function alertOk( title, body ){
+function alertOk( title, text ){
 	Toast.fire({
 	  	title: title,
+	  	text: text,
 	  	icon: "success"
 	});	
 }
