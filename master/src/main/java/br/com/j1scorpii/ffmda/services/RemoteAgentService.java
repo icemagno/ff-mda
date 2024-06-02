@@ -277,7 +277,7 @@ public class RemoteAgentService {
 				agent.setBesuData( payload.getJSONObject("besu") );
 				
 				logger.info("DON'T FORGET TO RECEIVE THE BESU ENODE FROM AGENT ");
-				// besuService.
+				System.out.println( payload.toString(5) );
 				
 				// Duh
 				saveConfig();
