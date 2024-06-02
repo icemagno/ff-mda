@@ -383,7 +383,7 @@ public class RemoteAgentService {
 		
 		// Prepare the Bootnodes option to append to the remote agent BESU config.toml file
 		String localEnode = thisNodeBlockChainData.getString("enode");
-		String bootNodeOption = "bootnodes=[\"" + localEnode + "\"]";
+		String bootNodeOption = System.lineSeparator() + "bootnodes=[\"" + localEnode + "\"]";
 
 		System.out.println( "Besu Files: " );
 		File[] besuFiles = besuAgentFolder.listFiles();
@@ -394,6 +394,7 @@ public class RemoteAgentService {
 					if( fileName.equals("config.toml") ) {
 						// Append this local BESU enode to the remote BESU startup config
 						// as the Bootnode
+						System.out.println( besuFiles[i].getAbsolutePath() );
 						try {
 						    Files.write( Paths.get( besuFiles[i].getAbsolutePath() ), bootNodeOption.getBytes(), StandardOpenOption.APPEND );
 						} catch (IOException e) {
