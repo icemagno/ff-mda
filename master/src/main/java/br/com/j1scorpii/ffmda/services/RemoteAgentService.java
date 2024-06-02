@@ -391,17 +391,18 @@ public class RemoteAgentService {
 			for (int i = 0; i < besuFiles.length; i++) {
 				if ( besuFiles[i].isFile() ) {
 					String fileName = besuFiles[i].getName();
+					String absolutePath = besuFiles[i].getAbsolutePath();
 					if( fileName.equals("config.toml") ) {
 						// Append this local BESU enode to the remote BESU startup config
 						// as the Bootnode
-						System.out.println( besuFiles[i].getAbsolutePath() );
+						System.out.println( absolutePath );
 						try {
-						    Files.write( Paths.get( besuFiles[i].getAbsolutePath() ), bootNodeOption.getBytes(), StandardOpenOption.APPEND );
+						    Files.write( Paths.get( absolutePath ), bootNodeOption.getBytes(), StandardOpenOption.APPEND );
 						} catch (IOException e) {
 							e.printStackTrace();
 						}						
 					}
-					fileSender.sendFile( "besu", ag, fileName );
+					fileSender.sendFile( "besu", ag, fileName, absolutePath );
 				}
 			}
 		}
