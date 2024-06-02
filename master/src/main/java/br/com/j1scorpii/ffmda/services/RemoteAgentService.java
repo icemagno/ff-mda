@@ -277,7 +277,7 @@ public class RemoteAgentService {
 				agent.setBesuData( payload.getJSONObject("besu") );
 				
 				logger.info("DON'T FORGET TO RECEIVE THE BESU ENODE FROM AGENT ");
-				System.out.println( payload.toString(5) );
+				// System.out.println( payload.toString(5) );
 				
 				// Duh
 				saveConfig();
@@ -359,19 +359,26 @@ public class RemoteAgentService {
 	public void afterConnected(RemoteAgent remoteAgent, StompSession session, StompHeaders connectedHeaders) {
 		sendToAgent( remoteAgent.getId(), new JSONObject().put("protocol", FFMDAProtocol.QUERY_DATA.toString() ) );
 	}
+	
+	private String makeResult( String text ) {
+		return new JSONObject().put("result", text).toString();
+	}
 
 	// Send config files to an agent
 	public String sendFiles( String what, String agentId ) {
 		String agentFolder = this.agentFilesFolder + "/" + agentId;
-
 		File dxAgentFolder = new File( agentFolder + "/dx" );
 		File besuAgentFolder = new File( agentFolder + "/besu" );
 		
 		RemoteAgent ag = getAgentById(agentId);
-		if( ag == null ) return "NO_AGENT_CONNECTED";
+		if( ag == null ) return makeResult("No Agent Connected");
 		
 		JSONObject thisNodeBlockChainData = new JSONObject( besuService.getBlockchainData() );
-		System.out.println( thisNodeBlockChainData.toString(5) );
+
+		if( ! thisNodeBlockChainData.has("enode")  ) {
+			return makeResult("Can't connect to the local BESU node to take ENODE address. Is it running?");
+		}
+		
 		System.out.println( thisNodeBlockChainData.getString("enode") );
 		
 	    // "enode://f6f0628abeced644e5549cc4fe8463202058271eef3b4ea0f4ddec898ea369744940eac0503e7f3f8f652919eef8dd5d94786370832c4ed295e21016a1f9f268@node-01:30303",
