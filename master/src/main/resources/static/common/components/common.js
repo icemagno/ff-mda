@@ -6,8 +6,6 @@ var Toast = Swal.mixin({
 });
 
 
-console.log( Toast );
-
 function alertToast( title, text, icon = 'success' ){
 	Toast.fire({
 	  	title: title,

@@ -29,8 +29,8 @@ import org.springframework.stereotype.Service;
 
 import br.com.j1scorpii.ffmda.agent.RemoteAgent;
 import br.com.j1scorpii.ffmda.enums.AgentKind;
+import br.com.j1scorpii.ffmda.enums.FFMDAProtocol;
 import br.com.j1scorpii.ffmda.enums.ResultType;
-import br.com.j1scorpii.ffmda.util.FFMDAProtocol;
 import jakarta.annotation.PostConstruct;
 
 @Service
@@ -132,7 +132,10 @@ public class RemoteAgentService {
 			if( listOfFiles != null) {
 				for (int i = 0; i < listOfFiles.length; i++) {
 					if ( listOfFiles[i].isFile() ) {
-						FileUtils.copyFileToDirectory( listOfFiles[i], besuFolderF );				  
+						// do not copy DATABASE_METADATA.json from local node
+						if( ! listOfFiles[i].getName().equals("DATABASE_METADATA.json") ) {
+							FileUtils.copyFileToDirectory( listOfFiles[i], besuFolderF );	
+						}
 					}
 				}
 			}

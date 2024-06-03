@@ -65,10 +65,7 @@ public class BESUService  {
 		return generalConfig;
 	}
 	
-	public JSONObject deploy( String imageName, CommService commService, String callbackChannel ) {
-		// Check if we already have all files needed by the BESU
-		// to start...
-		// if( no files here) commandError() ... 
+	public JSONObject deploy( String imageName, String callbackChannel ) {
 		System.out.println("Must deploy a BESU node.... " + imageName );
 		imageManager.addToManifest( "besu", imageName );
 		return startContainer( callbackChannel );

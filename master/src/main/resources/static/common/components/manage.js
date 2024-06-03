@@ -1,6 +1,8 @@
 
 // "/files/recreate/{agentId}"  ( will send too )
 
+let lastPullMessage = "";
+
 function getAgentId(){
 	return $("#agentId").text();
 }
@@ -39,6 +41,23 @@ $( document ).ready(function() {
 		stompClient.subscribe('/agent/log/' + agentId, (message) => {
 			let payload = JSON.parse( message.body );
 			console.log( payload );
+
+			if( payload.protocol == 'LOG' ){
+				//
+			}
+			
+			if( payload.protocol == 'DOCKERLOG' ){
+				let status = payload.status;
+				if( payload.progress ) updateFixedLog(payload.progress);
+				if( status ) log( status );
+				if( payload.errorIndicated == true ) log('Finish with ERROR.' );
+				if( payload.pullSuccessIndicated == true ) {
+					log( 'Finish with SUCCESS.' );
+					updateFixedLog("");
+					lastPullMessage = "";
+				}			
+			}
+			
 		});
 		
 		stompClient.subscribe('/shell/' + agentId + "/dataexchange", (message) => {

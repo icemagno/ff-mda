@@ -37,7 +37,7 @@ import com.github.dockerjava.transport.DockerHttpClient.Request.Builder;
 import com.github.dockerjava.transport.DockerHttpClient.Request.Method;
 import com.github.dockerjava.transport.DockerHttpClient.Response;
 
-import br.com.j1scorpii.ffmda.util.FFMDAProtocol;
+import br.com.j1scorpii.ffmda.enums.FFMDAProtocol;
 import jakarta.annotation.PostConstruct;
 
 @Service
@@ -118,7 +118,7 @@ public class DockerService {
 	}
 	
 	private void send( String channel, JSONObject payload ) {
-		payload.put("protocol", FFMDAProtocol.LOG );
+		payload.put("protocol", FFMDAProtocol.DOCKERLOG );
 		messagingTemplate.convertAndSend( channel, payload.toString() );
 	}
 

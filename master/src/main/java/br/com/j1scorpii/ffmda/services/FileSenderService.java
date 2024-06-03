@@ -10,7 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import br.com.j1scorpii.ffmda.agent.RemoteAgent;
-import br.com.j1scorpii.ffmda.util.FFMDAProtocol;
+import br.com.j1scorpii.ffmda.enums.FFMDAProtocol;
 
 @Service
 public class FileSenderService {

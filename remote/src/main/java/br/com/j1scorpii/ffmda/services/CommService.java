@@ -15,7 +15,7 @@ import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.stereotype.Service;
 
-import br.com.j1scorpii.ffmda.util.FFMDAProtocol;
+import br.com.j1scorpii.ffmda.enums.FFMDAProtocol;
 import jakarta.annotation.PostConstruct;
 
 @Service
@@ -127,7 +127,7 @@ public class CommService {
 			commandError(payload, "No BESU image name was given");
 			return;
 		}
-		JSONObject result = besuService.deploy( payload.getString("imageName"), this, commChannel );
+		JSONObject result = besuService.deploy( payload.getString("imageName"), commChannel );
 		sendResult( payload, result );
 	}
 
