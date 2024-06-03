@@ -20,6 +20,6 @@ rpc-http-host="0.0.0.0"
 Xp2p-peer-lower-bound=2
 network-id=8658
 sync-mode="FULL"
-discovery-enabled=false
+discovery-enabled=true
 data-storage-format='FOREST'
 pruning-enabled=false
