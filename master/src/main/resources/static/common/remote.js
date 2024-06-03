@@ -72,7 +72,7 @@ function processAgent( agent ){
 		// Its a new agent.. add the card
 		$("#agentContainer").append( getAgentCard(agent) );
 		// Hide the "Manage" button since we don't know its status yet
-		$("#lk_" + agent.id).hide();
+		if( agent.status == 'CONNECTED') $("#lk_" + agent.id).show(); else $("#lk_" + agent.id).hide(); 
 	}
 }
 

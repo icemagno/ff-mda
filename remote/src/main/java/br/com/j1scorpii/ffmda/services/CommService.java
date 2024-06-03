@@ -95,7 +95,7 @@ public class CommService {
 				String componentName = filePayload.getString("component");
 				String targetFolder = null;
 				
-				if( componentName.equals("besu") ) targetFolder = besuService.getDataFolder();
+				if( componentName.equals("besu") ) targetFolder = besuService.getComponentDataFolder();
 				if( componentName.equals("dataexchange") ) targetFolder = dataExchangeService.getComponentDataFolder();
 				if( componentName.equals("ipfs") ) targetFolder = ipfsService.getComponentDataFolder();
 				
@@ -103,9 +103,12 @@ public class CommService {
 					commandError( payload, "Unknown component name: '" + componentName + "'" );
 					return;
 				}				
-					
+				
+				logger.info("received file " + fileName + " for component '" + componentName + "'");
+				logger.info("  > " + targetFolder + "/" + fileName );
+				
 				new File( targetFolder ).mkdirs();
-				BufferedWriter writer = new BufferedWriter( new FileWriter( targetFolder = "/" + fileName ) );
+				BufferedWriter writer = new BufferedWriter( new FileWriter( targetFolder + "/" + fileName ) );
 				writer.write( fileContent );
 				writer.close();
 				

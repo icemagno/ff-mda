@@ -47,7 +47,13 @@ public class BESUService  {
 		this.getConfig();
 	}
 	
-	public String getDataFolder() {
+	// "getComponentDataFolder" returns actually the componentDataFolder + "/data"
+	// because BESU have a different structure to its data folder when other components have
+	// its files inside the componentDataFolder itself ( component's root folder ).
+	// BESU have /plugins and /data structure under its root folder.
+	// I'll keep this name instead getDataFolder() (the correct attribute name) 
+	// to look more "standardized" with all others
+	public String getComponentDataFolder() {
 		return dataFolder;
 	}
 	
