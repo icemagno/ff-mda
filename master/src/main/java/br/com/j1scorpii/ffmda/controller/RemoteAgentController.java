@@ -42,7 +42,7 @@ public class RemoteAgentController {
 
     @GetMapping( value="/files/send/{what}/{agentId}", produces= MediaType.APPLICATION_JSON_VALUE )
     public ResponseEntity<String> sendFiles( @PathVariable String what, @PathVariable String agentId ) throws Exception {
-    	return new ResponseEntity<String>( this.remoteAgentService.sendFiles( what, agentId ) , HttpStatus.OK);
+    	return new ResponseEntity<String>( this.remoteAgentService.sendFilesToAgent( what, agentId ) , HttpStatus.OK);
     }  	
     
     @GetMapping( value="/files/recreate/{what}/{agentId}", produces= MediaType.APPLICATION_JSON_VALUE )

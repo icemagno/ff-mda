@@ -151,7 +151,7 @@ public class RemoteAgentService {
 		RemoteAgent ag = getAgentById(agentId);
 		if( ag == null  ) return "NO_AGENT_FOUND";
 		configureFiles( ag );
-		sendFiles( what, agentId );
+		sendFilesToAgent( what, agentId );
 		return "OK";
 	}
 	
@@ -329,7 +329,7 @@ public class RemoteAgentService {
 		JSONObject besuData = localAgentConfig.getJSONObject("stackStatus").getJSONObject("besu");
 		
 		// Send all files to agent
-		sendFiles( "besu", agentId );
+		sendFilesToAgent( "besu", agentId );
 
 		this.sendToAgent( ag.getId(), new JSONObject()
 			.put("protocol", FFMDAProtocol.DEPLOY_BESU.toString() )
@@ -356,69 +356,83 @@ public class RemoteAgentService {
 
 	// Triggered right after an agent is connected.
 	// Let's ask it for its information ( containers and images info, host name, FF node name and FF org name ) 
-	public void afterConnected(RemoteAgent remoteAgent, StompSession session, StompHeaders connectedHeaders) {
+	public void afterAgentIsConnected(RemoteAgent remoteAgent, StompSession session, StompHeaders connectedHeaders) {
 		sendToAgent( remoteAgent.getId(), new JSONObject().put("protocol", FFMDAProtocol.QUERY_DATA.toString() ) );
 	}
 	
-	private String makeResult( String text, ResultType type ) {
+	// Format a JSON result to send to front end in response to a command
+	private String makeResultToFront( String text, ResultType type ) {
 		return new JSONObject()
 				.put("result", text)
 				.put("type", type.toString() )
 				.toString();
 	}
 
-	// Send config files to an agent
-	public String sendFiles( String what, String agentId ) {
+	// Send configuration files to an agent.
+	// It will be a copy of my own files into the 'agentFilesFolder'
+	// for each agent registered. I will modify and send these files
+	// to configure the Agent's components (mostly BESU, IPFS and DX)
+	public String sendFilesToAgent( String what, String agentId ) {
 		try {
 			String agentFolder = this.agentFilesFolder + "/" + agentId;
 			File dxAgentFolder = new File( agentFolder + "/dx" );
 			File besuAgentFolder = new File( agentFolder + "/besu" );
+			File ipfsAgentFolder = new File( agentFolder + "/ipfs" );
 			
 			RemoteAgent ag = getAgentById(agentId);
-			if( ag == null ) return makeResult("No Agent Connected", ResultType.ERROR );
+			if( ag == null ) return makeResultToFront("No Agent Connected", ResultType.ERROR );
 			
 			JSONObject thisNodeBlockChainData = new JSONObject( besuService.getBlockchainData() );
 	
 			if( ! thisNodeBlockChainData.has("enode")  ) {
-				return makeResult("Can't connect to the local BESU node to take ENODE address. Is it running?", ResultType.ERROR );
+				return makeResultToFront("Can't connect to the local BESU node to take ENODE address. Is it running?", ResultType.ERROR );
 			}
 			
 			// Prepare the Bootnodes option to append to the remote agent BESU config.toml file
 			String localEnode = thisNodeBlockChainData.getString("enode");
 			String bootNodeOption = "bootnodes=[\"" + localEnode + "\"]";
-
+			updateBootNodesBeforeSend( agentFolder + "/besu/config.toml", bootNodeOption );
+			
+			logger.info("sending files from " + agentFolder );
+			
 			// Send BESU configuration
-			File[] besuFiles = besuAgentFolder.listFiles();
-			if( besuFiles != null) {
-				for (int i = 0; i < besuFiles.length; i++) {
-					if ( besuFiles[i].isFile() ) {
-						String fileName = besuFiles[i].getName();
-						String absolutePath = besuFiles[i].getAbsolutePath();
-						if( fileName.equals("config.toml") ) updateBootNodesBeforeSend(absolutePath, bootNodeOption );
-						fileSender.sendFile( "besu", ag, fileName, absolutePath );
-					}
-				}
-			}
-	
+			logger.info(" > sending BESU configuration");
+			sendAgentFilesFromFolder( besuAgentFolder.listFiles(), "besu", ag );
+
 			// Send DX configuration
-			File[] dxFiles = dxAgentFolder.listFiles();
-			if( dxFiles != null) {
-				for (int i = 0; i < dxFiles.length; i++) {
-					if ( dxFiles[i].isFile() ) {
-						fileSender.sendFile( "dataexchange", ag, dxFiles[i].getName(), dxFiles[i].getAbsolutePath() );
-					}
+			logger.info(" > sending DataExchange configuration");
+			sendAgentFilesFromFolder( dxAgentFolder.listFiles(), "dataexchange", ag );
+			
+			// Send IPFS configuration
+			logger.info(" > sending IPFS configuration");
+			sendAgentFilesFromFolder( ipfsAgentFolder.listFiles(), "ipfs", ag );
+			
+		} catch (Exception e) {
+			return makeResultToFront( e.getMessage(), ResultType.ERROR );
+		}	
+		return makeResultToFront( "All configuration flies sent to remote agent.", ResultType.SUCCESS );
+	}
+
+	// Actually send the files from local component's folder
+	private void sendAgentFilesFromFolder( File[] files, String componentName, RemoteAgent ag ) {
+		if( files != null) {
+			for (int i = 0; i < files.length; i++) {
+				String fileName = files[i].getName();
+				String absolutePath = files[i].getAbsolutePath();
+				if ( files[i].isFile() ) {
+					fileSender.sendFile( componentName, ag, fileName, absolutePath );
+					logger.info("   > " + fileName );
 				}
 			}
-		} catch (Exception e) {
-			return makeResult( e.getMessage(), ResultType.ERROR );
-		}	
-		return makeResult( "All configuration flies sent to remote agent.", ResultType.SUCCESS );
+		}		
 	}
 	
 	// Update the config.toml file ( the BESU startup options file ) before send it to
-	// the remote node. We need to put this local BESU node as the Boot node.
+	// the remote node. We need to put this local BESU node as the Boot node for all BESU network nodes.
+	// This method will append the "bootnodes" option to the startup 'config.toml' file with this local BESU ENODE
+	// address and send it to the remote Agent. This will make all BESU nodes use this local BESU node as the chain boot node.
 	private void updateBootNodesBeforeSend( String absolutePath, String bootNodeOption ) throws Exception {
-		// Check if we already done this
+		// Check if we already done this. The user may want to send these files at any time.
 		Scanner s = new Scanner(new File( absolutePath ));
 		while (s.hasNext()){
 		    String line = s.next();

@@ -25,6 +25,8 @@ public class CommService {
 	private Logger logger = LoggerFactory.getLogger( CommService.class );
 	
 	@Autowired private BESUService besuService;
+	@Autowired private IPFSService ipfsService;
+	@Autowired private DataExchangeService dataExchangeService;
 	@Autowired private SimpMessagingTemplate messagingTemplate;
 	@Autowired private SecureChannelService secChannel;
 	
@@ -89,14 +91,24 @@ public class CommService {
 		if( filePayload.has("fileContent") ) {
 			try {
 				String fileContent = filePayload.getString("fileContent").replaceAll("\\\\n", "").replaceAll("\\\\\"", "\"");
-				String filePath = filePayload.getString("fileName");
-				File f = new File( filePath );
-				String fileAbsolutePath = f.getParentFile().getAbsolutePath();
-				System.out.println( fileAbsolutePath );
-				new File( fileAbsolutePath ).mkdirs();
-				BufferedWriter writer = new BufferedWriter( new FileWriter( filePath ) );
+				String fileName = filePayload.getString("fileName");
+				String componentName = filePayload.getString("component");
+				String targetFolder = null;
+				
+				if( componentName.equals("besu") ) targetFolder = besuService.getDataFolder();
+				if( componentName.equals("dataexchange") ) targetFolder = dataExchangeService.getComponentDataFolder();
+				if( componentName.equals("ipfs") ) targetFolder = ipfsService.getComponentDataFolder();
+				
+				if( targetFolder == null ) {
+					commandError( payload, "Unknown component name: '" + componentName + "'" );
+					return;
+				}				
+					
+				new File( targetFolder ).mkdirs();
+				BufferedWriter writer = new BufferedWriter( new FileWriter( targetFolder = "/" + fileName ) );
 				writer.write( fileContent );
 				writer.close();
+				
 			} catch ( Exception e ) { 
 				e.printStackTrace();
 			}			

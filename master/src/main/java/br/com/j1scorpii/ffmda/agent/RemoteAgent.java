@@ -117,7 +117,7 @@ public class RemoteAgent implements StompSessionHandler {
 		status = RemoteAgentStatus.CONNECTED;
 		this.session = session;
 		session.subscribe("/agent_master", this);
-		this.owner.afterConnected( this, session, connectedHeaders );
+		this.owner.afterAgentIsConnected( this, session, connectedHeaders );
 	}
 
 	@Override

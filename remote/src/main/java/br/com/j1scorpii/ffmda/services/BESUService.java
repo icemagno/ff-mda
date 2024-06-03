@@ -15,11 +15,10 @@ import org.springframework.http.RequestEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
-import br.com.j1scorpii.ffmda.util.IFireFlyComponent;
 import jakarta.annotation.PostConstruct;
 
 @Service
-public class BESUService implements IFireFlyComponent {
+public class BESUService  {
 	private Logger logger = LoggerFactory.getLogger( BESUService.class );
 	private RestTemplate rt;
 	private final String COMPONENT_NAME = "besu";
@@ -38,12 +37,18 @@ public class BESUService implements IFireFlyComponent {
 	@PostConstruct
 	private void init() {
 		this.componentDataFolder = localDataFolder + "/" + COMPONENT_NAME;
+		this.dataFolder = this.componentDataFolder + "/data";
 		this.pluginsFolder = this.componentDataFolder + "/plugins";		
 		new File( this.componentDataFolder ).mkdirs();
 		new File( this.pluginsFolder ).mkdirs();
+		new File( this.dataFolder ).mkdirs();
 		this.rt = new RestTemplate();
 		logger.info("init");
 		this.getConfig();
+	}
+	
+	public String getDataFolder() {
+		return dataFolder;
 	}
 	
 	public JSONObject getConfig( ) {
@@ -155,11 +160,6 @@ public class BESUService implements IFireFlyComponent {
 	}
 
 
-
-	@Override
-	public String getComponentDataFolder() {
-		return this.componentDataFolder;
-	}
 	
 	
 }
