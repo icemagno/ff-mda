@@ -288,9 +288,6 @@ public class RemoteAgentService {
 				agent.setHostName( payload.getString("hostName") );
 				agent.setBesuData( payload.getJSONObject("besu") );
 				
-				System.out.println( payload.getJSONObject("besu").toString(5) );
-				// besuService.updateStaticNode(uuid, false);
-				
 				// Duh
 				saveConfig();
 

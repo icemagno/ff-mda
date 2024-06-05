@@ -13,7 +13,6 @@ import java.nio.file.StandardCopyOption;
 import java.util.Scanner;
 
 import org.apache.commons.io.FileUtils;
-import org.bouncycastle.util.encoders.Hex;
 import org.json.JSONArray;
 import org.json.JSONObject;
 import org.slf4j.Logger;
@@ -30,7 +29,6 @@ import org.springframework.http.RequestEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.multipart.MultipartFile;
-import org.testcontainers.shaded.org.bouncycastle.jcajce.provider.digest.Keccak;
 
 import br.com.j1scorpii.ffmda.util.IFireFlyComponent;
 import br.com.j1scorpii.ffmda.util.IObservable;
@@ -406,16 +404,14 @@ public class BESUService implements IFireFlyComponent, IObservable  {
 				// Take the content of the files
 			    Scanner s1 = new Scanner( new File( this.dataFolder + "/nodefiles/keys/" + address + "/key" ) );
 			    Scanner s2 = new Scanner( new File( this.dataFolder + "/nodefiles/keys/" + address + "/key.pub" ) );
-			    String privKey = s1.nextLine();
-			    String pubKey = s2.nextLine();
-			    String enodePrefix = publicKeyToEnode(pubKey);
+			    String privKey = s1.nextLine().trim();
+			    String pubKey = s2.nextLine().trim();
 				// Create an entry to store address, private and public keys for each validator
 				JSONObject nd = new JSONObject()
 			    		.put("address", address)
 			    		.put("available", true)
-			    		.put("privKey", privKey.trim() )
-			    		.put("pubKey", pubKey.trim() )
-			    		.put("enodePrefix", enodePrefix)
+			    		.put("privKey", privKey )
+			    		.put("pubKey", pubKey )
 			    		.put("usedByNode", JSONObject.NULL );
 			    this.validatorsData.put(nd);
 			    s1.close();
@@ -424,7 +420,7 @@ public class BESUService implements IFireFlyComponent, IObservable  {
 			
 			// Reserve a key pair to this node
 			logger.info("reserving keys to this node");
-			generateValidatorKeyPair( this.dataFolder, "local" );
+			JSONObject vd = generateValidatorKeyPair( this.dataFolder, "local" );
 					
 			// Remove the original genesis config file. No need to keep it
 			new File(this.dataFolder + "/bc_config.json").delete();
@@ -432,6 +428,16 @@ public class BESUService implements IFireFlyComponent, IObservable  {
 			// on the validators repository
 			FileUtils.deleteDirectory( new File( this.dataFolder + "/nodefiles" ) );			
 			
+			// Now we must add this node's ENODE address to the permissions file
+			// The ENODE address is just the public key string.
+			String localIpAddress = localService.getMainConfig().getString("ipAddress");
+			String pubKey = vd.getString("pubKey");
+			FileWriter fw = new FileWriter( this.permissionsFile );
+			String enodeAddress = "enode://" + pubKey + "@" + localIpAddress + ":30303";
+			fw.write( new JSONArray().put( enodeAddress ).toString(5) );
+			fw.close();
+
+			logger.info("ENODE created as " + enodeAddress );
 		} catch ( Exception e ) { e.printStackTrace(); }		
 		
 	}
@@ -442,7 +448,6 @@ public class BESUService implements IFireFlyComponent, IObservable  {
 	private int getNextAvailableValidator( String nodeName ) {
 		logger.info("searching for next available validator key...");
 		for( int x=0; x < this.validatorsData.length(); x++ ) {
-			System.out.println( this.validatorsData.getJSONObject(x).toString(5) );
 			try {
 				String usedBy = this.validatorsData.getJSONObject(x).getString( "usedByNode" );
 				logger.info("  > index " + x + " used by " + usedBy );
@@ -461,7 +466,7 @@ public class BESUService implements IFireFlyComponent, IObservable  {
 		return -1;
 	}
 	
-	public void generateValidatorKeyPair( String toFolder, String nodeName ) throws Exception{
+	public JSONObject generateValidatorKeyPair( String toFolder, String nodeName ) throws Exception{
 		int av = getNextAvailableValidator( nodeName );
 		// Yes I know.. I call the object 'this.validatorsData' every time to make sure the global array
 		// will reflect the changes so I can save it to disk. Not sure if it will be called by reference 
@@ -470,8 +475,9 @@ public class BESUService implements IFireFlyComponent, IObservable  {
 		// Save keys to disk
 		FileWriter w1 = new FileWriter( toFolder + "/key" );
 		FileWriter w2 = new FileWriter( toFolder + "/key.pub" );
-		w1.write( this.validatorsData.getJSONObject(av).getString("privKey") );
-		w2.write( this.validatorsData.getJSONObject(av).getString("pubKey") );
+		JSONObject vd = this.validatorsData.getJSONObject(av);
+		w1.write( vd.getString("privKey") );
+		w2.write( vd.getString("pubKey") );
 		w1.close();
 		w2.close();
 		// Mark the entry as used by this node so no one can take it again
@@ -480,6 +486,7 @@ public class BESUService implements IFireFlyComponent, IObservable  {
 		logger.info("BESU node '" + nodeName + "' will use address " + address + " of entry " + av );
 		// Update the validators repository to disk
 		saveValidatorsData();
+		return vd;
 	}
 
 	private void saveFile( String file, String data ) throws Exception {
@@ -495,22 +502,6 @@ public class BESUService implements IFireFlyComponent, IObservable  {
 		} catch ( Exception e ) {   }
 		return null;
 	}
-	
-	
-	private String publicKeyToEnode(String publicKeyHex) {
-        if (publicKeyHex.startsWith("0x") ) {
-            publicKeyHex = publicKeyHex.substring(2);
-        }
-        byte[] publicKeyBytes = Hex.decode(publicKeyHex);
-        Keccak.Digest256 keccak = new Keccak.Digest256();
-        keccak.update(publicKeyBytes, 1, publicKeyBytes.length - 1);
-        byte[] publicKeyHash = keccak.digest();
-        byte[] nodeIdBytes = new byte[20];
-        System.arraycopy(publicKeyHash, publicKeyHash.length - 20, nodeIdBytes, 0, 20);
-        String nodeId = Hex.toHexString(nodeIdBytes);
-        String enode = "enode://" + nodeId;
-        return enode;
-    }
 	
 	/*
 	public void updateStaticNode( String enode, boolean remove ) {
