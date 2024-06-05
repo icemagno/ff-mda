@@ -109,9 +109,8 @@ public class BESUService implements IFireFlyComponent, IObservable  {
 	public synchronized void notify( String componentName ) {
 		// Continue to configuration
 		logger.info("notified pull done for " + componentName );
-		loadValidatorsData();
-		getConfig();
 		copyDefaultData();
+		getConfig();
 	}
 	
 	private String requestData( String endpoint, JSONObject payload ) throws Exception {
@@ -242,6 +241,7 @@ public class BESUService implements IFireFlyComponent, IObservable  {
 	
 	public String getConfig( ) {
 		logger.info("loading config");
+		loadValidatorsData();
 		JSONObject localAgentConfig = localService.getMainConfig();
 		// Use a object wrapper to send component configuration 
 		// plus some relevant configuration to the UI.
@@ -344,8 +344,6 @@ public class BESUService implements IFireFlyComponent, IObservable  {
 			FileUtils.copyDirectory( new File("/besu-data"), new File( this.dataFolder ) );
 			// Generate the Genesis file and 20 validator node keys
 			// based on the 'bc_config.json' file 
-			createValidatorNodes();
-			getConfig();
 		} catch ( Exception e ) {
 			e.printStackTrace();
 		}
@@ -358,7 +356,7 @@ public class BESUService implements IFireFlyComponent, IObservable  {
 	// This must be done just once. I'll check the presence of the genesis file to
 	// determine if I must do this. See 'copyDefaultData()'
 	// This container will be removed.
-	private void createValidatorNodes() {
+	public void createValidatorNodes() {
 		// We don't have any BESU image yet ... go away from here now.
 		if( !imageExists() ) return;
 		
@@ -429,18 +427,17 @@ public class BESUService implements IFireFlyComponent, IObservable  {
 			FileUtils.deleteDirectory( new File( this.dataFolder + "/nodefiles" ) );			
 			
 			// Now we must add this node's ENODE address to the permissions file
-			// The ENODE address is just the public key string.
 			String localIpAddress = localService.getMainConfig().getString("ipAddress");
 			String pubKey = vd.getString("pubKey");
-			FileWriter fw = new FileWriter( this.permissionsFile );
-			String enodeAddress = "enode://" + pubKey.substring(2) + "@" + localIpAddress + ":30303";
-			fw.write( "nodes-allowlist=" + new JSONArray().put( enodeAddress ).toString() );
-			fw.close();
-			logger.info("ENODE created as " + enodeAddress );
+			String enodeAddress = makeEnodeAddress( localIpAddress, pubKey );
+			updatePermissionsFile( enodeAddress );
+			
+			// Put this enode addres into static_nodes file
+			updateStaticNode( enodeAddress, false );
 		} catch ( Exception e ) { e.printStackTrace(); }		
 		
 	}
-	
+
 	// Every time you register a new node, I need to send a key pair to it.
 	// So it will become a BESU validator (don't forget it was already registered into genesis file.
 	// no need to register again)
@@ -502,36 +499,47 @@ public class BESUService implements IFireFlyComponent, IObservable  {
 		return null;
 	}
 	
-	/*
 	public void updateStaticNode( String enode, boolean remove ) {
 		JSONArray staticNodes = new JSONArray();
 		try { 
 			// Copy enodes and make sure to delete proposed enode if exists
+			// just to make sure I'll not add more than once
 			JSONArray staticNodesTmp = new JSONArray( loadFile( this.staticNodesFile ) );
 			for ( int x=0; x< staticNodesTmp.length(); x++ ) {
-				if( !enode.equals(staticNodesTmp.get(x) ) ) staticNodes.put( enode );
+				if( !enode.equals(staticNodesTmp.get(x) ) ) staticNodes.put( staticNodesTmp.get(x) );
 			}
-			// May I request this peer to delete that enode? 
-			// Think about it later. It will removed when restart anyway
+			
+			if( !remove ) {
+				// Put (back / new) proposed enode into static nodes file.
+				staticNodes.put( enode );
+				
+				// Add the new node to this node right now
+				JSONObject requestData = new JSONObject()
+						.put("jsonrpc", "2.0")
+						.put("id", 99)
+						.put("params", new JSONArray().put(enode) )
+						.put("method", "admin_addPeer");
+				this.requestData("http://besu:8545", requestData);
+			
+			}
 			
 			// Save the updated list to 'static-nodes.json' file to make this node to remember
 			// when restarts
 			saveFile( this.staticNodesFile, staticNodes.toString() );
 			
-			// Just to remove. Quit now without adding
-			if( remove ) return;
-			
-			// Add the new node to this node right now
-			JSONObject requestData = new JSONObject()
-					.put("jsonrpc", "2.0")
-					.put("id", 99)
-					.put("params", new JSONArray().put(enode) )
-					.put("method", "admin_addPeer");
-			this.requestData("http://besu:8545", requestData);
 		} catch (Exception e) {	e.printStackTrace(); }
 	}
-	*/
 	
+	public String makeEnodeAddress(String ipAddress, String pubKey) {
+		return "enode://" + pubKey.substring(2) + "@" + ipAddress + ":30303";
+	}
+	
+	public void updatePermissionsFile( String enode ) throws Exception {
+		FileWriter fw = new FileWriter( this.permissionsFile );
+		fw.write( "nodes-allowlist=" + new JSONArray().put( enode ).toString() );
+		fw.close();
+		logger.info("ENODE created as " + enode );
+	}
 	
 	@Override
 	public String getComponentDataFolder() {

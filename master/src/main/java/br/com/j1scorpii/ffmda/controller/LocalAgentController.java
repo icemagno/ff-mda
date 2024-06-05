@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import br.com.j1scorpii.ffmda.services.LocalService;
+import br.com.j1scorpii.ffmda.services.OrganizationGenesisService;
 import jakarta.servlet.http.HttpServletResponse;
 
 @RestController
@@ -22,6 +23,7 @@ import jakarta.servlet.http.HttpServletResponse;
 public class LocalAgentController {
 
 	@Autowired private LocalService localService;
+	@Autowired private OrganizationGenesisService organizationGenesisService;
 	
 	// Return the config data
     @GetMapping( value="/config/get", produces= MediaType.APPLICATION_JSON_VALUE )
@@ -48,7 +50,7 @@ public class LocalAgentController {
     @PostMapping( value="/org/save", consumes= MediaType.APPLICATION_JSON_VALUE )
     public ResponseEntity<String> saveOrgData( @RequestBody String data  ) {
     	try {
-    		JSONObject result = this.localService.saveOrgData( data );
+    		JSONObject result = this.organizationGenesisService.saveOrgData( data );
     		return new ResponseEntity<>( result.toString(), HttpStatus.OK );
     	} catch (Exception e) {
     		e.printStackTrace();

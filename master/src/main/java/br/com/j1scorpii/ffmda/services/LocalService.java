@@ -92,6 +92,7 @@ public class LocalService {
 			if( new File( myConfigFile ).exists() ) {
 				logger.info("Configuration file found.");
 				this.loadConfig();
+				
 			} else {
 				logger.info("Configuration file not found. Will create one.");
 				this.mainConfig = new JSONObject();
@@ -205,6 +206,8 @@ public class LocalService {
 				// Lock this part of configuration
 				this.mainConfig.getJSONObject("stackStatus").put("locked", true);	
 				this.saveConfig();
+				
+				
 				
 				// Create the Certificate Authority for all Conglomerate
 				// Because it is running on the Master Agent, this server will 
