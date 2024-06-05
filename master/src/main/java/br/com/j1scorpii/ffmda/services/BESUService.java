@@ -537,8 +537,26 @@ public class BESUService implements IFireFlyComponent, IObservable  {
 	}
 	
 	public void updatePermissionsFile( String enode ) throws Exception {
+		// Load current file from local
+		String pf = loadFile( this.permissionsFile );
+		System.out.println( pf );
+		// Already here?
+		if( pf.contains(enode) ) return;
+		
+		// Convert to JSONArray
+		String enArr = pf.replace("nodes-allowlist=", "");
+		
+		System.out.println( enArr );
+		
+		JSONArray enodeList = new JSONArray( enArr );
+		// Put the new one
+		enodeList.put(enode);
+		
+		System.out.println( enodeList.toString(5) );
+		
+		// Save
 		FileWriter fw = new FileWriter( this.permissionsFile );
-		fw.write( "nodes-allowlist=" + new JSONArray().put( enode ).toString() );
+		fw.write( "nodes-allowlist=" + enodeList.toString() );
 		fw.close();
 		logger.info("ENODE created as " + enode );
 	}
