@@ -13,6 +13,7 @@ import java.nio.file.StandardCopyOption;
 import java.util.Scanner;
 
 import org.apache.commons.io.FileUtils;
+import org.bouncycastle.util.encoders.Hex;
 import org.json.JSONArray;
 import org.json.JSONObject;
 import org.slf4j.Logger;
@@ -29,6 +30,7 @@ import org.springframework.http.RequestEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.multipart.MultipartFile;
+import org.testcontainers.shaded.org.bouncycastle.jcajce.provider.digest.Keccak;
 
 import br.com.j1scorpii.ffmda.util.IFireFlyComponent;
 import br.com.j1scorpii.ffmda.util.IObservable;
@@ -406,12 +408,14 @@ public class BESUService implements IFireFlyComponent, IObservable  {
 			    Scanner s2 = new Scanner( new File( this.dataFolder + "/nodefiles/keys/" + address + "/key.pub" ) );
 			    String privKey = s1.nextLine();
 			    String pubKey = s2.nextLine();
+			    String enodePrefix = publicKeyToEnode(pubKey);
 				// Create an entry to store address, private and public keys for each validator
 				JSONObject nd = new JSONObject()
 			    		.put("address", address)
 			    		.put("available", true)
 			    		.put("privKey", privKey.trim() )
 			    		.put("pubKey", pubKey.trim() )
+			    		.put("enodePrefix", enodePrefix)
 			    		.put("usedByNode", JSONObject.NULL );
 			    this.validatorsData.put(nd);
 			    s1.close();
@@ -493,6 +497,22 @@ public class BESUService implements IFireFlyComponent, IObservable  {
 	}
 	
 	
+	private String publicKeyToEnode(String publicKeyHex) {
+        if (publicKeyHex.startsWith("0x") ) {
+            publicKeyHex = publicKeyHex.substring(2);
+        }
+        byte[] publicKeyBytes = Hex.decode(publicKeyHex);
+        Keccak.Digest256 keccak = new Keccak.Digest256();
+        keccak.update(publicKeyBytes, 1, publicKeyBytes.length - 1);
+        byte[] publicKeyHash = keccak.digest();
+        byte[] nodeIdBytes = new byte[20];
+        System.arraycopy(publicKeyHash, publicKeyHash.length - 20, nodeIdBytes, 0, 20);
+        String nodeId = Hex.toHexString(nodeIdBytes);
+        String enode = "enode://" + nodeId;
+        return enode;
+    }
+	
+	/*
 	public void updateStaticNode( String enode, boolean remove ) {
 		JSONArray staticNodes = new JSONArray();
 		try { 
@@ -520,6 +540,7 @@ public class BESUService implements IFireFlyComponent, IObservable  {
 			this.requestData("http://besu:8545", requestData);
 		} catch (Exception e) {	e.printStackTrace(); }
 	}
+	*/
 	
 	
 	@Override
