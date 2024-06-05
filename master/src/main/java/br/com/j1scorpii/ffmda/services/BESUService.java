@@ -380,7 +380,7 @@ public class BESUService implements IFireFlyComponent, IObservable  {
 		}
 		logger.info("Done. will copy genesis file to data folder.");
 		try {
-			FileUtils.copyFile( genesisFile , new File(this.genesisFile ) );
+			FileUtils.copyFile( genesisFile , new File( this.genesisFile ) );
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -422,9 +422,10 @@ public class BESUService implements IFireFlyComponent, IObservable  {
 					
 			// Remove the original genesis config file. No need to keep it
 			new File(this.dataFolder + "/bc_config.json").delete();
+			
 			// Remove the original nodefiles folder because we have this information
 			// on the validators repository
-			FileUtils.deleteDirectory( new File( this.dataFolder + "/nodefiles" ) );			
+			// FileUtils.deleteDirectory( new File( this.dataFolder + "/nodefiles" ) );			
 			
 			// Now we must add this node's ENODE address to the permissions file
 			String localIpAddress = localService.getMainConfig().getString("ipAddress");
