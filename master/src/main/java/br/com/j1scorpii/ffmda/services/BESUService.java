@@ -433,10 +433,9 @@ public class BESUService implements IFireFlyComponent, IObservable  {
 			String localIpAddress = localService.getMainConfig().getString("ipAddress");
 			String pubKey = vd.getString("pubKey");
 			FileWriter fw = new FileWriter( this.permissionsFile );
-			String enodeAddress = "enode://" + pubKey + "@" + localIpAddress + ":30303";
-			fw.write( new JSONArray().put( enodeAddress ).toString(5) );
+			String enodeAddress = "enode://" + pubKey.substring(2) + "@" + localIpAddress + ":30303";
+			fw.write( "nodes-allowlist=" + new JSONArray().put( enodeAddress ).toString() );
 			fw.close();
-
 			logger.info("ENODE created as " + enodeAddress );
 		} catch ( Exception e ) { e.printStackTrace(); }		
 		
