@@ -342,8 +342,6 @@ public class BESUService implements IFireFlyComponent, IObservable  {
 		// It is the first time. Do it.
 		try {
 			FileUtils.copyDirectory( new File("/besu-data"), new File( this.dataFolder ) );
-			// Generate the Genesis file and 20 validator node keys
-			// based on the 'bc_config.json' file 
 		} catch ( Exception e ) {
 			e.printStackTrace();
 		}
@@ -381,6 +379,11 @@ public class BESUService implements IFireFlyComponent, IObservable  {
 		logger.info("Done. will copy genesis file to data folder.");
 		try {
 			FileUtils.copyFile( genesisFile , new File( this.genesisFile ) );
+			
+			String gf = loadFile( this.genesisFile );
+			System.out.println( gf );
+			if( gf.length() < 10 ) throw new Exception("Error generating GENESIS file");
+			
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -539,21 +542,13 @@ public class BESUService implements IFireFlyComponent, IObservable  {
 	public void updatePermissionsFile( String enode ) throws Exception {
 		// Load current file from local
 		String pf = loadFile( this.permissionsFile );
-		System.out.println( pf );
 		// Already here?
 		if( pf.contains(enode) ) return;
-		
 		// Convert to JSONArray
 		String enArr = pf.replace("nodes-allowlist=", "");
-		
-		System.out.println( enArr );
-		
 		JSONArray enodeList = new JSONArray( enArr );
 		// Put the new one
 		enodeList.put(enode);
-		
-		System.out.println( enodeList.toString(5) );
-		
 		// Save
 		FileWriter fw = new FileWriter( this.permissionsFile );
 		fw.write( "nodes-allowlist=" + enodeList.toString() );
