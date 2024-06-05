@@ -399,10 +399,6 @@ public class RemoteAgentService {
 			
 			JSONObject thisNodeBlockChainData = new JSONObject( besuService.getBlockchainData() );
 	
-			if( ! thisNodeBlockChainData.has("enode")  ) {
-				return makeResultToFront("Can't connect to the local BESU node to take ENODE address. Is it running?", ResultType.ERROR );
-			}
-
 			// Clone BESU configuration again. The user may have changed something here.
 			recreateBesuData(ag);
 			
