@@ -513,13 +513,14 @@ public class BESUService implements IFireFlyComponent, IObservable  {
 				// Put (back / new) proposed enode into static nodes file.
 				staticNodes.put( enode );
 				
-				// Add the new node to this node right now
 				JSONObject requestData = new JSONObject()
 						.put("jsonrpc", "2.0")
 						.put("id", 99)
 						.put("params", new JSONArray().put(enode) )
 						.put("method", "admin_addPeer");
-				this.requestData("http://besu:8545", requestData);
+				// Add the new node to this node right now
+				// Try..catch because the node may not exist yet
+				try { this.requestData("http://besu:8545", requestData); } catch ( Exception e ) {}
 			
 			}
 			
