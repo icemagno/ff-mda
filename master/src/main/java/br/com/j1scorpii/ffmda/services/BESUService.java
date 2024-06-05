@@ -385,9 +385,9 @@ public class BESUService implements IFireFlyComponent, IObservable  {
 			e.printStackTrace();
 		}
 		
-		// At this point we must have a genesis file and a folder with 20 validators keys.
+		// At this point we must have a genesis file and a folder with a lot of validators keys.
 		// Do NOT FORGET that all these validators addresses are in the genesis file as a node validator.
-		// So... the first 20 nodes you create will become a validator with no need to register into BC.
+		// So... these first nodes you create will become a validator with no need to register into BC.
 		// In many common cases 5 validators are enough but I'll reserve a pool of 20 just in case...
 		// If you decide to create the 21th node then no key pair will be send and BESU will
 		// generate they making the node to not be a validator (it will not be in genesis)

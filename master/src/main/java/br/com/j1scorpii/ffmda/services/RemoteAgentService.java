@@ -121,21 +121,25 @@ public class RemoteAgentService {
 			String besuAgentFolder = agentFolder + "/besu";
 			File besuFolderF = new File( besuAgentFolder ); 
 			besuFolderF.mkdirs();
-			// Copy all local besu files to the agent's folder ( including local keys. It will be override below )
-			File besuLocalDataFolder = new File( besuService.getDataFolder() );
-			File[] listOfFiles = besuLocalDataFolder.listFiles();
-			if( listOfFiles != null) {
-				for (int i = 0; i < listOfFiles.length; i++) {
-					if ( listOfFiles[i].isFile() ) {
-						// do not copy DATABASE_METADATA.json from local node
-						if( ! listOfFiles[i].getName().equals("DATABASE_METADATA.json") ) {
-							FileUtils.copyFileToDirectory( listOfFiles[i], besuFolderF );	
-						}
-					}
-				}
-			}
-			// Override the keys 
-			this.besuService.generateValidatorKeyPair( besuAgentFolder, ag.getNodeName() );
+			
+			// Generate the key pair files 
+			JSONObject vd = this.besuService.generateValidatorKeyPair( besuAgentFolder, ag.getNodeName() );
+			String pubKey = vd.getString("pubKey");
+			String ipAddress = ag.getIpAddress();
+			
+			String enode = besuService.makeEnodeAddress(ipAddress, pubKey);
+			
+			besuService.updatePermissionsFile(enode);
+			besuService.updateStaticNode(enode, false);
+
+			FileUtils.copyFileToDirectory( new File("permissions_config.toml") , besuFolderF );
+			FileUtils.copyFileToDirectory( new File("config.toml") , besuFolderF );
+			FileUtils.copyFileToDirectory( new File("static-nodes.json") , besuFolderF );
+			FileUtils.copyFileToDirectory( new File("genesis.json") , besuFolderF );
+			
+			logger.info("Agent " + ag.getIpAddress() + " have ENODE address:");
+			logger.info(enode);
+			
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
