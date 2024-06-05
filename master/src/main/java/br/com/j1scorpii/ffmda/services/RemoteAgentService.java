@@ -132,10 +132,12 @@ public class RemoteAgentService {
 			besuService.updatePermissionsFile(enode);
 			besuService.updateStaticNode(enode, false);
 
-			FileUtils.copyFileToDirectory( new File("permissions_config.toml") , besuFolderF );
-			FileUtils.copyFileToDirectory( new File("config.toml") , besuFolderF );
-			FileUtils.copyFileToDirectory( new File("static-nodes.json") , besuFolderF );
-			FileUtils.copyFileToDirectory( new File("genesis.json") , besuFolderF );
+			String besuLocalFolder = besuService.getDataFolder();
+			
+			FileUtils.copyFileToDirectory( new File( besuLocalFolder + "/permissions_config.toml") , besuFolderF );
+			FileUtils.copyFileToDirectory( new File( besuLocalFolder + "/config.toml") , besuFolderF );
+			FileUtils.copyFileToDirectory( new File( besuLocalFolder + "/static-nodes.json") , besuFolderF );
+			FileUtils.copyFileToDirectory( new File( besuLocalFolder + "/genesis.json") , besuFolderF );
 			
 			logger.info("Agent " + ag.getIpAddress() + " have ENODE address:");
 			logger.info(enode);
