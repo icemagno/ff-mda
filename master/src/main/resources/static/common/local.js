@@ -54,6 +54,8 @@ $( document ).ready(function() {
 		
 		if ( !data.orgName || !data.nodeName || !data.ipAddress || !data.hostName ) return;
 		
+		alertToast( "Wait... Don't move!", "I will refresh this page when I finish...", icon = 'warning' )
+		
 		$.ajax ({
 		    url: "/v1/org/save",
 		    type: "POST",
