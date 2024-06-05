@@ -492,8 +492,8 @@ public class BESUService implements IFireFlyComponent, IObservable  {
 		return null;
 	}
 	
-	/*
-	public void updateStaticNode( String enode, boolean remove, int h ) {
+	
+	public void updateStaticNode( String enode, boolean remove ) {
 		JSONArray staticNodes = new JSONArray();
 		try { 
 			// Copy enodes and make sure to delete proposed enode if exists
@@ -520,7 +520,6 @@ public class BESUService implements IFireFlyComponent, IObservable  {
 			this.requestData("http://besu:8545", requestData);
 		} catch (Exception e) {	e.printStackTrace(); }
 	}
-	*/
 	
 	
 	@Override

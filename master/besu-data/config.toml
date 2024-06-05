@@ -1,6 +1,8 @@
 data-path="/data"
 min-gas-price=0
 genesis-file="/data/genesis.json"
+permissions-nodes-config-file-enabled=true
+permissions-accounts-config-file-enabled=true
 nat-method="DOCKER"
 host-allowlist=["*"]
 metrics-enabled=true

@@ -288,6 +288,9 @@ public class RemoteAgentService {
 				agent.setHostName( payload.getString("hostName") );
 				agent.setBesuData( payload.getJSONObject("besu") );
 				
+				System.out.println( payload.getJSONObject("besu").toString(5) );
+				// besuService.updateStaticNode(uuid, false);
+				
 				// Duh
 				saveConfig();
 
@@ -396,7 +399,7 @@ public class RemoteAgentService {
 			if( ! thisNodeBlockChainData.has("enode")  ) {
 				return makeResultToFront("Can't connect to the local BESU node to take ENODE address. Is it running?", ResultType.ERROR );
 			}
-			
+
 			// Clone BESU configuration again. The user may have changed something here.
 			recreateBesuData(ag);
 			
