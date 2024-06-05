@@ -103,7 +103,7 @@ public class RemoteAgentService {
 			new File( this.agentFilesFolder + "/" + uuid ).mkdirs();
 			
 			// Create certificates and other files for this new agent
-			recreateBesuData( ra, true );
+			recreateBesuData( ra );
 			recreateDxData( ra );
 			
 			return newAgent;
@@ -114,11 +114,8 @@ public class RemoteAgentService {
 	}
 	
 	// Create certificates and initial files for an agent
-	private void recreateBesuData( RemoteAgent ag, boolean assignNewValidatorKeys ) {
-		// The option 'assignNewValidatorKeys' will actually not assign keys again because
-		// the Validator Key Pool is smart enough to not give another key to same agent.
-		// It will use the host name to check if we gave the validator key already.
-		// I use this option here just to be safe (and not spend computational resources for nothing). 
+	private void recreateBesuData( RemoteAgent ag ) {
+		logger.info("will clone local BESU data to agent " + ag.getIpAddress() + " (" + ag.getId() + ")" );
 		try {
 			String agentFolder = this.agentFilesFolder + "/" + ag.getId();
 			String besuAgentFolder = agentFolder + "/besu";
@@ -138,12 +135,13 @@ public class RemoteAgentService {
 				}
 			}
 			// Override the keys 
-			if( assignNewValidatorKeys ) this.besuService.generateValidatorKeyPair( besuAgentFolder, ag.getNodeName() );
+			this.besuService.generateValidatorKeyPair( besuAgentFolder, ag.getNodeName() );
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
 	}
 	private void recreateDxData( RemoteAgent ag ) {
+		logger.info("will create DataExchange data for agent " + ag.getIpAddress() + " (" + ag.getId() + ")" );
 		try {
 			String agentFolder = this.agentFilesFolder + "/" + ag.getId();
 			String dxAgentFolder = agentFolder + "/dx";
@@ -160,7 +158,7 @@ public class RemoteAgentService {
 	public String recreateFiles( String what, String agentId ) {
 		RemoteAgent ag = getAgentById(agentId);
 		if( ag == null  ) return "NO_AGENT_FOUND";
-		recreateBesuData( ag, true );
+		recreateBesuData( ag );
 		recreateDxData( ag );
 		sendFilesToAgent( what, agentId );
 		return "OK";
@@ -400,7 +398,7 @@ public class RemoteAgentService {
 			}
 			
 			// Clone BESU configuration again. The user may have changed something here.
-			recreateBesuData(ag, false);
+			recreateBesuData(ag);
 			
 			// Prepare the Bootnodes option to append to the remote agent BESU config.toml file
 			String localEnode = thisNodeBlockChainData.getString("enode");
