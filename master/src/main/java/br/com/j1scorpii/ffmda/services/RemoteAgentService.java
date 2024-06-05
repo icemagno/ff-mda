@@ -397,15 +397,8 @@ public class RemoteAgentService {
 			RemoteAgent ag = getAgentById(agentId);
 			if( ag == null ) return makeResultToFront("No Agent Connected", ResultType.ERROR );
 			
-			JSONObject thisNodeBlockChainData = new JSONObject( besuService.getBlockchainData() );
-	
 			// Clone BESU configuration again. The user may have changed something here.
 			recreateBesuData(ag);
-			
-			// Prepare the Bootnodes option to append to the remote agent BESU config.toml file
-			String localEnode = thisNodeBlockChainData.getString("enode");
-			String bootNodeOption = "bootnodes=[\"" + localEnode + "\"]";
-			updateBootNodesBeforeSend( agentFolder + "/besu/config.toml", bootNodeOption );
 			
 			logger.info("sending files from " + agentFolder );
 			
