@@ -370,20 +370,25 @@ public class BESUService implements IFireFlyComponent, IObservable  {
 		};
 		// Run a temp BESU container to create the Genesis file and the validators keys
 		this.containerManager.executeAndRemoveContainer( "besu_create_genesis", this.imageName, command, this.dataFolder, "/data" );
-		File genesisFile = new File( this.dataFolder + "/nodefiles/genesis.json");
+		String genesisFileName = this.dataFolder + "/nodefiles/genesis.json";
+		File genesisFile = new File( genesisFileName );
 		
 		logger.info("waiting for container 'besu_create_genesis' to generate genesis file and keys ... ");
-		while( !genesisFile.exists() ) {
+		boolean canMove = false;
+		while( !canMove ) {
 			// Wait to genesis.json be present
+			try { Thread.sleep(500); } catch ( Exception h ) {}
+			boolean sourceExists = genesisFile.exists();
+			if( sourceExists ) {
+				String gfn = loadFile( genesisFileName );
+				if( gfn.length() > 10 ) canMove = true;
+			}
 		}
 		logger.info("Done. will copy genesis file to data folder.");
 		try {
 			FileUtils.copyFile( genesisFile , new File( this.genesisFile ) );
-			
 			String gf = loadFile( this.genesisFile );
-			System.out.println( gf );
 			if( gf.length() < 10 ) throw new Exception("Error generating GENESIS file");
-			
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
